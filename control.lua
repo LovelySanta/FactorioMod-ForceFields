@@ -5,6 +5,7 @@ require 'src/forcefield'
 require 'src/emitter'
 require 'src/gui'
 
+require 'src/config-changes'
 require 'src/testing'
 
 
@@ -14,7 +15,7 @@ function init()
   if not global.forcefields then
     global.forcefields = {}
   end
-  global.forcefields.version = 1.1
+  global.forcefields.version = ConfigChanges.currentVersion
 end
 
 script.on_init(function(_)
@@ -24,6 +25,7 @@ end)
 
 script.on_configuration_changed(function (data)
   if data.mod_changes and data.mod_changes.ForceFields2 and data.mod_changes.ForceFields2.old_version then
+    ConfigChanges:onConfigurationChanged()
     Settings:verifySettings()
   end
 end)
@@ -52,18 +54,20 @@ script.on_event(defines.events.on_robot_built_entity, onEntityBuilt)
 
 
 
--- When entities get damaged (creates a trigger entity)
-script.on_event(defines.events.on_trigger_created_entity, function(event)
-  -- Check if a forcefield is damaged
-  if event.entity.name == Settings.fieldDamagedTriggerName then
-    local position = event.entity.position
-    local surface = event.entity.surface
-    event.entity.destroy() -- Removes the trigger
-    Forcefield:onForcefieldDamaged(surface, position)
-  end
+-- When research finished
+script.on_event(defines.events.on_research_finished, function(event)
+  Forcefield:onResearchFinished(event.research)
 end)
 
 
+
+-- When entities get damaged (creates a trigger entity)
+script.on_event(defines.events.on_entity_damaged, function(event)
+  -- Check if a forcefield is damaged
+  if Settings.forcefieldTypes[event.entity.name] ~= nil then
+    Forcefield:onForcefieldDamaged(event.entity)
+  end
+end)
 
 -- When entities get destroyed
 script.on_event(defines.events.on_entity_died, function(event)
@@ -109,7 +113,7 @@ script.on_event(defines.events.on_canceled_deconstruction, function(event)
     local emitterTable = Emitter:findEmitter(event.entity)
     if emitterTable ~= nil then
       emitterTable["disabled"] = false
-      Forcefield:setActive(emitterTable, true)
+      Emitter:setActive(emitterTable, true)
     end
   end
 end)
@@ -141,5 +145,10 @@ end)
 script.on_event(defines.events.on_gui_click, function(event)
   if Gui.guiButtonHandlers[event.element.name] then
     Gui.guiButtonHandlers[event.element.name](Gui, event)
+  -- Check for wall config button pressed
+  elseif string.find(event.element.name, Gui.guiElementNames.configOption) then
+    Gui.guiButtonHandlers[Gui.guiElementNames.configOption](Gui, event)
+  elseif string.find(event.element.name, Gui.guiElementNames.configRowOption) then
+    Gui.guiButtonHandlers[Gui.guiElementNames.configRowOption](Gui, event)
   end
 end)

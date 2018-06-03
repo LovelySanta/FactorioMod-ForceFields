@@ -3,9 +3,50 @@ local loaded
 
 Settings = {}
 
--- forcefields types
+
+Settings.modName = "__ForceFields2__"
+
+
+
+-- gui settings
+Settings.configWallIconName = "forcefield-config-tool"
+
+Settings.guiSelectButtonStyle = "selectbuttons"
+Settings.guiSelectButtonSelectedStyle = "selectbuttonsselected"
+Settings.guiSmallSelectButtonStyle = "smallselectbuttons"
+Settings.guiSmallSelectButtonSelectedStyle = "smallselectbuttonsselected"
+
+
+-- builder settings
+Settings.forcefieldBuildDamageName = "forcefield-build-damage"
+Settings.forcefieldDeathDamageName = "forcefield-death-damage"
+
+
+
+-- emitter settings
+Settings.emitterName = "forcefield-emitter"
+Settings.tickRate = 20
+
+Settings.emitterDefaultDistance = 10
+Settings.maxRangeUpgrades = 23
+Settings.emitterMaxDistance = Settings.emitterDefaultDistance + Settings.maxRangeUpgrades
+
+Settings.emitterDefaultWidth = 25
+Settings.maxWidthUpgrades = 10
+Settings.widthUpgradeMultiplier = 4
+Settings.emitterMaxWidth = Settings.emitterDefaultWidth + (Settings.maxWidthUpgrades * Settings.widthUpgradeMultiplier)
+
+Settings.maxFieldDistance = math.max(Settings.emitterMaxDistance, Settings.emitterMaxWidth)
+
+
+
+-- forcefields settings
 Settings.fieldSuffix = "-forcefield"
-Settings.defaultFieldType = "blue" .. Settings.fieldSuffix
+Settings.fieldGateSuffix = "-forcefield-gate"
+Settings.fieldEmptySuffix = "-forcefield-empty"
+Settings.defaultFieldSuffix = Settings.fieldSuffix
+
+Settings.defaultFieldType = "blue"
 Settings.forcefieldTypes =
 {
   ["blue" .. Settings.fieldSuffix] =
@@ -39,7 +80,7 @@ Settings.forcefieldTypes =
     energyPerRespawn = 10000,
     energyPerHealthLost = 25000,
     damageWhenMined = 15,
-    deathEntity = "forcefield-death-damage",
+    deathEntity = Settings.forcefieldDeathDamageName,
     maxHealth = 150
   },
   ["red" .. Settings.fieldSuffix] =
@@ -54,24 +95,14 @@ Settings.forcefieldTypes =
     maxHealth = 300
   }
 }
-Settings.fieldgateSuffix = "-forcefield-gate"
-Settings.fieldDamagedTriggerName = "forcefield-damaged"
+Settings.forcefieldTypes["blue" .. Settings.fieldGateSuffix] = Settings.forcefieldTypes["blue" .. Settings.fieldSuffix]
+Settings.forcefieldTypes["green" .. Settings.fieldGateSuffix] = Settings.forcefieldTypes["green" .. Settings.fieldSuffix]
+Settings.forcefieldTypes["purple" .. Settings.fieldGateSuffix] = Settings.forcefieldTypes["purple" .. Settings.fieldSuffix]
+Settings.forcefieldTypes["red" .. Settings.fieldGateSuffix] = Settings.forcefieldTypes["red" .. Settings.fieldSuffix]
 
--- emitter settings
-Settings.emitterName = "forcefield-emitter"
-Settings.tickRate = 20
-
-Settings.emitterDefaultWidth = 25
-
-Settings.maxRangeUpgrades = 23
-Settings.emitterDefaultDistance = 10
-Settings.emitterMaxDistance = Settings.emitterDefaultDistance + Settings.maxRangeUpgrades
-
-Settings.maxWidthUpgrades = 10
-Settings.widthUpgradeMultiplier = 4
-Settings.emitterMaxWidth = Settings.emitterDefaultWidth + (Settings.maxWidthUpgrades * Settings.widthUpgradeMultiplier)
-
-Settings.maxFieldDistance = math.max(Settings.emitterMaxDistance, Settings.emitterMaxWidth)
+--Settings.fieldEmptySetting = 0
+--Settings.fieldWallSetting = 1
+--Settings.fieldGateSetting = 2
 
 
 
@@ -80,11 +111,6 @@ function Settings:verifySettings()
     self.tickRate = 0
     throwError("Tick rate must be >= 0.")
   end
-
-  --if self.toolRadius < 0 then
-  --  self.toolRadius = 0
-  --  throwError("Tool radius must be >= 0.")
-  --end
 
   if self.emitterDefaultDistance < 1 then
     self.emitterDefaultDistance = 1
@@ -105,8 +131,9 @@ function Settings:verifySettings()
     self.maxFieldDistance = math.max(self.emitterMaxDistance, self.emitterMaxWidth)
   end
 
-  if not self.forcefieldTypes[self.defaultFieldType] then
-    self.defaultFieldType = "blue" .. self.fieldSuffix
+  if not self.forcefieldTypes[self.defaultFieldType .. self.defaultFieldSuffix] then
+    self.defaultFieldType = "blue"
+    self.defaultFieldSuffix = self.fieldSuffix
     throwError("Emitter default field type isn't known.")
   end
 end
