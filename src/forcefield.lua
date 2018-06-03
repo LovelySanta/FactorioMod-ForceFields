@@ -104,6 +104,15 @@ function Forcefield:scanAndBuildFields(emitterTable)
           if surface.can_place_entity({name = emitterTable["type"], position = pos, direction = direction}) then
             local newField = surface.create_entity({name = emitterTable["type"], position = pos, force = force, direction = direction})
 
+            -- Quick fix
+            if newField == nil then
+              entities = surface.find_entities({{pos.x-.5,pos.y-.5},{pos.x+.5,pos.y+.5}})
+              for _,entity in pairs (entities) do
+                entity.destroy()
+              end
+              newField = surface.create_entity({name = emitterTable["type"], position = pos, force = force, direction = direction})
+            end
+
             -- This new entity will have 0 health on creation + one load of recharge this tick
             newField.health = Settings.forcefieldTypes[emitterTable["type"]]["chargeRate"]
             if emitterTable["generating-fields"] == nil then
@@ -122,7 +131,7 @@ function Forcefield:scanAndBuildFields(emitterTable)
             emitterTable["entity"].energy = emitterTable["entity"].energy -  (Settings.tickRate * Settings.forcefieldTypes[emitterTable["type"]]["energyPerRespawn"])
             -- If we can't get to the end, we need to degrade as we have no power to maintain the full field
             if n ~= incTimes and emitterTable["entity"].energy == 0 then
-              emitterTable["build-tick"] = forcefieldTypes[emitterTable["type"]]["respawnRate"] * 10
+              emitterTable["build-tick"] = Settings.forcefieldTypes[emitterTable["type"]]["respawnRate"] * 10
               self:degradeLinkedFields(emitterTable)
               break
             end

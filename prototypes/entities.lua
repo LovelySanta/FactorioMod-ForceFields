@@ -780,7 +780,7 @@ data:extend(
     icon_size = 32,
     flags = {"placeable-neutral", "player-creation"},
     enable_gui = true,
-    allow_copy_paste = false,
+    allow_copy_paste = true,
     minable = {hardness = 0.2, mining_time = 1, result = "forcefield-emitter"},
     max_health = 50,
     corpse = "small-remnants",
@@ -789,7 +789,7 @@ data:extend(
     energy_source =
     {
       type = "electric",
-      buffer_capacity = "1GJ",
+      buffer_capacity = "100MJ",
       usage_priority = "primary-input",
       input_flow_limit = "100MW",
       output_flow_limit = "0kW",
@@ -897,7 +897,7 @@ data:extend(
         }
       }
     },
-    action_frequency = 60
+    action_cooldown = 60
   },
 
   {
@@ -952,6 +952,6 @@ data:extend(
         }
       }
     },
-    action_frequency = 60
+    action_cooldown = 60
   }
 })
