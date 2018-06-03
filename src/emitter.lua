@@ -229,6 +229,7 @@ function Emitter:updateTick()
         -- By default let us not keep it active, if its needed we re-activate it
         shouldRemainActive = false
 
+        -- Building new forcefields (newly build or destroyed)
         if emitterTable["disabled"] == false then
           if emitterTable["build-scan"] ~= nil then
             -- The function will toggle index 4 (build-scan) if it finishes building fields.
@@ -237,6 +238,8 @@ function Emitter:updateTick()
             end
           end
         end
+
+        -- Generate health afther a field has been build
         if emitterTable["generating-fields"] then
           -- The function will toggle index 11 (generating-fields) if it finishes generating fields.
           if Forcefield:generateFields(emitterTable) then
@@ -244,6 +247,7 @@ function Emitter:updateTick()
           end
         end
 
+        -- Regenerate health when damaged
         if emitterTable["damaged-fields"] then
           -- The function will toggle index 3 (emitterTable) if it finishes repairing fields.
           if Forcefield:regenerateFields(emitterTable) then
@@ -271,10 +275,13 @@ function Emitter:updateTick()
   if global.forcefields.degradingFields ~= nil then
     shouldKeepTicking = true
     for k,v in pairs(global.forcefields.degradingFields) do
-      if v["entity"].valid then
-        v["entity"].health = v["entity"].health - (Settings.forcefieldTypes[v["entity"].name]["degradeRate"] * Settings.tickRate)
-        if v["entity"].health == 0 then
-          v["entity"].destroy()
+      if not v["fieldEntity"] and v["entity"] then
+        v["fieldEntity"] = v["entity"]
+      end
+      if v["fieldEntity"].valid then
+        v["fieldEntity"].health = v["fieldEntity"].health - (Settings.forcefieldTypes[v["fieldEntity"].name]["degradeRate"] * Settings.tickRate)
+        if v["fieldEntity"].health == 0 then
+          v["fieldEntity"].destroy()
           if not Forcefield:removeDegradingFieldID(k) then
             break
           end
@@ -288,25 +295,32 @@ function Emitter:updateTick()
   end
 
   if global.forcefields.searchDamagedPos ~= nil then
+    local searchDamagedPos = global.forcefields.searchDamagedPos
     shouldKeepTicking = true
+    -- for each damages position
     for index,xs in pairs (global.forcefields.searchDamagedPos) do
       local surface = game.surfaces[index]
+
+      -- for each sy location in each sx location
       for sx,ys in pairs(xs) do
         for sy in pairs(ys) do
+
           local foundFields = Forcefield:findForcefieldsRadius(surface, {x = sx + 0.5, y = sy + 0.5}, 1)
           if foundFields ~= nil then
             Forcefield:handleDamagedFields(foundFields)
           end
           table.remove(ys, sy)
         end
-        table.remove(global.forcefields.searchDamagedPos, sx)
+        table.remove(searchDamagedPos, sx)
       end
-      table.remove(global.forcefields.searchDamagedPos, index)
+      table.remove(searchDamagedPos, index)
     end
 
-    if #global.forcefields.searchDamagedPos == 0 then
-      global.forcefields.searchDamagedPos = nil
+    if #searchDamagedPos == 0 then
+      searchDamagedPos = nil
     end
+
+    global.forcefields.searchDamagedPos = searchDamagedPos
   end
 
   if not shouldKeepTicking then

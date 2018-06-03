@@ -14,7 +14,7 @@ function init()
   if not global.forcefields then
     global.forcefields = {}
   end
-  global.forcefields.version = 1.0
+  global.forcefields.version = 1.1
 end
 
 script.on_init(function(_)
@@ -23,9 +23,8 @@ script.on_init(function(_)
 end)
 
 script.on_configuration_changed(function (data)
-  if data.mod_changes and data.mod_changes.ForceFields then
+  if data.mod_changes and data.mod_changes.ForceFields2 and data.mod_changes.ForceFields2.old_version then
     Settings:verifySettings()
-    init()
   end
 end)
 
@@ -93,7 +92,10 @@ script.on_event(defines.events.on_robot_pre_mined, function(event)
 end)
 
 script.on_event(defines.events.on_marked_for_deconstruction, function(event)
-  if event.entity.name == Settings.emitterName then
+  if Settings.forcefieldTypes[event.entity.name] ~= nil then
+    -- Forcefields itself can't be deconstructed
+    event.entity.cancel_deconstruction(game.players[event.player_index].force)
+  elseif event.entity.name == Settings.emitterName then
     local emitterTable = Emitter:findEmitter(event.entity)
     if emitterTable ~= nil then
       emitterTable["disabled"] = true
