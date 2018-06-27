@@ -431,7 +431,7 @@ end
 
 
 function Forcefield:degradeLinkedFields(emitterTable)
-  if global.forcefields.fields ~= nil then
+  if global.forcefields.fields ~= nil and emitterTable["entity"].valid then
     local pos1, xInc, yInc, incTimes = self:getFieldsArea(emitterTable)
     local pos2 = {x = pos1.x + (xInc * incTimes), y = pos1.y + (yInc * incTimes)}
     local surface = emitterTable["entity"].surface

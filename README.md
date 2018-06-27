@@ -1,7 +1,7 @@
 This mod adds forcefields to the game: electric powered, self healing walls. Make no mistakes, the force fields are powerful but power hungry - don't let them run out of energy or it all comes crumbling down.
 Mod original from [RSeding91](https://mods.factorio.com/user/Rseding91), but discontinued afther 0.14, taken over by me.
 
-![Example forcefield](https://raw.githubusercontent.com/LovelySanta/FactorioMod-ForceFields/master/graphics/screenshots/preview.png)
+![Example forcefield](https://raw.githubusercontent.com/LovelySanta/FactorioMods/master/ForceFields2/graphics/screenshots/preview.png)
 
 # Features
 + Different types of energy powered 'walls' (AKA forcefields)
@@ -23,7 +23,7 @@ For ease of use you can set the distance and the width of the forcefield. These 
 When pressing apply, the emitter will draw more energy and will start build the forcefield you requested.
 *NOTE*: When building an emitter for the first time, it won't build a wall until you configure it.
 
-![Emitter configuration](https://raw.githubusercontent.com/LovelySanta/FactorioMod-ForceFields/master/graphics/screenshots/emitter_configuration_gui.png)
+![Emitter configuration](https://raw.githubusercontent.com/LovelySanta/FactorioMods/master/ForceFields2/graphics/screenshots/emitter_configuration_gui.png)
 
 ## 2 Forcefield configuration
 At the bottom of the GUI is another button with some gears (next to the apply button). When pressing that, it will open a new configuration window that will let you select the configuration of the forcefield. The amount of buttons will depend on the number you've set as the width of the emitter.
@@ -31,7 +31,7 @@ At the bottom of the GUI is another button with some gears (next to the apply bu
 In this window you can select for each individual wall section if you want there to be a wall build, a gate or leave it empty. This ensures the full customability of your wall. For the ease of use there are some extra buttons at the left to configure the whole forcefield all at once.
 *NOTE*: afther saving the configuration, don't forget to press apply in the emiter GUI to make your settings active.
 
-![Forcefield configuration](https://raw.githubusercontent.com/LovelySanta/FactorioMod-ForceFields/master/graphics/screenshots/forcefield_configuration_gui.png)
+![Forcefield configuration](https://raw.githubusercontent.com/LovelySanta/FactorioMods/master/ForceFields2/graphics/screenshots/forcefield_configuration_gui.png)
 
 ## 3 Quick configuring
 If you have long walls, I wouldn't want you to have to do tremendous amounts of repetitive work. You can copy paste settings from one emitter to the other (just like you can copy paste the recipe on assemblers). This will also insert the necessary amount of upgrades into it, if you have them in your inventory.
@@ -42,7 +42,7 @@ When an emitter gets destroyed, the forcefield will degrade and it will leave a 
 
 # Changelog
 ### Future
-+ Tooltips when hovering over the buttons (waiting on 0.17)
-+ New help '?' screen (waiting on 0.17)
++ Tooltips when hovering over the buttons
++ New help '?' screen
 ### Latest release
-+ See ingame changelog or find it [here on github](https://github.com/LovelySanta/FactorioMod-ForceFields/blob/master/changelog.txt).
++ See ingame changelog or find it [here on github](https://github.com/LovelySanta/FactorioMods/blob/master/ForceFields2/changelog.txt).
