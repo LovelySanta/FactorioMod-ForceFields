@@ -1,5 +1,4 @@
-require("prototypes.items")
-require("prototypes.entities")
-require("prototypes.recipes")
-require("prototypes.technologies")
-require("prototypes.styles")
+require("prototypes/categories/crafting-categories")
+require("prototypes/categories/item-group")
+
+require("prototypes/entity/forcefield")
