@@ -30,7 +30,6 @@ function forceFieldWallEntity(color)
 
   local tint = settings.colorTint   -- add tint to wall
   for pictureName,picture in pairs(forceFieldWall.pictures) do
-    log(pictureName)
     -- https://wiki.factorio.com/Prototype/Wall#pictures
     if pictureName == "water_connection_patch" or pictureName == "gate_connection_patch" then
       local tempPicture                    = lib.prototypes.sprites.addTintToSprite4Way(picture, tint)

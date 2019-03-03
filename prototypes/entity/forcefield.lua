@@ -9,3 +9,4 @@ function addForceField(color)
 end
 
 addForceField("blue")
+addForceField("green")

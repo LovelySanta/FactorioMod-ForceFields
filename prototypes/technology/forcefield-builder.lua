@@ -11,16 +11,21 @@ function forceFieldWallTech(color)
   local forceFieldWallTech = util.table.deepcopy(data.raw["technology"]["stone-walls"])
   local settings = require("prototypes/settings")[color]
 
-  forceFieldWallTech.name= string.format(settings.name, "wall", color)
+  forceFieldWallTech.name             = string.format(settings.name, "wall", color)
 
-  forceFieldWallTech.icon = nil
-  forceFieldWallTech.icon_size = nil
-  forceFieldWallTech.icons = lib.prototypes.icons.getIcons("technology", "stone-walls", 1, {0 ,0}, settings.colorTint)
+  forceFieldWallTech.icon             = nil
+  forceFieldWallTech.icon_size        = nil
+  forceFieldWallTech.icons            = lib.prototypes.icons.getIcons("technology", "stone-walls", 1, {0 ,0}, settings.colorTint)
 
-  forceFieldWallTech.effects = util.table.deepcopy(settings["wallTechnology"]["additionalEffects"])
-  forceFieldWallTech.unit = util.table.deepcopy(settings["wallTechnology"]["technologyRecipe"])
+  forceFieldWallTech.prerequisites    = util.table.deepcopy(settings["wallTechnology"]["additionalPrerequisites"])
+  forceFieldWallTech.effects          = util.table.deepcopy(settings["wallTechnology"]["additionalEffects"])
+  table.insert(forceFieldWallTech.effects, {type = "unlock-recipe", recipe = forceFieldWallTech.name})
 
-  forceFieldWallTech.order = "f-f-e"
+  forceFieldWallTech.unit             = util.table.deepcopy(settings["wallTechnology"]["technologyRecipe"])
+
+  forceFieldWallTech.order            = "f-f-e"
+
+
 
   data:extend{forceFieldWallTech}
 
