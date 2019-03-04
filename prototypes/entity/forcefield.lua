@@ -4,7 +4,8 @@ require 'prototypes/technology/forcefield-builder'
 function addForceField(color)
   forceFieldWallEntity(color)
   forceFieldWallTech(color)
-  --forceFieldGateEntity(color)
+  forceFieldGateEntity(color)
+  forceFieldGateTech(color)
 
 end
 

@@ -21,7 +21,7 @@ prototypeSettings["emitter"] =
 prototypeSettings["blue"] =
 {
   ["name"]              = "forcefield-%s-%s",
-  ["colorTint"]         = { r = 0, g = 0, b = 1, a = 0.5},
+  ["colorTint"]         = { r = 32/255, g = 82/255, b = 188/255, a = 0.80},
   ["resistances"]       = {
     {type = "physical"  , decrease = 3  ,  percent = 20  },
     {type = "impact"    , decrease = 45 ,  percent = 100 },
@@ -50,7 +50,7 @@ prototypeSettings["blue"] =
                         },
                         ["additionalEffects"] = {{type = "unlock-recipe", recipe = prototypeSettings["emitter"].emitterName}},
                         ["technologyRecipe"] = {
-                          ["count"]       = math.floor(.5 + 2.5 * data.raw["technology"]["advanced-electronics"].unit.count),
+                          ["count"]       = math.floor( 0.5 + 2.5 * data.raw["technology"]["advanced-electronics"].unit.count),
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["advanced-electronics"].unit.ingredients),
                           ["time"]        = 2 * data.raw["technology"]["advanced-electronics"].unit.time,
                         },
@@ -60,6 +60,11 @@ prototypeSettings["blue"] =
                         },
                         ["additionalEffects"] = {
 
+                        },
+                        ["technologyRecipe"] = {
+                          ["count"]       = math.floor( 0.5 + 0.5 * data.raw["technology"]["advanced-electronics"].unit.count),
+                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["advanced-electronics"].unit.ingredients),
+                          ["time"]        = 2 * data.raw["technology"]["advanced-electronics"].unit.time,
                         },
     },
 }
@@ -73,7 +78,7 @@ prototypeSettings["blue"] =
 prototypeSettings["green"] =
 {
   ["name"]              = prototypeSettings["blue"]["name"],
-  ["colorTint"]         = { r = 0, g = 1, b = 0, a = prototypeSettings["blue"]["colorTint"].a},
+  ["colorTint"]         = { r = 62/255, g = 221/255, b = 88/255, a = prototypeSettings["blue"]["colorTint"].a},
   ["resistances"]       = {
     {type = "physical"  , decrease = 3  ,  percent = 20  },
     {type = "impact"    , decrease = 45 ,  percent = 100 },
@@ -106,10 +111,15 @@ prototypeSettings["green"] =
                         },
   },
   ["gateTechnology"] = {["additionalPrerequisites"] = {
-
+                          string.format(prototypeSettings["blue"]["name"], "gate", "blue"),
                         },
                         ["additionalEffects"] = {
 
+                        },
+                        ["technologyRecipe"] = {
+                          ["count"]       = math.floor( 0.5 + 0.5 * ( 2 * prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["count"])),
+                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["explosives"].unit.ingredients),
+                          ["time"]        = prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
 }
@@ -123,7 +133,7 @@ prototypeSettings["green"] =
 prototypeSettings["purple"] =
 {
   ["name"]              = prototypeSettings["blue"]["name"],
-  ["colorTint"]         = { r = 1, g = 0, b = 1, a = prototypeSettings["blue"]["colorTint"].a},
+  ["colorTint"]         = { r = 89/255, g = 66/255, b = 206/255, a = prototypeSettings["blue"]["colorTint"].a},
   ["resistances"]       = {
     {type = "physical"  , decrease = 3  ,  percent = 20  },
     {type = "impact"    , decrease = 45 ,  percent = 100 },
@@ -157,10 +167,15 @@ prototypeSettings["purple"] =
                         },
   },
   ["gateTechnology"] = {["additionalPrerequisites"] = {
-
+                          string.format(prototypeSettings["blue"]["name"], "gate", "green"),
                         },
                         ["additionalEffects"] = {
 
+                        },
+                        ["technologyRecipe"] = {
+                          ["count"]       = math.floor( 0.5 + 0.5 * ( 2 * prototypeSettings["green"]["wallTechnology"]["technologyRecipe"]["count"])),
+                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["military-3"].unit.ingredients),
+                          ["time"]        = prototypeSettings["green"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
 }
@@ -174,7 +189,7 @@ prototypeSettings["purple"] =
 prototypeSettings["red"] =
 {
   ["name"]              = prototypeSettings["blue"]["name"],
-  ["colorTint"]         = { r = 1, g = 0, b = 0, a = prototypeSettings["blue"]["colorTint"].a},
+  ["colorTint"]         = { r = 219/255, g = 30/255, b = 30/255, a = prototypeSettings["blue"]["colorTint"].a},
   ["resistances"]       = {
     {type = "physical"  , decrease = 3  ,  percent = 20  },
     {type = "impact"    , decrease = 45 ,  percent = 100 },
@@ -202,15 +217,20 @@ prototypeSettings["red"] =
                         ["additionalEffects"] = {},
                         ["technologyRecipe"] = {
                           ["count"]       = 2 * (prototypeSettings["purple"]["wallTechnology"]["technologyRecipe"]["count"] + prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["count"]),
-                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["military-3"].unit.ingredients),
+                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["military-4"].unit.ingredients),
                           ["time"]        = prototypeSettings["purple"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
   ["gateTechnology"] = {["additionalPrerequisites"] = {
-
+                          string.format(prototypeSettings["blue"]["name"], "gate", "purple"),
                         },
                         ["additionalEffects"] = {
 
+                        },
+                        ["technologyRecipe"] = {
+                          ["count"]       = math.floor( 0.5 + 0.5 * ( 2 * prototypeSettings["purple"]["wallTechnology"]["technologyRecipe"]["count"])),
+                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["military-4"].unit.ingredients),
+                          ["time"]        = prototypeSettings["purple"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
 }

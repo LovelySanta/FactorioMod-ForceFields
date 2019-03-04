@@ -18,7 +18,7 @@ function forceFieldWallEntity(color)
 
   forceFieldWall.minable                = {hardness = 0.2, mining_time = 1,
                                            result = (settings.manualPlaceable and forceFieldWall.name or nil),}
-  forceFieldWall.mised_sound            = nil
+  forceFieldWall.mined_sound            = nil
   forceFieldWall.fast_replaceable_group = nil
 
   forceFieldWall.order                  = "a[items]-f[forcefields]"
@@ -45,15 +45,65 @@ function forceFieldWallEntity(color)
 end
 
 
--- function forceFieldGateEntity(color)
---
---   local settings = require("prototypes/settings")[color]
---   local forceFieldGate = util.table.deepcopy(data.raw["gate"]["gate"])
---
---   forceFIeldGate.name       = string.forward(settings.name, "gate", color)
---   forceFieldGate.max_health = settings.maxHealth
---
---   forceFieldWall.icon       = lib.prototypes.icons.getIcons("gate", "gate", 1, {0 ,0}, settings.colorTint)
---
---
--- end
+
+function forceFieldGateEntity(color)
+
+  local settings = require("prototypes/settings")[color]
+  local forceFieldGate = util.table.deepcopy(data.raw["gate"]["gate"])
+
+  forceFieldGate.name                   = string.format(settings.name, "gate", color)
+
+  forceFieldGate.icon_size              = nil
+  forceFieldGate.icon                   = nil
+  forceFieldGate.icons                  = lib.prototypes.icons.getIcons("gate", "gate", 1, {0 ,0}, settings.colorTint)
+
+  table.insert(forceFieldGate.flags, "not-repairable")
+
+  forceFieldGate.minable                = {hardness = 0.2, mining_time = 1,
+                                           result = (settings.manualPlaceable and forceFieldGate.name or nil),}
+  forceFieldGate.mined_sound            = nil
+  forceFieldGate.fast_replaceable_group = nil
+
+  forceFieldGate.order                  = "a[items]-f[forcefields]"
+  forceFieldGate.subgroup               = "forcefield"
+
+  forceFieldGate.max_health             = settings.properties.maxHealth
+  forceFieldGate.resistances            = settings.resistances
+
+
+    -- color
+  local tint = settings.colorTint
+  for _,animationName in pairs{
+    "vertical_animation"             ,
+    "horizontal_animation"           ,
+
+    "vertical_rail_base"             ,
+    --"vertical_rail_base_mask"        ,
+    "horizontal_rail_base"           ,
+    --"horizontal_rail_base_mask"      ,
+
+    "horizontal_rail_animation_left" ,
+    "horizontal_rail_animation_right",
+    "vertical_rail_animation_left"   ,
+    "vertical_rail_animation_right"  ,
+  } do
+    local tempPicture                    = lib.prototypes.sprites.addTintToAnimation(forceFieldGate[animationName], tint)
+    forceFieldGate[animationName] = lib.prototypes.sprites.removeShadowsFromSpriteVariation(tempPicture)
+  end
+  for _,spriteName in pairs{
+    "vertical_rail_base"  ,
+    "horizontal_rail_base",
+  } do
+    local tempPicture                    = lib.prototypes.sprites.addTintToSprite(forceFieldGate[spriteName], tint)
+    forceFieldGate[spriteName] = lib.prototypes.sprites.removeShadowsFromSpriteVariation(tempPicture)
+  end
+  for _,sprite4WayName in pairs{
+    "wall_patch",
+  } do
+    local tempPicture                    = lib.prototypes.sprites.addTintToSprite4Way(forceFieldGate[sprite4WayName], tint)
+    forceFieldGate[sprite4WayName] = lib.prototypes.sprites.removeShadowsFromSpriteVariation(tempPicture)
+  end
+
+  data:extend{forceFieldGate}
+
+end

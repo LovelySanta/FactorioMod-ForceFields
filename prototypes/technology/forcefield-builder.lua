@@ -30,3 +30,35 @@ function forceFieldWallTech(color)
   data:extend{forceFieldWallTech}
 
 end
+
+
+
+function forceFieldGateTech(color)
+
+  --required for technology effect
+  forceFieldGateItem(color)
+  forceFieldGateRecipe(color)
+
+  local forceFieldGateTech = util.table.deepcopy(data.raw["technology"]["gates"])
+  local settings = require("prototypes/settings")[color]
+
+  forceFieldGateTech.name             = string.format(settings.name, "gate", color)
+
+  forceFieldGateTech.icon             = nil
+  forceFieldGateTech.icon_size        = nil
+  forceFieldGateTech.icons            = lib.prototypes.icons.getIcons("technology", "gates", 1, {0 ,0}, settings.colorTint)
+
+  forceFieldGateTech.prerequisites    = util.table.deepcopy(settings["gateTechnology"]["additionalPrerequisites"])
+  table.insert(forceFieldGateTech.prerequisites, string.format(settings.name, "wall", color))
+  forceFieldGateTech.effects          = util.table.deepcopy(settings["gateTechnology"]["additionalEffects"])
+  table.insert(forceFieldGateTech.effects, {type = "unlock-recipe", recipe = forceFieldGateTech.name})
+
+  forceFieldGateTech.unit             = util.table.deepcopy(settings["gateTechnology"]["technologyRecipe"])
+
+  forceFieldGateTech.order            = "f-f-e"
+
+
+
+  data:extend{forceFieldGateTech}
+
+end

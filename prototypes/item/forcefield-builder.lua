@@ -20,3 +20,26 @@ function forceFieldWallItem(color)
   data:extend{forceFieldWall}
 
 end
+
+
+
+function forceFieldGateItem(color)
+
+  local forceFieldGate = util.table.deepcopy(data.raw["item"]["gate"])
+  local settings = require("prototypes/settings")[color]
+
+  forceFieldGate.name                   = string.format(settings.name, "gate", color)
+
+  forceFieldGate.icon_size              = nil
+  forceFieldGate.icon                   = nil
+  forceFieldGate.icons                  = lib.prototypes.icons.getIcons("item", "gate", 1, {0 ,0}, settings.colorTint)
+
+  forceFieldGate.order                  = "a[items]-f[forcefields]"
+  forceFieldGate.subgroup               = "forcefield"
+
+  forceFieldGate.place_result           = (settings.manualPlaceable and forceFieldGate.name or nil)
+
+
+  data:extend{forceFieldGate}
+
+end
