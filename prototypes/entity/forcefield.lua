@@ -10,3 +10,5 @@ end
 
 addForceField("blue")
 addForceField("green")
+addForceField("purple")
+addForceField("red")
