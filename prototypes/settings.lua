@@ -1,6 +1,8 @@
 local prototypeSettings = {}
 prototypeSettings["modName"] = "__ForceFields2__"
 
+local prototyping = data and data.raw or false
+
 
 --------------------------------------------------------------------------------
 -----                             Emitter                                   ----
@@ -41,21 +43,25 @@ prototypeSettings["blue"] =
     maxHealth = 300,
   },
   ["manualPlaceable"]   = true,
-  ["wallTechnology"] = {["additionalPrerequisites"] = {
+  ["wallTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                          "optics",
                          "stone-walls",
                          "military-2",
                          "advanced-electronics",
                          "battery",
                         },
-                        ["additionalEffects"] = {{type = "unlock-recipe", recipe = prototypeSettings["emitter"].emitterName}},
+                        ["additionalEffects"] = {
+                          {type = "unlock-recipe", recipe = prototypeSettings["emitter"].emitterName}
+                        },
                         ["technologyRecipe"] = {
                           ["count"]       = math.floor( 0.5 + 2.5 * data.raw["technology"]["advanced-electronics"].unit.count),
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["advanced-electronics"].unit.ingredients),
                           ["time"]        = 2 * data.raw["technology"]["advanced-electronics"].unit.time,
                         },
     },
-  ["gateTechnology"] = {["additionalPrerequisites"] = {
+  ["gateTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           "gates",
                         },
                         ["additionalEffects"] = {
@@ -98,19 +104,23 @@ prototypeSettings["green"] =
     maxHealth = 700,
   },
   ["manualPlaceable"] = prototypeSettings["blue"]["manualPlaceable"],
-  ["wallTechnology"] = {["additionalPrerequisites"] = {
+  ["wallTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "wall", "blue"),
                           "explosives",
                           "laser",
                         },
-                        ["additionalEffects"] = {},
+                        ["additionalEffects"] = {
+                          
+                        },
                         ["technologyRecipe"] = {
                           ["count"]       = 2 * prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["count"],
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["explosives"].unit.ingredients),
                           ["time"]        = prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
-  ["gateTechnology"] = {["additionalPrerequisites"] = {
+  ["gateTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "gate", "blue"),
                         },
                         ["additionalEffects"] = {
@@ -155,18 +165,22 @@ prototypeSettings["purple"] =
   },
   ["manualPlaceable"] = prototypeSettings["blue"]["manualPlaceable"],
   --["upgrade"] = true,
-  ["wallTechnology"] = {["additionalPrerequisites"] = {
+  ["wallTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "wall", "green"),
                           "military-3",
                         },
-                        ["additionalEffects"] = {},
+                        ["additionalEffects"] = {
+                          
+                        },
                         ["technologyRecipe"] = {
                           ["count"]       = 2 * prototypeSettings["green"]["wallTechnology"]["technologyRecipe"]["count"],
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["military-3"].unit.ingredients),
                           ["time"]        = prototypeSettings["green"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
-  ["gateTechnology"] = {["additionalPrerequisites"] = {
+  ["gateTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "gate", "green"),
                         },
                         ["additionalEffects"] = {
@@ -210,18 +224,22 @@ prototypeSettings["red"] =
   },
   ["manualPlaceable"] = prototypeSettings["blue"]["manualPlaceable"],
   --["upgrade"] = true,
-  ["wallTechnology"] = {["additionalPrerequisites"] = {
+  ["wallTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "wall", "purple"),
                           "military-4",
                         },
-                        ["additionalEffects"] = {},
+                        ["additionalEffects"] = {
+                          
+                        },
                         ["technologyRecipe"] = {
                           ["count"]       = 2 * (prototypeSettings["purple"]["wallTechnology"]["technologyRecipe"]["count"] + prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["count"]),
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["military-4"].unit.ingredients),
                           ["time"]        = prototypeSettings["purple"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
-  ["gateTechnology"] = {["additionalPrerequisites"] = {
+  ["gateTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "gate", "purple"),
                         },
                         ["additionalEffects"] = {

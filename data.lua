@@ -8,3 +8,5 @@ require("prototypes/entity/emitter")
 require("prototypes/entity/forcefield-crafter")
 
 require("prototypes/recipe/emitter")
+
+require("prototypes/gui/styles")
