@@ -1,5 +1,5 @@
 require 'src/utilities'
-require 'src/settings'
+local settings = require 'src/settings'
 
 -- execute functions with remote.call("forcefields", "fuction_name")
 
@@ -49,7 +49,7 @@ remote.add_interface("forcefields", {
       miny = miny * 32
       maxy = maxy * 32
 
-      for name in pairs(Settings.forcefieldTypes) do
+      for name in pairs(settings.forcefieldTypes) do
         for _,v in pairs(surface.find_entities_filtered({area = {{minx, miny}, {maxx, maxy}}, name = name})) do
           v.destroy()
         end

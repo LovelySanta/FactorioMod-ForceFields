@@ -1,4 +1,4 @@
-require 'src/settings'
+local settings = require 'src/settings'
 require 'src/utilities'
 
 
@@ -37,8 +37,8 @@ function Forcefield:onForcefieldDied(field)
     if global.forcefields.emitters ~= nil and global.forcefields.emitters[emitterID] ~= nil then
       Emitter:setActive(global.forcefields.emitters[emitterID], true)
     end
-    if Settings.forcefieldTypes[field.name]["deathEntity"] ~= nil then
-      surface.create_entity({name = Settings.forcefieldTypes[field.name]["deathEntity"], position = pos, force = field.force})
+    if settings.forcefieldTypes[field.name]["deathEntity"] ~= nil then
+      surface.create_entity({name = settings.forcefieldTypes[field.name]["deathEntity"], position = pos, force = field.force})
     end
   end
 
@@ -52,7 +52,7 @@ function Forcefield:onForcefieldMined(field, playerIndex)
   if playerIndex ~= nil then
     local player = game.players[playerIndex]
     if player.character ~= nil then
-      player.character.damage(Settings.forcefieldTypes[field.name]["damageWhenMined"], player.force)
+      player.character.damage(settings.forcefieldTypes[field.name]["damageWhenMined"], player.force)
     end
   end
 
@@ -72,7 +72,7 @@ end
 
 
 function Forcefield:onResearchFinished(research)
-  local recipeNames = Settings.forcefieldTypes
+  local recipeNames = settings.forcefieldTypes
   for _,effect in pairs(research.effects) do
     if effect.type == "unlock-recipe" and recipeNames[effect.recipe] ~= nil then
       research.force.recipes[effect.recipe].enabled = false
@@ -88,7 +88,7 @@ function Forcefield:scanAndBuildFields(emitterTable)
   if emitterTable["build-tick"] == 0 then
     local energyBefore = emitterTable["entity"].energy
     -- Check to make sure there is enough energy
-    if emitterTable["entity"].energy >= (Settings.tickRate * Settings.forcefieldTypes[Settings.defaultFieldSuffix .. emitterTable["type"]]["energyPerRespawn"] + Settings.tickRate * Settings.forcefieldTypes[Settings.defaultFieldSuffix .. emitterTable["type"]]["energyPerCharge"]) then
+    if emitterTable["entity"].energy >= (settings.tickRate * settings.forcefieldTypes[settings.defaultFieldSuffix .. emitterTable["type"]]["energyPerRespawn"] + settings.tickRate * settings.forcefieldTypes[settings.defaultFieldSuffix .. emitterTable["type"]]["energyPerCharge"]) then
       local pos, xInc, yInc, incTimes = self:getFieldsArea(emitterTable)
       local fieldConfigOffset = (incTimes + 1)/2
       local blockingFields = 0
@@ -116,7 +116,7 @@ function Forcefield:scanAndBuildFields(emitterTable)
 
       for n=1,incTimes do
         -- If another emitter (or even this one previously) has built a field at this location, skip trying to build there, same if we don't have to build here
-        if (fields[index][pos.x] == nil or fields[index][pos.x][pos.y] == nil) and emitterTable["config"][n-fieldConfigOffset] ~= Settings.fieldEmptySuffix then
+        if (fields[index][pos.x] == nil or fields[index][pos.x][pos.y] == nil) and emitterTable["config"][n-fieldConfigOffset] ~= settings.fieldEmptySuffix then
           -- If that spot has no field, we need to try and build one
           local fieldEntityName = emitterTable["type"] .. emitterTable["config"][n-fieldConfigOffset]
           -- check if we can build the field
@@ -124,7 +124,7 @@ function Forcefield:scanAndBuildFields(emitterTable)
             local newField = surface.create_entity({name = fieldEntityName, position = pos, force = force, direction = direction})
 
             -- This new entity will have 0 health on creation + one load of recharge this tick
-            newField.health = Settings.forcefieldTypes[fieldEntityName]["chargeRate"]
+            newField.health = settings.forcefieldTypes[fieldEntityName]["chargeRate"]
             if emitterTable["generating-fields"] == nil then
               emitterTable["generating-fields"] = {}
             end
@@ -138,10 +138,10 @@ function Forcefield:scanAndBuildFields(emitterTable)
             -- We have build a new field, congratz
             buildField = true
             -- Remove the power consumption for this tick
-            emitterTable["entity"].energy = emitterTable["entity"].energy -  (Settings.tickRate * Settings.forcefieldTypes[fieldEntityName]["energyPerRespawn"])
+            emitterTable["entity"].energy = emitterTable["entity"].energy -  (settings.tickRate * settings.forcefieldTypes[fieldEntityName]["energyPerRespawn"])
             -- If we can't get to the end, we need to degrade as we have no power to maintain the full field
             if n ~= incTimes and emitterTable["entity"].energy == 0 then
-              emitterTable["build-tick"] = Settings.forcefieldTypes[fieldEntityName]["respawnRate"] * 10
+              emitterTable["build-tick"] = settings.forcefieldTypes[fieldEntityName]["respawnRate"] * 10
               self:degradeLinkedFields(emitterTable)
               break
             end
@@ -161,7 +161,7 @@ function Forcefield:scanAndBuildFields(emitterTable)
               end
             else
               -- Some other entity (other than a force field) is standing in the way, so we need to destroy it
-              surface.create_entity({name = Settings.forcefieldBuildDamageName, position = pos, force = force})
+              surface.create_entity({name = settings.forcefieldBuildDamageName, position = pos, force = force})
             end
           end
         else -- There is already some field here, by this or an previous field
@@ -192,13 +192,13 @@ function Forcefield:scanAndBuildFields(emitterTable)
       else
         -- if the field is partialy blocked, we need to keep building it
         if not builtField then
-          emitterTable["build-tick"] = Settings.forcefieldTypes[Settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"] * 3 + math.random(Settings.forcefieldTypes[Settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"])
+          emitterTable["build-tick"] = settings.forcefieldTypes[settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"] * 3 + math.random(settings.forcefieldTypes[settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"])
         else
-          emitterTable["build-tick"] = Settings.forcefieldTypes[Settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"]
+          emitterTable["build-tick"] = settings.forcefieldTypes[settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"]
         end
       end
     else -- If there is not enough energy, time to degrade
-      emitterTable["build-tick"] = Settings.forcefieldTypes[Settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"] * 5
+      emitterTable["build-tick"] = settings.forcefieldTypes[settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"] * 5
       self:degradeLinkedFields(emitterTable)
     end
 
@@ -213,23 +213,23 @@ end
 
 function Forcefield:generateFields(emitterTable)
   local availableEnergy = emitterTable["entity"].energy
-  local tickRate = Settings.tickRate
+  local tickRate = settings.tickRate
 
   -- Generate each field
   for k,field in pairs(emitterTable["generating-fields"]) do
     if field.valid then
       -- Generate field if enough energy
-      if availableEnergy >= (Settings.forcefieldTypes[field.name]["energyPerCharge"] * tickRate) then
-        field.health = field.health + (Settings.forcefieldTypes[field.name]["chargeRate"] * tickRate)
-        availableEnergy = availableEnergy - (Settings.forcefieldTypes[field.name]["energyPerCharge"] * tickRate)
+      if availableEnergy >= (settings.forcefieldTypes[field.name]["energyPerCharge"] * tickRate) then
+        field.health = field.health + (settings.forcefieldTypes[field.name]["chargeRate"] * tickRate)
+        availableEnergy = availableEnergy - (settings.forcefieldTypes[field.name]["energyPerCharge"] * tickRate)
         -- If field is fully generated, remove out of the table
-        if field.health >= Settings.forcefieldTypes[field.name]["maxHealth"] then
+        if field.health >= settings.forcefieldTypes[field.name]["maxHealth"] then
           table.remove(emitterTable["generating-fields"], k)
         end
       else -- If not enough energy
         self:degradeLinkedFields(emitterTable)
         emitterTable["generating-fields"] = {}
-        emitterTable["build-tick"] = Settings.forcefieldTypes[field.name]["respawnRate"] * 10
+        emitterTable["build-tick"] = settings.forcefieldTypes[field.name]["respawnRate"] * 10
         Emitter:setActive(emitterTable, true, true)
       end
     else -- If invalid for some reason, delete it
@@ -255,20 +255,20 @@ function Forcefield:regenerateFields(emitterTable)
 
   for k,field in pairs(emitterTable["damaged-fields"]) do
     if field.valid then
-      local lostHealth = Settings.forcefieldTypes[field.name]["maxHealth"] - field.health
+      local lostHealth = settings.forcefieldTypes[field.name]["maxHealth"] - field.health
 
       -- Check so we dont go over our charge rate
-      local maxHealthRecharge = Settings.forcefieldTypes[field.name]["chargeRate"] * Settings.tickRate
+      local maxHealthRecharge = settings.forcefieldTypes[field.name]["chargeRate"] * settings.tickRate
       if lostHealth > maxHealthRecharge then
         lostHealth = maxHealthRecharge
       end
 
       -- If enough energy, we repair
-      neededEnergy = Settings.forcefieldTypes[field.name]["energyPerHealthLost"] * lostHealth
+      neededEnergy = settings.forcefieldTypes[field.name]["energyPerHealthLost"] * lostHealth
       if availableEnergy >= neededEnergy then
         field.health = field.health + lostHealth
         availableEnergy = availableEnergy - neededEnergy
-        if field.health == Settings.forcefieldTypes[field.name]["maxHealth"] then
+        if field.health == settings.forcefieldTypes[field.name]["maxHealth"] then
           table.remove(emitterTable["damaged-fields"], k)
         end
 
@@ -276,7 +276,7 @@ function Forcefield:regenerateFields(emitterTable)
       else -- Not enough energy, degrade the wall
         self:degradeLinkedFields(emitterTable)
         emitterTable["damaged-fields"] = {}
-        emitterTable["build-tick"] = Settings.forcefieldTypes[field.name]["respawnRate"] * 10
+        emitterTable["build-tick"] = settings.forcefieldTypes[field.name]["respawnRate"] * 10
         Emitter:setActive(emitterTable, true, true)
       end
     else -- Remove if invalid
@@ -381,7 +381,7 @@ function Forcefield:findForcefieldsArea(surface, area, includeFullHealth)
 
   if #walls ~= 0 then
     for i,wall in pairs(walls) do
-      if Settings.forcefieldTypes[wall.name] ~= nil and (includeFullHealth or wall.health ~= Settings.forcefieldTypes[wall.name]["maxHealth"]) then
+      if settings.forcefieldTypes[wall.name] ~= nil and (includeFullHealth or wall.health ~= settings.forcefieldTypes[wall.name]["maxHealth"]) then
         table.insert(foundFields, wall)
       end
     end
@@ -389,7 +389,7 @@ function Forcefield:findForcefieldsArea(surface, area, includeFullHealth)
 
   if #gates ~= 0 then
     for i,gate in pairs(gates) do
-      if Settings.forcefieldTypes[gate.name] ~= nil and (includeFullHealth or gate.health ~= Settings.forcefieldTypes[gate.name]["maxHealth"]) then
+      if settings.forcefieldTypes[gate.name] ~= nil and (includeFullHealth or gate.health ~= settings.forcefieldTypes[gate.name]["maxHealth"]) then
         table.insert(foundFields, gate)
       end
     end
@@ -409,7 +409,7 @@ function Forcefield:findForcefieldsRadius(surface, position, radius, includeFull
 
   if #walls ~= 0 then
     for i,wall in pairs(walls) do
-      if Settings.forcefieldTypes[wall.name] ~= nil and (includeFullHealth or wall.health ~= Settings.forcefieldTypes[wall.name]["maxHealth"]) then
+      if settings.forcefieldTypes[wall.name] ~= nil and (includeFullHealth or wall.health ~= settings.forcefieldTypes[wall.name]["maxHealth"]) then
         table.insert(foundFields, wall)
       end
     end
@@ -417,7 +417,7 @@ function Forcefield:findForcefieldsRadius(surface, position, radius, includeFull
 
   if #gates ~= 0 then
     for i,gate in pairs(gates) do
-      if Settings.forcefieldTypes[gate.name] ~= nil and (includeFullHealth or gate.health ~= Settings.forcefieldTypes[gate.name]["maxHealth"]) then
+      if settings.forcefieldTypes[gate.name] ~= nil and (includeFullHealth or gate.health ~= settings.forcefieldTypes[gate.name]["maxHealth"]) then
         table.insert(foundFields, gate)
       end
     end
@@ -489,7 +489,7 @@ function Forcefield:removeDegradingFieldID(fieldID)
       local pos = global.forcefields.degradingFields[fieldID].position
       local surface = global.forcefields.degradingFields[fieldID].surface
       table.remove(global.forcefields.degradingFields, fieldID)
-      local emitters = surface.find_entities_filtered({area = {{x = pos.x - Settings.maxFieldDistance, y = pos.y - Settings.maxFieldDistance}, {x = pos.x + Settings.maxFieldDistance, y = pos.y + Settings.maxFieldDistance}}, name = Settings.emitterName})
+      local emitters = surface.find_entities_filtered({area = {{x = pos.x - settings.maxFieldDistance, y = pos.y - settings.maxFieldDistance}, {x = pos.x + settings.maxFieldDistance, y = pos.y + settings.maxFieldDistance}}, name = settings.emitterName})
       for _,emitter in pairs(emitters) do
         emitterTable = Emitter:findEmitter(emitter)
         if emitterTable then

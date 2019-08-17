@@ -1,75 +1,73 @@
 require 'src/utilities'
 local prototypeSettings = require('prototypes/settings')
 
-Settings = {}
+local settings = {}
 
 
-Settings.modName = "__ForceFields2__"
+settings.modName = prototypeSettings.modName
 
 
 
 -- gui settings
-Settings.configWallIconName = "forcefield-config-tool"
+settings.configWallSprite = prototypeSettings.gui.configWallSprite
 
---Settings.guiSelectButtonStyle = "selectbuttons"
---Settings.guiSelectButtonSelectedStyle = "selectbuttonsselected"
---Settings.guiSmallSelectButtonStyle = "smallselectbuttons"
---Settings.guiSmallSelectButtonSelectedStyle = "smallselectbuttonsselected"
-Settings.guiSelectButtonStyle = "button"
-Settings.guiSelectButtonSelectedStyle = "button"
-Settings.guiSmallSelectButtonStyle = "small_slot_button"
-Settings.guiSmallSelectButtonSelectedStyle = "small_slot_button"
+settings.guiSelectButtonStyle              = prototypeSettings.gui.guiSelectButtonStyle
+settings.guiSelectButtonSelectedStyle      = prototypeSettings.gui.guiSelectButtonSelectedStyle
+settings.guiSmallSelectButtonStyle         = prototypeSettings.gui.guiSmallSelectButtonStyle
+settings.guiSmallSelectButtonSelectedStyle = prototypeSettings.gui.guiSmallSelectButtonSelectedStyle
+settings.guiTextfieldStyle                 = prototypeSettings.gui.guiTextfieldStyle
+settings.guiItemSlotStyle                  = prototypeSettings.gui.guiItemSlotStyle
 
 -- builder settings
-Settings.forcefieldBuildDamageName = "forcefield-build-damage"
-Settings.forcefieldDeathDamageName = "forcefield-death-damage"
+settings.forcefieldBuildDamageName = "forcefield-build-damage"
+settings.forcefieldDeathDamageName = "forcefield-death-damage"
 
 
 
 -- emitter settings
-Settings.emitterName = "forcefield-emitter"
-Settings.tickRate = 20
+settings.emitterName = "forcefield-emitter"
+settings.tickRate = 20
 
-Settings.emitterDefaultDistance = 10
-Settings.maxRangeUpgrades = 23
-Settings.emitterMaxDistance = Settings.emitterDefaultDistance + Settings.maxRangeUpgrades
+settings.emitterDefaultDistance = 10
+settings.maxRangeUpgrades = 23
+settings.emitterMaxDistance = settings.emitterDefaultDistance + settings.maxRangeUpgrades
 
-Settings.emitterDefaultWidth = 25
-Settings.maxWidthUpgrades = 10
-Settings.widthUpgradeMultiplier = 4
-Settings.emitterMaxWidth = Settings.emitterDefaultWidth + (Settings.maxWidthUpgrades * Settings.widthUpgradeMultiplier)
+settings.emitterDefaultWidth = 25
+settings.maxWidthUpgrades = 10
+settings.widthUpgradeMultiplier = 4
+settings.emitterMaxWidth = settings.emitterDefaultWidth + (settings.maxWidthUpgrades * settings.widthUpgradeMultiplier)
 
-Settings.maxFieldDistance = math.max(Settings.emitterMaxDistance, Settings.emitterMaxWidth)
+settings.maxFieldDistance = math.max(settings.emitterMaxDistance, settings.emitterMaxWidth)
 
 
 
 -- forcefields settings
-Settings.fieldSuffix      = string.format(prototypeSettings["blue"].name, "wall", "")
-Settings.fieldGateSuffix  = string.format(prototypeSettings["blue"].name, "gate", "")
-Settings.fieldEmptySuffix = string.format(prototypeSettings["blue"].name, "empty", "")
-Settings.defaultFieldSuffix = Settings.fieldSuffix
+settings.fieldSuffix      = string.format(prototypeSettings["blue"].name, "wall", "")
+settings.fieldGateSuffix  = string.format(prototypeSettings["blue"].name, "gate", "")
+settings.fieldEmptySuffix = string.format(prototypeSettings["blue"].name, "empty", "")
+settings.defaultFieldSuffix = settings.fieldSuffix
 
-Settings.defaultFieldType = "blue"
-Settings.defaultFieldDirection = defines.direction.north
-Settings.forcefieldTypes =
+settings.defaultFieldType = "blue"
+settings.defaultFieldDirection = defines.direction.north
+settings.forcefieldTypes =
 {
-  [Settings.fieldSuffix .. "blue"  ] = prototypeSettings["blue"  ].properties,
-  [Settings.fieldSuffix .. "green" ] = prototypeSettings["green" ].properties,
-  [Settings.fieldSuffix .. "purple"] = prototypeSettings["purple"].properties,
-  [Settings.fieldSuffix .. "red"   ] = prototypeSettings["red"   ].properties,
+  [settings.fieldSuffix .. "blue"  ] = prototypeSettings["blue"  ].properties,
+  [settings.fieldSuffix .. "green" ] = prototypeSettings["green" ].properties,
+  [settings.fieldSuffix .. "purple"] = prototypeSettings["purple"].properties,
+  [settings.fieldSuffix .. "red"   ] = prototypeSettings["red"   ].properties,
 }
-Settings.forcefieldTypes[Settings.fieldGateSuffix .. "blue"  ] = Settings.forcefieldTypes[Settings.fieldSuffix .. "blue"  ]
-Settings.forcefieldTypes[Settings.fieldGateSuffix .. "green" ] = Settings.forcefieldTypes[Settings.fieldSuffix .. "green" ]
-Settings.forcefieldTypes[Settings.fieldGateSuffix .. "purple"] = Settings.forcefieldTypes[Settings.fieldSuffix .. "purple"]
-Settings.forcefieldTypes[Settings.fieldGateSuffix .. "red"   ] = Settings.forcefieldTypes[Settings.fieldSuffix .. "red"   ]
+settings.forcefieldTypes[settings.fieldGateSuffix .. "blue"  ] = settings.forcefieldTypes[settings.fieldSuffix .. "blue"  ]
+settings.forcefieldTypes[settings.fieldGateSuffix .. "green" ] = settings.forcefieldTypes[settings.fieldSuffix .. "green" ]
+settings.forcefieldTypes[settings.fieldGateSuffix .. "purple"] = settings.forcefieldTypes[settings.fieldSuffix .. "purple"]
+settings.forcefieldTypes[settings.fieldGateSuffix .. "red"   ] = settings.forcefieldTypes[settings.fieldSuffix .. "red"   ]
 
---Settings.fieldEmptySetting = 0
---Settings.fieldWallSetting = 1
---Settings.fieldGateSetting = 2
+--settings.fieldEmptySetting = 0
+--settings.fieldWallSetting = 1
+--settings.fieldGateSetting = 2
 
 
 
-function Settings:verifySettings()
+function settings:verifySettings()
   if self.tickRate < 0 then
     self.tickRate = 0
     throwError("Tick rate must be >= 0.")
@@ -100,3 +98,5 @@ function Settings:verifySettings()
     throwError("Emitter default field type isn't known.")
   end
 end
+
+return settings

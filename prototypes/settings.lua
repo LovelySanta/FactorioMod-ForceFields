@@ -15,6 +15,23 @@ prototypeSettings["emitter"] =
   ["crafting-category"] = "forcefield-crafter",
 }
 
+--------------------------------------------------------------------------------
+-----                               Gui                                     ----
+--------------------------------------------------------------------------------
+
+prototypeSettings["gui"] =
+{
+  ["guiSelectButtonStyle"             ] = "emitter_select_button",
+  ["guiSelectButtonSelectedStyle"     ] = "emitter_select_button_selected",
+  ["guiSmallSelectButtonStyle"        ] = "emitter_small_select_button",
+  ["guiSmallSelectButtonSelectedStyle"] = "emitter_small_select_button_selected",
+
+  ["guiTextfieldStyle"] = "short_number_textfield",
+  ["guiItemSlotStyle" ] = "emitter_slot_button",
+
+  ["configWallSprite"] = "forcefield-config-tool",
+}
+
 
 --------------------------------------------------------------------------------
 -----                          Blue forceField                              ----

@@ -9,4 +9,5 @@ require("prototypes/entity/forcefield-crafter")
 
 require("prototypes/recipe/emitter")
 
+require("prototypes/gui/sprites")
 require("prototypes/gui/styles")

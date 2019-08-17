@@ -1,4 +1,4 @@
-require 'src/settings'
+local settings = require 'src/settings'
 require 'src/utilities'
 
 require 'src/forcefield'
@@ -165,76 +165,78 @@ function Gui:showEmitterGui(emitterTable, playerIndex)
 
   -- Create the gui
   if canOpenGui and guiCenter and guiCenter.emitterConfig == nil then
-    local frame = guiCenter.add{type = "frame", name = self.guiElementNames.guiFrame, caption = game.entity_prototypes[Settings.emitterName].localised_name, direction = "vertical", style = frame_caption_label}
+    local frame = guiCenter.add{type = "frame", name = self.guiElementNames.guiFrame, caption = game.entity_prototypes[settings.emitterName].localised_name, direction = "vertical", style = frame_caption_label}
     local configTable = frame.add{type ="table", name = self.guiElementNames.configTable, column_count = 2}
 
     -- Direction of forcefield
     configTable.add{type = "label", name = self.guiElementNames.directionLabel, caption = "Direction:                       "}
     local directions = configTable.add{type = "table", name = self.guiElementNames.directionTable, column_count = 4}
-    local d1 = directions.add{type = "sprite-button", name = self.guiElementNames.directionOptionN, style = Settings.guiSelectButtonStyle, sprite = "virtual-signal/signal-N"}
-    local d2 = directions.add{type = "sprite-button", name = self.guiElementNames.directionOptionS, style = Settings.guiSelectButtonStyle, sprite = "virtual-signal/signal-S"}
-    local d3 = directions.add{type = "sprite-button", name = self.guiElementNames.directionOptionE, style = Settings.guiSelectButtonStyle, sprite = "virtual-signal/signal-E"}
-    local d4 = directions.add{type = "sprite-button", name = self.guiElementNames.directionOptionW, style = Settings.guiSelectButtonStyle, sprite = "virtual-signal/signal-W"}
+    local d1 = directions.add{type = "sprite-button", name = self.guiElementNames.directionOptionN, style = settings.guiSelectButtonStyle, sprite = "virtual-signal/signal-N"}
+    local d2 = directions.add{type = "sprite-button", name = self.guiElementNames.directionOptionS, style = settings.guiSelectButtonStyle, sprite = "virtual-signal/signal-S"}
+    local d3 = directions.add{type = "sprite-button", name = self.guiElementNames.directionOptionE, style = settings.guiSelectButtonStyle, sprite = "virtual-signal/signal-E"}
+    local d4 = directions.add{type = "sprite-button", name = self.guiElementNames.directionOptionW, style = settings.guiSelectButtonStyle, sprite = "virtual-signal/signal-W"}
 
     if emitterTable["direction"] == defines.direction.north then
-      d1.style = Settings.guiSelectButtonSelectedStyle
+      d1.style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["direction"] == defines.direction.south then
-      d2.style = Settings.guiSelectButtonSelectedStyle
+      d2.style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["direction"] == defines.direction.east then
-      d3.style = Settings.guiSelectButtonSelectedStyle
+      d3.style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["direction"] == defines.direction.west then
-      d4.style = Settings.guiSelectButtonSelectedStyle
+      d4.style = settings.guiSelectButtonSelectedStyle
     end
 
     -- Type of forcefield
     configTable.add{type = "label", name = self.guiElementNames.fieldTypeLabel, caption = "Field type:"}
     local fields = configTable.add{type = "table", name = self.guiElementNames.fieldTypeTable, column_count = 4}
-    local f1 = fields.add{type = "sprite-button", name = self.guiElementNames.fieldTypeOptionB, sprite = "item/" .. Settings.fieldSuffix .. "blue", style = Settings.guiSelectButtonStyle}
-    local f2 = fields.add{type = "sprite-button", name = self.guiElementNames.fieldTypeOptionG, sprite = "item/" .. Settings.fieldSuffix .. "green", style = Settings.guiSelectButtonStyle}
-    local f3 = fields.add{type = "sprite-button", name = self.guiElementNames.fieldTypeOptionR, sprite = "item/" .. Settings.fieldSuffix .. "red", style = Settings.guiSelectButtonStyle}
-    local f4 = fields.add{type = "sprite-button", name = self.guiElementNames.fieldTypeOptionP, sprite = "item/" .. Settings.fieldSuffix .. "purple", style = Settings.guiSelectButtonStyle}
+    local f1 = fields.add{type = "sprite-button", name = self.guiElementNames.fieldTypeOptionB, sprite = "item/" .. settings.fieldSuffix .. "blue", style = settings.guiSelectButtonStyle}
+    local f2 = fields.add{type = "sprite-button", name = self.guiElementNames.fieldTypeOptionG, sprite = "item/" .. settings.fieldSuffix .. "green", style = settings.guiSelectButtonStyle}
+    local f3 = fields.add{type = "sprite-button", name = self.guiElementNames.fieldTypeOptionR, sprite = "item/" .. settings.fieldSuffix .. "red", style = settings.guiSelectButtonStyle}
+    local f4 = fields.add{type = "sprite-button", name = self.guiElementNames.fieldTypeOptionP, sprite = "item/" .. settings.fieldSuffix .. "purple", style = settings.guiSelectButtonStyle}
 
     if emitterTable["type"] == "blue" then
-      f1.style = Settings.guiSelectButtonSelectedStyle
+      f1.style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["type"] == "green" then
-      f2.style = Settings.guiSelectButtonSelectedStyle
+      f2.style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["type"] == "red" then
-      f3.style = Settings.guiSelectButtonSelectedStyle
+      f3.style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["type"] == "purple" then
-      f4.style = Settings.guiSelectButtonSelectedStyle
+      f4.style = settings.guiSelectButtonSelectedStyle
     end
 
     -- Distance of forcefield
     configTable.add{type = "label", name = self.guiElementNames.distanceLabel, caption = "Emitter distance:"}
     local distance = configTable.add{type = "table", name = self.guiElementNames.distanceTable, column_count = 2}
-    distance.add{type = "textfield", name = self.guiElementNames.distanceInput, style = "distancetext"}.text = emitterTable["distance"]
-    distance.add{type = "label", name = self.guiElementNames.distanceMaxInput, caption = "Max: " .. tostring(Settings.emitterDefaultDistance + emitterTable["distance-upgrades"]), style = description_title_label}
+    distance.add{type = "textfield", name = self.guiElementNames.distanceInput, style = settings.guiTextfieldStyle}.text = emitterTable["distance"]
+    distance.add{type = "label", name = self.guiElementNames.distanceMaxInput, caption = "Max: " .. tostring(settings.emitterDefaultDistance + emitterTable["distance-upgrades"]), style = description_title_label}
 
     -- Width of forcefield
     configTable.add{type = "label", name = self.guiElementNames.widthLabel, caption = "Emitter width:"}
     local width = configTable.add{type = "table", name = self.guiElementNames.widthTable, column_count = 2}
-    width.add{type = "textfield", name = self.guiElementNames.widthInput, style = "distancetext"}.text = emitterTable["width"]
-    width.add{type = "label", name = self.guiElementNames.widthMaxInput, caption = "Max: " .. tostring(Settings.emitterDefaultWidth + emitterTable["width-upgrades"] * Settings.widthUpgradeMultiplier), style = description_title_label}
+    width.add{type = "textfield", name = self.guiElementNames.widthInput, style = settings.guiTextfieldStyle}.text = emitterTable["width"]
+    width.add{type = "label", name = self.guiElementNames.widthMaxInput, caption = "Max: " .. tostring(settings.emitterDefaultWidth + emitterTable["width-upgrades"] * settings.widthUpgradeMultiplier), style = description_title_label}
 
     -- Upgrades of emitter
     configTable.add{type = "label", name = self.guiElementNames.upgradesLabel, caption = "Upgrades applied:"}
     local upgrades = configTable.add{type = "table", name = self.guiElementNames.upgradesTable, column_count = 2}
     if emitterTable["distance-upgrades"] ~= 0 then
-      upgrades.add{type = "button", name = self.guiElementNames.upgradesDistance, caption = "x" .. tostring(emitterTable["distance-upgrades"]), style = "advanced-circuit"}
+      --upgrades.add{type = "button", name = self.guiElementNames.upgradesDistance, caption = "x" .. tostring(emitterTable["distance-upgrades"]), style = "advanced-circuit"}
+      upgrades.add{type = "sprite-button", name = self.guiElementNames.upgradesDistance, caption = "x" .. tostring(emitterTable["distance-upgrades"]), style = settings.guiItemSlotStyle, sprite = "item/advanced-circuit"}
     else
-      upgrades.add{type = "button", name = self.guiElementNames.upgradesDistance, caption = " ", style = "noitem"}
+      upgrades.add{type = "sprite-button", name = self.guiElementNames.upgradesDistance, caption = " ", style = settings.guiItemSlotStyle}
     end
     if emitterTable["width-upgrades"] ~= 0 then
-      upgrades.add{type = "button", name = self.guiElementNames.upgradesWidth, caption = "x" .. tostring(emitterTable["width-upgrades"]), style = "processing-unit"}
+      --upgrades.add{type = "button", name = self.guiElementNames.upgradesWidth, caption = "x" .. tostring(emitterTable["width-upgrades"]), style = "processing-unit"}
+      upgrades.add{type = "sprite-button", name = self.guiElementNames.upgradesWidth, caption = "x" .. tostring(emitterTable["width-upgrades"]), style = settings.guiItemSlotStyle, sprite = "item/processing-unit"}
     else
-      upgrades.add{type = "button", name = self.guiElementNames.upgradesWidth, caption = " ", style = "noitem"}
+      upgrades.add{type = "sprite-button", name = self.guiElementNames.upgradesWidth, caption = " ", style = settings.guiItemSlotStyle}
     end
 
     -- Bottom buttons
     local buttonFlow = frame.add{type = "flow", name = self.guiElementNames.buttonFrame, direction = "horizontal"}
     buttonFlow.add{type = "button", name = self.guiElementNames.buttonHelp, caption = "?"}
     buttonFlow.add{type = "button", name = self.guiElementNames.buttonRemoveUpgrades, caption = "Remove all upgrades"}
-    buttonFlow.add{type = "sprite-button", name = self.guiElementNames.buttonConfigure, sprite = "entity/" .. Settings.configWallIconName, style = Settings.guiSelectButtonStyle}
+    buttonFlow.add{type = "sprite-button", name = self.guiElementNames.buttonConfigure, sprite = settings.configWallSprite, style = settings.guiSelectButtonStyle}
     buttonFlow.add{type = "button", name = self.guiElementNames.buttonApplySettings, caption = "Apply"}
 
     -- Save gui
@@ -260,7 +262,7 @@ function Gui:createForcefieldGui(playerIndex, fieldWidth)
   if guiCenter and guiCenter[self.guiElementNames.guiFrame] then
     if not guiCenter[self.guiElementNames.configFrame] then
       -- If config gui doesn't exist yet we have to make it
-      local frame = guiCenter.add{type = "frame", name = self.guiElementNames.configFrame, caption = game.entity_prototypes[Settings.emitterName].localised_name, direction = "vertical", style = frame_caption_label}
+      local frame = guiCenter.add{type = "frame", name = self.guiElementNames.configFrame, caption = game.entity_prototypes[settings.emitterName].localised_name, direction = "vertical", style = frame_caption_label}
 
       -- Table for wall config
       local configTable = frame.add{type = "flow", name = self.guiElementNames.configTableFrame, direction = "horizontal"}
@@ -271,11 +273,11 @@ function Gui:createForcefieldGui(playerIndex, fieldWidth)
       configTableHeader.style.column_alignments[2] = "right"
       configTableHeader.add{type = "label", name = self.guiElementNames.configRowOptionLabel, caption = "All"}
       configTableHeader.add{type = "label", name = self.guiElementNames.configRowDescriptionLabel, caption = ""}
-      configTableHeader.add{type = "sprite-button", name = self.guiElementNames.configRowOption .. "E", sprite = "utility/set_bar_slot", style = Settings.guiSmallSelectButtonStyle}
+      configTableHeader.add{type = "sprite-button", name = self.guiElementNames.configRowOption .. "E", sprite = "utility/set_bar_slot", style = settings.guiSmallSelectButtonStyle}
       configTableHeader.add{type = "label", name = self.guiElementNames.configRowDescriptionLabel .. "E", caption = "   empty   "}
-      configTableHeader.add{type = "sprite-button", name = self.guiElementNames.configRowOption .. "W", sprite = "item/stone-wall", style = Settings.guiSmallSelectButtonStyle}
+      configTableHeader.add{type = "sprite-button", name = self.guiElementNames.configRowOption .. "W", sprite = "item/stone-wall", style = settings.guiSmallSelectButtonStyle}
       configTableHeader.add{type = "label", name = self.guiElementNames.configRowDescriptionLabel .. "W", caption = "wall   "}
-      configTableHeader.add{type = "sprite-button", name = self.guiElementNames.configRowOption .. "G", sprite = "item/gate", style = Settings.guiSmallSelectButtonStyle}
+      configTableHeader.add{type = "sprite-button", name = self.guiElementNames.configRowOption .. "G", sprite = "item/gate", style = settings.guiSmallSelectButtonStyle}
       configTableHeader.add{type = "label", name = self.guiElementNames.configRowDescriptionLabel .. "G", caption = "gate   "}
 
       -- Table row data
@@ -291,7 +293,7 @@ function Gui:createForcefieldGui(playerIndex, fieldWidth)
       buttonFrame.add{type = "button", name = self.guiElementNames.configApplyButton, caption = "Save configuration"}
     else -- gui already exist, now we have to recreate it if needed
       local frame = guiCenter[self.guiElementNames.configFrame]
-      frame.style.visible = true
+      frame.visible = true
       configTableSlider = frame[self.guiElementNames.configTableFrame][self.guiElementNames.configTableSlider]
       -- recreate the gui
       configTableSlider[self.guiElementNames.configTableData].destroy()
@@ -305,13 +307,13 @@ function Gui:createForcefieldGui(playerIndex, fieldWidth)
       configTableData.add{type = "label", name = self.guiElementNames.configOptionLabel ..string.format("%02d", fieldIndex), caption = string.format("%02d", fieldIndex)}
     end
     for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = Settings.guiSmallSelectButtonStyle}
+      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
     end
     for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = Settings.guiSmallSelectButtonStyle}
+      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
     end
     for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = Settings.guiSmallSelectButtonStyle}
+      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
     end
 
     -- Select the correct setting for each wall
@@ -319,12 +321,12 @@ function Gui:createForcefieldGui(playerIndex, fieldWidth)
     local emitterWallConfigTable = emitterTable["config"]
     for fieldIndex = 1, fieldWidth do
       local type = emitterWallConfigTable[fieldIndex-fieldOffset]
-      if type == Settings.fieldSuffix then
-        configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = Settings.guiSmallSelectButtonSelectedStyle
-      elseif type == Settings.fieldGateSuffix then
-        configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = Settings.guiSmallSelectButtonSelectedStyle
+      if type == settings.fieldSuffix then
+        configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
+      elseif type == settings.fieldGateSuffix then
+        configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
       else
-        configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = Settings.guiSmallSelectButtonSelectedStyle
+        configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
       end
     end
   end
@@ -351,11 +353,11 @@ function Gui:handleGuiDirectionButtons(event)
     global.forcefields.emitterConfigGuis["I" .. playerIndex][2] = nameToDirection[event.element.name]
 
     -- Set the buttons accordingly to pressed selection
-    directions[self.guiElementNames.directionOptionN].style = Settings.guiSelectButtonStyle
-    directions[self.guiElementNames.directionOptionS].style = Settings.guiSelectButtonStyle
-    directions[self.guiElementNames.directionOptionE].style = Settings.guiSelectButtonStyle
-    directions[self.guiElementNames.directionOptionW].style = Settings.guiSelectButtonStyle
-    directions[event.element.name].style = Settings.guiSelectButtonSelectedStyle
+    directions[self.guiElementNames.directionOptionN].style = settings.guiSelectButtonStyle
+    directions[self.guiElementNames.directionOptionS].style = settings.guiSelectButtonStyle
+    directions[self.guiElementNames.directionOptionE].style = settings.guiSelectButtonStyle
+    directions[self.guiElementNames.directionOptionW].style = settings.guiSelectButtonStyle
+    directions[event.element.name].style = settings.guiSelectButtonSelectedStyle
   end
 end
 
@@ -382,11 +384,11 @@ function Gui:handleGuiFieldTypeButtons(event)
     -- Check if the force of that player has the required researched
     local shouldSwitch = true
     if selectedButtonName == self.guiElementNames.fieldTypeOptionG then
-      shouldSwitch = force.technologies["green-fields"].researched
+      shouldSwitch = force.technologies[settings.fieldSuffix.."green"].researched
     elseif selectedButtonName == self.guiElementNames.fieldTypeOptionR then
-      shouldSwitch = force.technologies["red-fields"].researched
+      shouldSwitch = force.technologies[settings.fieldSuffix.."red"].researched
     elseif selectedButtonName == self.guiElementNames.fieldTypeOptionP then
-      shouldSwitch = force.technologies["purple-fields"].researched
+      shouldSwitch = force.technologies[settings.fieldSuffix.."purple"].researched
     end
 
     if shouldSwitch then
@@ -394,11 +396,11 @@ function Gui:handleGuiFieldTypeButtons(event)
       global.forcefields.emitterConfigGuis["I" .. playerIndex][3] = nameToFieldName[selectedButtonName]
 
       -- Set the buttons accordingly to pressed selection
-      fields[self.guiElementNames.fieldTypeOptionB].style = Settings.guiSelectButtonStyle
-      fields[self.guiElementNames.fieldTypeOptionG].style = Settings.guiSelectButtonStyle
-      fields[self.guiElementNames.fieldTypeOptionR].style = Settings.guiSelectButtonStyle
-      fields[self.guiElementNames.fieldTypeOptionP].style = Settings.guiSelectButtonStyle
-      fields[selectedButtonName].style = Settings.guiSelectButtonSelectedStyle
+      fields[self.guiElementNames.fieldTypeOptionB].style = settings.guiSelectButtonStyle
+      fields[self.guiElementNames.fieldTypeOptionG].style = settings.guiSelectButtonStyle
+      fields[self.guiElementNames.fieldTypeOptionR].style = settings.guiSelectButtonStyle
+      fields[self.guiElementNames.fieldTypeOptionP].style = settings.guiSelectButtonStyle
+      fields[selectedButtonName].style = settings.guiSelectButtonSelectedStyle
     else
       player.print("You need to complete the required research before this field type can be used.")
     end
@@ -413,8 +415,8 @@ function Gui:handleGuiUpgradeButtons(event)
   local frame = player.gui.center[self.guiElementNames.guiFrame]
   local nameToUpgradeLimit =
   {
-    [self.guiElementNames.upgradesDistance] = Settings.maxRangeUpgrades,
-    [self.guiElementNames.upgradesWidth] = Settings.maxWidthUpgrades
+    [self.guiElementNames.upgradesDistance] = settings.maxRangeUpgrades,
+    [self.guiElementNames.upgradesWidth] = settings.maxWidthUpgrades
   }
   local nameToStyle =
   {
@@ -514,7 +516,7 @@ function Gui:handleConfigureButton(event)
     -- We need to configure the wall/gates for this wall, depending on the current settings in the gui
     self:createForcefieldGui(event.player_index, width)
     -- It opened the configGui, now make the emitterGui invisible
-    guiCenter[self.guiElementNames.guiFrame].style.visible = false
+    guiCenter[self.guiElementNames.guiFrame].visible = false
   end
 end
 
@@ -570,10 +572,7 @@ function Gui:handleGuiConfigWallChange(event)
       fieldType = global.forcefields.emitterConfigGuis["I" .. playerIndex][1]["type"]
     end
 
-    if fieldType == "blue" and not force.technologies["force-field-gates"].researched
-      or fieldType == "green" and not force.technologies["green-field-gates"].researched
-      or fieldType == "purple" and not force.technologies["purple-field-gates"].researched
-      or fieldType == "red" and not force.technologies["red-field-gates"].researched then
+    if not force.technologies[settings.fieldSuffix..fieldType].researched then
       player.print("You need to complete the required research before gates of this field type can be used.")
       return
     end
@@ -581,10 +580,10 @@ function Gui:handleGuiConfigWallChange(event)
 
   -- Change to new selection
   local configTableData = event.element.parent
-  configTableData[self.guiElementNames.configOption .. "E" .. fieldIndex].style = Settings.guiSmallSelectButtonStyle
-  configTableData[self.guiElementNames.configOption .. "W" .. fieldIndex].style = Settings.guiSmallSelectButtonStyle
-  configTableData[self.guiElementNames.configOption .. "G" .. fieldIndex].style = Settings.guiSmallSelectButtonStyle
-  configTableData[self.guiElementNames.configOption .. fieldConfig .. fieldIndex].style = Settings.guiSmallSelectButtonSelectedStyle
+  configTableData[self.guiElementNames.configOption .. "E" .. fieldIndex].style = settings.guiSmallSelectButtonStyle
+  configTableData[self.guiElementNames.configOption .. "W" .. fieldIndex].style = settings.guiSmallSelectButtonStyle
+  configTableData[self.guiElementNames.configOption .. "G" .. fieldIndex].style = settings.guiSmallSelectButtonStyle
+  configTableData[self.guiElementNames.configOption .. fieldConfig .. fieldIndex].style = settings.guiSmallSelectButtonSelectedStyle
 end
 
 
@@ -596,9 +595,9 @@ function Gui:handleGuiConfigWallRowChange(event)
   local StyleE, styleW, styleG
 
   if fieldConfig == "E" then
-    styleE = Settings.guiSmallSelectButtonSelectedStyle
-    styleW = Settings.guiSmallSelectButtonStyle
-    styleG = Settings.guiSmallSelectButtonStyle
+    styleE = settings.guiSmallSelectButtonSelectedStyle
+    styleW = settings.guiSmallSelectButtonStyle
+    styleG = settings.guiSmallSelectButtonStyle
 
   elseif fieldConfig == "G" then
     -- If its a gate, check if we have the required research
@@ -611,22 +610,19 @@ function Gui:handleGuiConfigWallRowChange(event)
       fieldType = global.forcefields.emitterConfigGuis["I" .. playerIndex][1]["type"]
     end
 
-    if fieldType == "blue" and not force.technologies["force-field-gates"].researched
-      or fieldType == "green" and not force.technologies["green-field-gates"].researched
-      or fieldType == "purple" and not force.technologies["purple-field-gates"].researched
-      or fieldType == "red" and not force.technologies["red-field-gates"].researched then
+    if not force.technologies[settings.fieldSuffix..fieldType].researched then
       player.print("You need to complete the required research before gates of this field type can be used.")
       return
     end
 
-    styleE = Settings.guiSmallSelectButtonStyle
-    styleW = Settings.guiSmallSelectButtonStyle
-    styleG = Settings.guiSmallSelectButtonSelectedStyle
+    styleE = settings.guiSmallSelectButtonStyle
+    styleW = settings.guiSmallSelectButtonStyle
+    styleG = settings.guiSmallSelectButtonSelectedStyle
 
   else -- default == "W"
-    styleE = Settings.guiSmallSelectButtonStyle
-    styleW = Settings.guiSmallSelectButtonSelectedStyle
-    styleG = Settings.guiSmallSelectButtonStyle
+    styleE = settings.guiSmallSelectButtonStyle
+    styleW = settings.guiSmallSelectButtonSelectedStyle
+    styleG = settings.guiSmallSelectButtonStyle
   end
 
   -- Now change all the buttons
@@ -667,38 +663,38 @@ function Gui:handleGuiConfigWallClose(event)
     -- Redo the the correct setting for each wall
     for fieldIndex = 1, fieldWidth do
       -- Default back to not selected
-      configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = Settings.guiSmallSelectButtonStyle
-      configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = Settings.guiSmallSelectButtonStyle
-      configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = Settings.guiSmallSelectButtonStyle
+      configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonStyle
+      configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonStyle
+      configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonStyle
 
       -- Now select the correct setting
       local type = configTable[fieldIndex-fieldOffset]
-      if type == Settings.fieldSuffix then
-        configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = Settings.guiSmallSelectButtonSelectedStyle
-      elseif type == Settings.fieldGateSuffix then
-        configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = Settings.guiSmallSelectButtonSelectedStyle
+      if type == settings.fieldSuffix then
+        configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
+      elseif type == settings.fieldGateSuffix then
+        configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
       else
-        configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = Settings.guiSmallSelectButtonSelectedStyle
+        configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
       end
     end
 
   elseif event.element.name == self.guiElementNames.configApplyButton then
     -- Extract info out of the gui
     for fieldIndex = 1, fieldWidth do
-      if configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style.name == Settings.guiSmallSelectButtonSelectedStyle then
-        configTable[fieldIndex-fieldOffset] = Settings.fieldSuffix
-      elseif configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style.name == Settings.guiSmallSelectButtonSelectedStyle then
-        configTable[fieldIndex-fieldOffset] = Settings.fieldGateSuffix
+      if configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style.name == settings.guiSmallSelectButtonSelectedStyle then
+        configTable[fieldIndex-fieldOffset] = settings.fieldSuffix
+      elseif configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style.name == settings.guiSmallSelectButtonSelectedStyle then
+        configTable[fieldIndex-fieldOffset] = settings.fieldGateSuffix
       else
-        configTable[fieldIndex-fieldOffset] = Settings.fieldEmptySuffix
+        configTable[fieldIndex-fieldOffset] = settings.fieldEmptySuffix
       end
     end
     global.forcefields.emitterConfigGuis["I" .. playerIndex][4] = configTable
   end
 
   -- Now we need to change the guis back
-  guiCenter[self.guiElementNames.guiFrame].style.visible = true
-  guiCenter[self.guiElementNames.configFrame].style.visible = false
+  guiCenter[self.guiElementNames.guiFrame].visible = true
+  guiCenter[self.guiElementNames.configFrame].visible = false
 end
 
 
@@ -939,9 +935,9 @@ function Gui:updateMaxLabel(frame, upgradeButton)
   end
   if upgradeButton.name == self.guiElementNames.upgradesDistance then
     -- Distance upgrade button
-    frame[self.guiElementNames.configTable][self.guiElementNames.distanceTable][self.guiElementNames.distanceMaxInput].caption = "Max: " .. tostring(Settings.emitterDefaultDistance + count)
+    frame[self.guiElementNames.configTable][self.guiElementNames.distanceTable][self.guiElementNames.distanceMaxInput].caption = "Max: " .. tostring(settings.emitterDefaultDistance + count)
   else
     -- Width upgrade button
-    frame[self.guiElementNames.configTable][self.guiElementNames.widthTable][self.guiElementNames.widthMaxInput].caption = "Max: " .. tostring(Settings.emitterDefaultWidth + (count * Settings.widthUpgradeMultiplier))
+    frame[self.guiElementNames.configTable][self.guiElementNames.widthTable][self.guiElementNames.widthMaxInput].caption = "Max: " .. tostring(settings.emitterDefaultWidth + (count * settings.widthUpgradeMultiplier))
   end
 end
