@@ -1,6 +1,4 @@
-require "lib/prototypes/icons"
-require "lib/prototypes/sprites"
-
+require "__LSlib__/LSlib"
 
 
 function forceFieldWallEntity(color)
@@ -12,8 +10,9 @@ function forceFieldWallEntity(color)
 
   forceFieldWall.icon_size              = nil
   forceFieldWall.icon                   = nil
-  forceFieldWall.icons                  = lib.prototypes.icons.getIcons("wall", "stone-wall", 1, {0 ,0}, settings.colorTint)
+  forceFieldWall.icons                  = LSlib.entity.getIcons("wall", "stone-wall", nil, nil, settings.colorTint)
 
+  forceFieldWall.flags = forceFieldWall.flags or {}
   table.insert(forceFieldWall.flags, "not-repairable")
 
   forceFieldWall.minable                = {hardness = 0.2, mining_time = 1,
@@ -32,11 +31,11 @@ function forceFieldWallEntity(color)
   for pictureName,picture in pairs(forceFieldWall.pictures) do
     -- https://wiki.factorio.com/Prototype/Wall#pictures
     if pictureName == "water_connection_patch" or pictureName == "gate_connection_patch" then
-      local tempPicture                    = lib.prototypes.sprites.addTintToSprite4Way(picture, tint)
-      forceFieldWall.pictures[pictureName] = lib.prototypes.sprites.removeShadowFromSprite4Way(tempPicture)
+      local tempPicture                    = LSlib.entity.addTintToSprite4Way(picture, tint)
+      forceFieldWall.pictures[pictureName] = LSlib.entity.removeShadowFromSprite4Way(tempPicture)
     else
-      local tempPicture                    = lib.prototypes.sprites.addTintToSpriteVariation(picture, tint)
-      forceFieldWall.pictures[pictureName] = lib.prototypes.sprites.removeShadowsFromSpriteVariation(tempPicture)
+      local tempPicture                    = LSlib.entity.addTintToSpriteVariation(picture, tint)
+      forceFieldWall.pictures[pictureName] = LSlib.entity.removeShadowsFromSpriteVariation(tempPicture)
     end
   end
 
@@ -55,8 +54,9 @@ function forceFieldGateEntity(color)
 
   forceFieldGate.icon_size              = nil
   forceFieldGate.icon                   = nil
-  forceFieldGate.icons                  = lib.prototypes.icons.getIcons("gate", "gate", 1, {0 ,0}, settings.colorTint)
+  forceFieldGate.icons                  = LSlib.entity.getIcons("gate", "gate", nil, nil, settings.colorTint)
 
+  forceFieldGate.flags = forceFieldGate.flags or {}
   table.insert(forceFieldGate.flags, "not-repairable")
 
   forceFieldGate.minable                = {hardness = 0.2, mining_time = 1,
@@ -87,21 +87,21 @@ function forceFieldGateEntity(color)
     "vertical_rail_animation_left"   ,
     "vertical_rail_animation_right"  ,
   } do
-    local tempPicture                    = lib.prototypes.sprites.addTintToAnimation(forceFieldGate[animationName], tint)
-    forceFieldGate[animationName] = lib.prototypes.sprites.removeShadowsFromSpriteVariation(tempPicture)
+    local tempPicture             = LSlib.entity.addTintToAnimation(forceFieldGate[animationName], tint)
+    forceFieldGate[animationName] = LSlib.entity.removeShadowsFromSpriteVariation(tempPicture)
   end
   for _,spriteName in pairs{
     "vertical_rail_base"  ,
     "horizontal_rail_base",
   } do
-    local tempPicture                    = lib.prototypes.sprites.addTintToSprite(forceFieldGate[spriteName], tint)
-    forceFieldGate[spriteName] = lib.prototypes.sprites.removeShadowsFromSpriteVariation(tempPicture)
+    local tempPicture          = LSlib.entity.addTintToSprite(forceFieldGate[spriteName], tint)
+    forceFieldGate[spriteName] = LSlib.entity.removeShadowsFromSpriteVariation(tempPicture)
   end
   for _,sprite4WayName in pairs{
     "wall_patch",
   } do
-    local tempPicture                    = lib.prototypes.sprites.addTintToSprite4Way(forceFieldGate[sprite4WayName], tint)
-    forceFieldGate[sprite4WayName] = lib.prototypes.sprites.removeShadowsFromSpriteVariation(tempPicture)
+    local tempPicture              = LSlib.entity.addTintToSprite4Way(forceFieldGate[sprite4WayName], tint)
+    forceFieldGate[sprite4WayName] = LSlib.entity.removeShadowsFromSpriteVariation(tempPicture)
   end
 
   data:extend{forceFieldGate}

@@ -1,4 +1,4 @@
-require "lib/prototypes/icons"
+require "__LSlib__/LSlib"
 
 function forceFieldWallItem(color)
 
@@ -9,13 +9,12 @@ function forceFieldWallItem(color)
 
   forceFieldWall.icon_size              = nil
   forceFieldWall.icon                   = nil
-  forceFieldWall.icons                  = lib.prototypes.icons.getIcons("item", "stone-wall", 1, {0 ,0}, settings.colorTint)
+  forceFieldWall.icons                  = LSlib.item.getIcons("item", "stone-wall", nil, nil, settings.colorTint)
 
   forceFieldWall.order                  = "a[items]-f[forcefields]"
   forceFieldWall.subgroup               = "forcefield"
 
   forceFieldWall.place_result           = (settings.manualPlaceable and forceFieldWall.name or nil)
-
 
   data:extend{forceFieldWall}
 
@@ -32,13 +31,12 @@ function forceFieldGateItem(color)
 
   forceFieldGate.icon_size              = nil
   forceFieldGate.icon                   = nil
-  forceFieldGate.icons                  = lib.prototypes.icons.getIcons("item", "gate", 1, {0 ,0}, settings.colorTint)
+  forceFieldGate.icons                  = LSlib.item.getIcons("item", "gate", nil, nil, settings.colorTint)
 
   forceFieldGate.order                  = "a[items]-f[forcefields]"
   forceFieldGate.subgroup               = "forcefield"
 
   forceFieldGate.place_result           = (settings.manualPlaceable and forceFieldGate.name or nil)
-
 
   data:extend{forceFieldGate}
 

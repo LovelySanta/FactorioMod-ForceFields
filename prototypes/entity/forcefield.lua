@@ -6,7 +6,6 @@ function addForceField(color)
   forceFieldWallTech(color)
   forceFieldGateEntity(color)
   forceFieldGateTech(color)
-
 end
 
 addForceField("blue")
