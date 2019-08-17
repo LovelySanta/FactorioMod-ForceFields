@@ -11,6 +11,7 @@ settings.modName = prototypeSettings.modName
 -- gui settings
 settings.configWallSprite = prototypeSettings.gui.configWallSprite
 
+settings.guiLabelStyle                     = prototypeSettings.gui.guiLabelStyle
 settings.guiSelectButtonStyle              = prototypeSettings.gui.guiSelectButtonStyle
 settings.guiSelectButtonSelectedStyle      = prototypeSettings.gui.guiSelectButtonSelectedStyle
 settings.guiSmallSelectButtonStyle         = prototypeSettings.gui.guiSmallSelectButtonStyle

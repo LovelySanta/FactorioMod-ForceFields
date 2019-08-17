@@ -21,13 +21,15 @@ prototypeSettings["emitter"] =
 
 prototypeSettings["gui"] =
 {
+  ["guiLabelStyle"] = "emitter_label",
+
   ["guiSelectButtonStyle"             ] = "emitter_select_button",
   ["guiSelectButtonSelectedStyle"     ] = "emitter_select_button_selected",
   ["guiSmallSelectButtonStyle"        ] = "emitter_small_select_button",
   ["guiSmallSelectButtonSelectedStyle"] = "emitter_small_select_button_selected",
 
-  ["guiTextfieldStyle"] = "short_number_textfield",
-  ["guiItemSlotStyle" ] = "emitter_slot_button",
+  ["guiTextfieldStyle" ] = "short_number_textfield",
+  ["guiItemSlotStyle"  ] = "emitter_item_slot_button",
 
   ["configWallSprite"] = "forcefield-config-tool",
 }
