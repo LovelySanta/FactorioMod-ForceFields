@@ -26,16 +26,19 @@ prototypeSettings["forcefieldDeathDamageName"] = "forcefield-death-damage"
 prototypeSettings["gui"] =
 {
   ["guiLabelStyle"] = "emitter_label",
-
+  
   ["guiSelectButtonStyle"             ] = "emitter_select_button",
   ["guiSelectButtonSelectedStyle"     ] = "emitter_select_button_selected",
   ["guiSmallSelectButtonStyle"        ] = "emitter_small_select_button",
   ["guiSmallSelectButtonSelectedStyle"] = "emitter_small_select_button_selected",
+  
+  ["guiTextfieldStyle"] = "short_number_textfield",
+  ["guiItemSlotStyle" ] = "emitter_item_slot_button",
+  
+  ["configWallSprite"] = "forcefield_config_tool",
 
-  ["guiTextfieldStyle" ] = "short_number_textfield",
-  ["guiItemSlotStyle"  ] = "emitter_item_slot_button",
-
-  ["configWallSprite"] = "forcefield-config-tool",
+  ["guiTableRowHeaderStyle"     ] = "forcefield_config_tableRowHeader_table",
+  ["guiTableRowHeaderLabelStyle"] = "forcefield_config_tableRowHeader_label",
 }
 
 
@@ -91,7 +94,7 @@ prototypeSettings["blue"] =
 
                         },
                         ["technologyRecipe"] = {
-                          ["count"]       = math.floor( 0.5 + 0.5 * data.raw["technology"]["advanced-electronics"].unit.count),
+                          ["count"]       = math.floor( 0.5 + 0.5 * (2.5 * data.raw["technology"]["advanced-electronics"].unit.count)),
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["advanced-electronics"].unit.ingredients),
                           ["time"]        = 2 * data.raw["technology"]["advanced-electronics"].unit.time,
                         },
@@ -183,7 +186,7 @@ prototypeSettings["purple"] =
     energyPerRespawn = 10000,
     energyPerHealthLost = 25000,
     damageWhenMined = 15,
-    --deathEntity = Settings.forcefieldDeathDamageName,
+    deathEntity = prototypeSettings.forcefieldDeathDamageName,
     maxHealth = 150
   },
   ["manualPlaceable"] = prototypeSettings["blue"]["manualPlaceable"],

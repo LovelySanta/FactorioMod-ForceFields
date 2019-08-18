@@ -9,6 +9,14 @@ LSlib.styles.addLabelStyle{
   minimal_width = 130,
 }
 
+LSlib.styles.addLabelStyle{
+  name = guiSettings["guiTableRowHeaderLabelStyle"],
+  parent = "label",
+
+  minimal_width = 60,
+  right_padding = 10,
+}
+
 LSlib.styles.addButtonStyle{
   name = guiSettings["guiSelectButtonStyle"],
   parent = "button",
@@ -37,4 +45,14 @@ LSlib.styles.addButtonStyle{
   selected_graphical_set         = data.raw["gui-style"]["default"].button.selected_graphical_set        ,
   selected_hovered_graphical_set = data.raw["gui-style"]["default"].button.selected_hovered_graphical_set,
   selected_clicked_graphical_set = data.raw["gui-style"]["default"].button.selected_clicked_graphical_set,
+}
+
+LSlib.styles.addTableStyle{
+  name = guiSettings["guiTableRowHeaderStyle"],
+  parent = "table",
+
+  column_alignments = {
+    {column = 1, alignment = "center"},
+    {column = 2, alignment = "right" },
+  }
 }

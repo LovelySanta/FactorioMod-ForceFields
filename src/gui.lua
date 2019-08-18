@@ -10,6 +10,7 @@ Gui = {}
 
 
 Gui.guiEmitterLayout = require("prototypes/gui/layout/emitter")
+Gui.guiForcefieldLayout = require("prototypes/gui/layout/forcefield")
 local guiNames = require("prototypes/gui/layout/guiElementNames")
 Gui.guiElementNames = {
   -- EMITTER GUI --
@@ -59,32 +60,57 @@ Gui.guiElementNames = {
   buttonDiscardSettings = guiNames.buttonDiscardSettings,
   
   -- FORCEFIELD GUI --
-  -- Gui base
-  configFrame = "fieldConfig",
-  configTableFrame = "fieldConfigTable",
+  -- Gui layout
+  configFrame      = guiNames.configFrame,
+  configTableFrame = guiNames.configTableFrame,
 
   -- Wall table row header
-  configTableHeader = "fieldConfigTableHeader",
-  configRowOptionLabel = "fieldConfigRowLabel",
-  configRowOption = "fieldConfigRowOption",
-  configRowDescriptionLabel = "fieldConfigRowDescriptionLabel",
+  configTableHeader         = guiNames.configTableHeader,
+  configRowOptionLabel      = guiNames.configRowOptionLabel,
+  configRowOption           = guiNames.configRowOption,
+  configRowDescriptionLabel = guiNames.configRowDescriptionLabel,
 
   -- Wall table row data
-  configTableSlider = "fieldConfigSlider",
-  configTableData = "fieldConfigTableData",
-  configOptionLabel = "fieldConfigOptionLabel",
-  configOption = "fieldConfigOption",
+  configTableSlider = guiNames.configTableSlider,
+  configTableData   = guiNames.configTableData,
+  configOptionLabel = guiNames.configOptionLabel,
+  configOption      = guiNames.configOption,
   
   -- Bottom buttons
-  configButtonFrame = "fieldConfigButtons",
-  configButtonAlign = "fieldConfigButtonsAlign",
-  configCancelButton = "fieldConfigButtonsCancel",
-  configApplyButton = "fieldConfigButtonsApply",
+  configCancelButton = guiNames.configCancelButton,
+  configApplyButton  = guiNames.configApplyButton,
 }
 
 Gui.guiElementPaths = {}
-for guiElementName, actualGuiElementName in pairs(Gui.guiElementNames) do
-  Gui.guiElementPaths[guiElementName] = LSlib.gui.layout.getElementPath(Gui.guiEmitterLayout, actualGuiElementName)
+for _, emitterGuiElementName in pairs{
+  -- Gui layout
+  "guiFrame", "buttonConfigure", "buttonHelp", "configTable",
+  -- Direction of forcefield
+  "directionLabel", "directionTable", "directionOptionN", "directionOptionS", "directionOptionE", "directionOptionW",
+  -- Type of forcefield
+  "fieldTypeLabel", "fieldTypeTable", "fieldTypeOptionB", "fieldTypeOptionG", "fieldTypeOptionR", "fieldTypeOptionP",
+  -- Distance of forcefield
+  "distanceLabel", "distanceTable", "distanceInput", "distanceMaxInput",
+  -- Width of forcefield
+  "widthLabel", "widthTable", "widthInput", "widthMaxInput",
+  -- Upgrades of emitter
+  "upgradesLabel", "upgradesTable", "upgradesDistance", "upgradesWidth", "buttonRemoveUpgrades",
+  -- Bottom buttons
+  "buttonApplySettings", "buttonDiscardSettings",
+} do
+  Gui.guiElementPaths[emitterGuiElementName] = LSlib.gui.layout.getElementPath(Gui.guiEmitterLayout, Gui.guiElementNames[emitterGuiElementName])
+end
+for _, forcefieldGuiElementName in pairs{
+  -- Gui layout
+  "configFrame", "configTableFrame",
+  -- Wall table row header
+  "configTableHeader", "configRowOptionLabel", "configRowOption", "configRowDescriptionLabel",
+  -- Wall table row data
+  "configTableSlider", "configTableData", "configOptionLabel", "configOption",
+  -- Bottom buttons
+  "configCancelButton", "configApplyButton",
+} do
+  Gui.guiElementPaths[forcefieldGuiElementName] = LSlib.gui.layout.getElementPath(Gui.guiForcefieldLayout, Gui.guiElementNames[forcefieldGuiElementName])
 end
 
 
@@ -221,76 +247,44 @@ function Gui:createForcefieldGui(playerIndex, fieldWidth)
   local player = game.players[playerIndex]
   local emitterTable = global.forcefields.emitterConfigGuis["I" .. playerIndex][1]
   local guiCenter = player.gui.center
-  local configTableSlider
   if guiCenter and guiCenter[self.guiElementNames.guiFrame] then
     if not guiCenter[self.guiElementNames.configFrame] then
       -- If config gui doesn't exist yet we have to make it
-      local frame = guiCenter.add{type = "frame", name = self.guiElementNames.configFrame, caption = game.entity_prototypes[settings.emitterName].localised_name, direction = "vertical", style = frame_caption_label}
+      LSlib.gui.create(playerIndex, self.guiForcefieldLayout)
 
-      -- Table for wall config
-      local configTable = frame.add{type = "flow", name = self.guiElementNames.configTableFrame, direction = "horizontal"}
-
-      -- Table row headers
-      local configTableHeader = configTable.add{type = "table", name = self.guiElementNames.configTableHeader, column_count = 2}
-      configTableHeader.style.column_alignments[1] = "center"
-      configTableHeader.style.column_alignments[2] = "right"
-      configTableHeader.add{type = "label", name = self.guiElementNames.configRowOptionLabel, caption = "All"}
-      configTableHeader.add{type = "label", name = self.guiElementNames.configRowDescriptionLabel, caption = ""}
-      configTableHeader.add{type = "sprite-button", name = self.guiElementNames.configRowOption .. "E", sprite = "utility/set_bar_slot", style = settings.guiSmallSelectButtonStyle}
-      configTableHeader.add{type = "label", name = self.guiElementNames.configRowDescriptionLabel .. "E", caption = "   empty   "}
-      configTableHeader.add{type = "sprite-button", name = self.guiElementNames.configRowOption .. "W", sprite = "item/stone-wall", style = settings.guiSmallSelectButtonStyle}
-      configTableHeader.add{type = "label", name = self.guiElementNames.configRowDescriptionLabel .. "W", caption = "wall   "}
-      configTableHeader.add{type = "sprite-button", name = self.guiElementNames.configRowOption .. "G", sprite = "item/gate", style = settings.guiSmallSelectButtonStyle}
-      configTableHeader.add{type = "label", name = self.guiElementNames.configRowDescriptionLabel .. "G", caption = "gate   "}
-
-      -- Table row data
-      configTableSlider = configTable.add{type = "scroll-pane", name = self.guiElementNames.configTableSlider, horizontal_scroll_policy = "auto", vertical_scroll_policy = "never"}
-      configTableSlider.style.maximal_width = math.floor(player.display_resolution.width/2)
-
-      -- Buttons on the bottom (cancel, save)
-      local buttonFrame = frame.add{type = "table", name = self.guiElementNames.configButtonFrame, column_count = 3}
-      buttonFrame.style.horizontally_stretchable = true
-      local buttonAlign = buttonFrame.add{type = "flow", name = self.guiElementNames.configButtonAlign, direction = "horizontal"}
-      buttonAlign.style.horizontally_stretchable = true
-      buttonFrame.add{type = "button", name = self.guiElementNames.configCancelButton, caption = "Cancel changes"}
-      buttonFrame.add{type = "button", name = self.guiElementNames.configApplyButton, caption = "Save configuration"}
-    else -- gui already exist, now we have to recreate it if needed
-      local frame = guiCenter[self.guiElementNames.configFrame]
-      frame.visible = true
-      configTableSlider = frame[self.guiElementNames.configTableFrame][self.guiElementNames.configTableSlider]
-      -- recreate the gui
-      configTableSlider[self.guiElementNames.configTableData].destroy()
-    end
-
-    local configTableData = configTableSlider.add{type ="table", name = self.guiElementNames.configTableData, column_count = fieldWidth}
-    for fieldIndex=1, fieldWidth do
-      configTableData.style.column_alignments[fieldIndex] = "center"
-    end
-    for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "label", name = self.guiElementNames.configOptionLabel ..string.format("%02d", fieldIndex), caption = string.format("%02d", fieldIndex)}
-    end
-    for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
-    end
-    for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
-    end
-    for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
-    end
-
-    -- Select the correct setting for each wall
-    local fieldOffset = (fieldWidth + 1)/2
-    local emitterWallConfigTable = emitterTable["config"]
-    for fieldIndex = 1, fieldWidth do
-      local type = emitterWallConfigTable[fieldIndex-fieldOffset]
-      if type == settings.fieldSuffix then
-        configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
-      elseif type == settings.fieldGateSuffix then
-        configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
-      else
-        configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
+      local configTableData = LSlib.gui.getElement(playerIndex, self.guiElementPaths.configTableSlider).add{type ="table", name = self.guiElementNames.configTableData, column_count = fieldWidth}
+      for fieldIndex=1, fieldWidth do
+        configTableData.style.column_alignments[fieldIndex] = "center"
       end
+      for fieldIndex=1, fieldWidth do
+        configTableData.add{type = "label", name = self.guiElementNames.configOptionLabel ..string.format("%02d", fieldIndex), caption = string.format("%02d", fieldIndex), ignored_by_interaction = true}
+      end
+      for fieldIndex=1, fieldWidth do
+        configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
+      end
+      for fieldIndex=1, fieldWidth do
+        configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
+      end
+      for fieldIndex=1, fieldWidth do
+        configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
+      end
+      
+      -- Select the correct setting for each wall
+      local fieldOffset = (fieldWidth + 1)/2
+      local emitterWallConfigTable = emitterTable["config"]
+      for fieldIndex = 1, fieldWidth do
+        local type = emitterWallConfigTable[fieldIndex-fieldOffset]
+        if type == settings.fieldSuffix then
+          configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
+        elseif type == settings.fieldGateSuffix then
+          configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
+        else
+          configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
+        end
+      end
+    else
+      -- Config gui does exist, we just make it visible
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.configFrame).visible = true
     end
   end
 end

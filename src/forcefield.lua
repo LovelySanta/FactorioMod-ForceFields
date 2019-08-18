@@ -42,7 +42,7 @@ function Forcefield:onForcefieldDied(field)
     end
   end
 
-  -- Coz I don't want a ghost, and Rseding91 likes this Kappa
+  -- Coz I don't want a ghost, and Rseding91 likes this, Kappa
   field.destroy()
 end
 

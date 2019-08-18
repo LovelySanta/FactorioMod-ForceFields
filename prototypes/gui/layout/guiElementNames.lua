@@ -52,20 +52,18 @@ return {
   configTableFrame = "fieldConfigTable",
 
   -- Wall table row header
-  configTableHeader = "fieldConfigTableHeader",
-  configRowOptionLabel = "fieldConfigRowLabel",
-  configRowOption = "fieldConfigRowOption",
+  configTableHeader         = "fieldConfigTableHeader",
+  configRowOptionLabel      = "fieldConfigRowLabel",
+  configRowOption           = "fieldConfigRowOption",
   configRowDescriptionLabel = "fieldConfigRowDescriptionLabel",
 
   -- Wall table row data
   configTableSlider = "fieldConfigSlider",
-  configTableData = "fieldConfigTableData",
+  configTableData   = "fieldConfigTableData",
   configOptionLabel = "fieldConfigOptionLabel",
-  configOption = "fieldConfigOption",
+  configOption      = "fieldConfigOption",
 
   -- Bottom buttons
-  configButtonFrame = "fieldConfigButtons",
-  configButtonAlign = "fieldConfigButtonsAlign",
   configCancelButton = "fieldConfigButtonsCancel",
-  configApplyButton = "fieldConfigButtonsApply",
+  configApplyButton  = "fieldConfigButtonsApply",
 }
