@@ -65,7 +65,7 @@ prototypeSettings["blue"] =
     damageWhenMined = 20,
     maxHealth = 300,
   },
-  ["manualPlaceable"]   = true,
+  ["manualPlaceable"]   = false,
   ["wallTechnology"] = prototyping and {
                         ["additionalPrerequisites"] = {
                          "optics",

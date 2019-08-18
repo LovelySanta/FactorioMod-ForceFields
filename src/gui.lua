@@ -55,7 +55,8 @@ Gui.guiElementNames = {
   buttonRemoveUpgrades = guiNames.buttonRemoveUpgrades,
   
   -- Bottom buttons
-  buttonApplySettings = guiNames.buttonApplySettings,
+  buttonApplySettings   = guiNames.buttonApplySettings,
+  buttonDiscardSettings = guiNames.buttonDiscardSettings,
   
   -- FORCEFIELD GUI --
   -- Gui base
@@ -487,6 +488,9 @@ function Gui:handleGuiMenuButtons(event)
         end
         frame.destroy()
       end
+    -- Discard button
+    elseif event.element.name == self.guiElementNames.buttonDiscardSettings then
+      self:onCloseGui(frame, playerIndex)
     -- Help button
     elseif event.element.name == self.guiElementNames.buttonHelp then
       self:printGuiHelp(player)
@@ -664,6 +668,7 @@ Gui.guiButtonHandlers =
   [Gui.guiElementNames.buttonConfigure] = Gui.handleConfigureButton,
   [Gui.guiElementNames.buttonRemoveUpgrades] = Gui.handleGuiMenuButtons,
   [Gui.guiElementNames.buttonApplySettings] = Gui.handleGuiMenuButtons,
+  [Gui.guiElementNames.buttonDiscardSettings] = Gui.handleGuiMenuButtons,
 
   -- Forcefield gui
   [Gui.guiElementNames.configOption] = Gui.handleGuiConfigWallChange,

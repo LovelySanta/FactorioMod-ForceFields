@@ -42,8 +42,8 @@ return {
   buttonRemoveUpgrades = "removeAllUpgrades",
 
   -- Bottom buttons
-  buttonApplySettings = "applyButton",
-
+  buttonApplySettings   = "applyButton",
+  buttonDiscardSettings = "discardButton",
 
 
   -- FORCEFIELD GUI --

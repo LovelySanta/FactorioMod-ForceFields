@@ -43,14 +43,12 @@ end)
 
 
 -- When entities get created
-function onEntityBuilt(event)
+script.on_event({defines.events.on_built_entity      ,
+                 defines.events.on_robot_built_entity}, function(event)
   if event.created_entity.name == settings.emitterName then
     Emitter:onEmitterBuilt(event.created_entity)
   end
-end
-
-script.on_event(defines.events.on_built_entity, onEntityBuilt)
-script.on_event(defines.events.on_robot_built_entity, onEntityBuilt)
+end)
 
 
 

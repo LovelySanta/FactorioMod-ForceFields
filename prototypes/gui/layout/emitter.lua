@@ -158,6 +158,10 @@ LSlib.gui.layout.addSpriteButton(guiLayout, guiEmitterUpgrades, guiNames.buttonR
 
 
 -- Footer buttons
+LSlib.gui.layout.addButton(guiLayout, guiFrameFooterFlow, guiNames.buttonDiscardSettings, {
+  caption = "Discard",
+  style = "red_back_button",
+})
 LSlib.gui.layout.addFrame(guiLayout, guiFrameFooterFlow, guiNames.guiFrame.."-footer-filler", "vertical", {
   style = "LSlib_default_footer_filler",
   ignored_by_interaction = true,
