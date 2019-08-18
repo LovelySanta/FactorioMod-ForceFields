@@ -1,6 +1,8 @@
 local prototypeSettings = {}
 prototypeSettings["modName"] = "__ForceFields2__"
 
+local prototyping = data and data.raw or false
+
 
 --------------------------------------------------------------------------------
 -----                             Emitter                                   ----
@@ -11,6 +13,32 @@ prototypeSettings["emitter"] =
   ["emitterName"] = "forcefield-emitter",
   ["tickRate"] = 20,
   ["crafting-category"] = "forcefield-crafter",
+}
+
+-- builder settings
+prototypeSettings["forcefieldBuildDamageName"] = "forcefield-build-damage"
+prototypeSettings["forcefieldDeathDamageName"] = "forcefield-death-damage"
+
+--------------------------------------------------------------------------------
+-----                               Gui                                     ----
+--------------------------------------------------------------------------------
+
+prototypeSettings["gui"] =
+{
+  ["guiLabelStyle"] = "emitter_label",
+  
+  ["guiSelectButtonStyle"             ] = "emitter_select_button",
+  ["guiSelectButtonSelectedStyle"     ] = "emitter_select_button_selected",
+  ["guiSmallSelectButtonStyle"        ] = "emitter_small_select_button",
+  ["guiSmallSelectButtonSelectedStyle"] = "emitter_small_select_button_selected",
+  
+  ["guiTextfieldStyle"] = "short_number_textfield",
+  ["guiItemSlotStyle" ] = "emitter_item_slot_button",
+  
+  ["configWallSprite"] = "forcefield_config_tool",
+
+  ["guiTableRowHeaderStyle"     ] = "forcefield_config_tableRowHeader_table",
+  ["guiTableRowHeaderLabelStyle"] = "forcefield_config_tableRowHeader_label",
 }
 
 
@@ -40,29 +68,33 @@ prototypeSettings["blue"] =
     damageWhenMined = 20,
     maxHealth = 300,
   },
-  ["manualPlaceable"]   = true,
-  ["wallTechnology"] = {["additionalPrerequisites"] = {
+  ["manualPlaceable"]   = false,
+  ["wallTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                          "optics",
                          "stone-walls",
                          "military-2",
                          "advanced-electronics",
                          "battery",
                         },
-                        ["additionalEffects"] = {{type = "unlock-recipe", recipe = prototypeSettings["emitter"].emitterName}},
+                        ["additionalEffects"] = {
+                          {type = "unlock-recipe", recipe = prototypeSettings["emitter"].emitterName}
+                        },
                         ["technologyRecipe"] = {
                           ["count"]       = math.floor( 0.5 + 2.5 * data.raw["technology"]["advanced-electronics"].unit.count),
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["advanced-electronics"].unit.ingredients),
                           ["time"]        = 2 * data.raw["technology"]["advanced-electronics"].unit.time,
                         },
     },
-  ["gateTechnology"] = {["additionalPrerequisites"] = {
+  ["gateTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           "gates",
                         },
                         ["additionalEffects"] = {
 
                         },
                         ["technologyRecipe"] = {
-                          ["count"]       = math.floor( 0.5 + 0.5 * data.raw["technology"]["advanced-electronics"].unit.count),
+                          ["count"]       = math.floor( 0.5 + 0.5 * (2.5 * data.raw["technology"]["advanced-electronics"].unit.count)),
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["advanced-electronics"].unit.ingredients),
                           ["time"]        = 2 * data.raw["technology"]["advanced-electronics"].unit.time,
                         },
@@ -98,19 +130,23 @@ prototypeSettings["green"] =
     maxHealth = 700,
   },
   ["manualPlaceable"] = prototypeSettings["blue"]["manualPlaceable"],
-  ["wallTechnology"] = {["additionalPrerequisites"] = {
+  ["wallTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "wall", "blue"),
                           "explosives",
                           "laser",
                         },
-                        ["additionalEffects"] = {},
+                        ["additionalEffects"] = {
+                          
+                        },
                         ["technologyRecipe"] = {
                           ["count"]       = 2 * prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["count"],
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["explosives"].unit.ingredients),
                           ["time"]        = prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
-  ["gateTechnology"] = {["additionalPrerequisites"] = {
+  ["gateTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "gate", "blue"),
                         },
                         ["additionalEffects"] = {
@@ -150,23 +186,27 @@ prototypeSettings["purple"] =
     energyPerRespawn = 10000,
     energyPerHealthLost = 25000,
     damageWhenMined = 15,
-    --deathEntity = Settings.forcefieldDeathDamageName,
+    deathEntity = prototypeSettings.forcefieldDeathDamageName,
     maxHealth = 150
   },
   ["manualPlaceable"] = prototypeSettings["blue"]["manualPlaceable"],
   --["upgrade"] = true,
-  ["wallTechnology"] = {["additionalPrerequisites"] = {
+  ["wallTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "wall", "green"),
                           "military-3",
                         },
-                        ["additionalEffects"] = {},
+                        ["additionalEffects"] = {
+                          
+                        },
                         ["technologyRecipe"] = {
                           ["count"]       = 2 * prototypeSettings["green"]["wallTechnology"]["technologyRecipe"]["count"],
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["military-3"].unit.ingredients),
                           ["time"]        = prototypeSettings["green"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
-  ["gateTechnology"] = {["additionalPrerequisites"] = {
+  ["gateTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "gate", "green"),
                         },
                         ["additionalEffects"] = {
@@ -210,18 +250,22 @@ prototypeSettings["red"] =
   },
   ["manualPlaceable"] = prototypeSettings["blue"]["manualPlaceable"],
   --["upgrade"] = true,
-  ["wallTechnology"] = {["additionalPrerequisites"] = {
+  ["wallTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "wall", "purple"),
                           "military-4",
                         },
-                        ["additionalEffects"] = {},
+                        ["additionalEffects"] = {
+                          
+                        },
                         ["technologyRecipe"] = {
                           ["count"]       = 2 * (prototypeSettings["purple"]["wallTechnology"]["technologyRecipe"]["count"] + prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["count"]),
                           ["ingredients"] = util.table.deepcopy(data.raw["technology"]["military-4"].unit.ingredients),
                           ["time"]        = prototypeSettings["purple"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
-  ["gateTechnology"] = {["additionalPrerequisites"] = {
+  ["gateTechnology"] = prototyping and {
+                        ["additionalPrerequisites"] = {
                           string.format(prototypeSettings["blue"]["name"], "gate", "purple"),
                         },
                         ["additionalEffects"] = {

@@ -5,6 +5,10 @@ require("prototypes/item/emitter")
 
 require("prototypes/entity/forcefield")
 require("prototypes/entity/emitter")
+require("prototypes/entity/emitter-effects")
 require("prototypes/entity/forcefield-crafter")
 
 require("prototypes/recipe/emitter")
+
+require("prototypes/gui/sprites")
+require("prototypes/gui/styles")
