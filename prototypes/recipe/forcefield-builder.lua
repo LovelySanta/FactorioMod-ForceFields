@@ -5,7 +5,7 @@ function forceFieldWallRecipe(color)
     {
       type = "recipe",
       name = string.format(settings.name, "wall", color),
-      energy_required = math.floor(settings.properties.chargeRate * emitter.tickRate * 100)/100,
+      energy_required = math.floor(settings.properties.respawnRate * emitter.tickRate / 60 * 100)/100,
       category = emitter["crafting-category"],
       ingredients = {nil},
       result = string.format(settings.name, "wall", color),
@@ -25,7 +25,7 @@ function forceFieldGateRecipe(color)
     {
       type = "recipe",
       name = string.format(settings.name, "gate", color),
-      energy_required = math.floor(settings.properties.chargeRate * emitter.tickRate * 100)/100,
+      energy_required = math.floor(settings.properties.respawnRate * emitter.tickRate / 60 * 100)/100,
       category = emitter["crafting-category"],
       ingredients = {nil},
       result = string.format(settings.name, "gate", color),

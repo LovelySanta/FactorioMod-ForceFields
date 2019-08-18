@@ -1,12 +1,16 @@
 require "__LSlib__/LSlib"
 
-
 function forceFieldWallEntity(color)
 
   local settings = require("prototypes/settings")[color]
+  local fieldProperties = require("prototypes/entity/forcefield-properties")
   local forceFieldWall = util.table.deepcopy(data.raw["wall"]["stone-wall"])
 
   forceFieldWall.name                   = string.format(settings.name, "wall", color)
+  forceFieldWall.localised_description  = {"",
+    {"entity-description.forcefield-wall"},
+    fieldProperties:generate_properties(color, {respawn=true, repair=true, max_health=false}),
+  }
 
   forceFieldWall.icon_size              = nil
   forceFieldWall.icon                   = nil
@@ -56,9 +60,14 @@ end
 function forceFieldGateEntity(color)
 
   local settings = require("prototypes/settings")[color]
+  local fieldProperties = require("prototypes/entity/forcefield-properties")
   local forceFieldGate = util.table.deepcopy(data.raw["gate"]["gate"])
 
   forceFieldGate.name                   = string.format(settings.name, "gate", color)
+  forceFieldGate.localised_description  = {"",
+    {"entity-description.forcefield-wall"},
+    fieldProperties:generate_properties(color, {respawn=true, repair=true, max_health=false}),
+  }
 
   forceFieldGate.icon_size              = nil
   forceFieldGate.icon                   = nil

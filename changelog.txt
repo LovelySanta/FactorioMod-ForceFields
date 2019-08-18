@@ -1,7 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 18. 8. 2019
+  Features:
+    - Updated to 0.17 with a new GUI
+  Changes:
+    - Green fields now require military science packs
+    - Forcefields will now not be selected when deconstructing/blueprinting
+---------------------------------------------------------------------------------------------------
 Version: 2.1.4
 Date: 27. 6. 2018
-  Fixes:
+  Bugfixes:
     - Bugfix api call to invalid entity when degrading linked fields
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.3
@@ -9,19 +17,19 @@ Date: 16. 5. 2018
   Changes:
     - Soft coding the technology recipes
     - Added compatibility with MoreScience mod by lovely_santa
-  Fixes:
+  Bugfixes:
     - Fixed changelog wasn't showing ingame
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 14. 4. 2018
-  Fixes:
+  Bugfixes:
     - Bugfix api call to invalid entity
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 24. 2. 2018
   Changes:
     - Emitters don't build a default wall when placed
-  Fixes:
+  Bugfixes:
     - Bugfix wall not degrading when changing settings too fast
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
@@ -35,19 +43,19 @@ Date: 1. 2. 2018
     - Balancing technology cost to reflect the dificulty/OP-ness
     - GUI has sprite buttons on the direction and wall type
     - New on_entity_damaged event as released in 0.16.17
-  Fixes:
+  Bugfixes:
     - Removed quick fix from version 2.0.1 as vanilla game fixed it
     - Fixed the red/green light where not showing when connected to a gate
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 21. 1. 2018
-  Fixes:
+  Bugfixes:
     - Bugfix crash resulting from a typo in previous release
     - Small optimalisations around the code (part 2)
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 21. 1. 2018
-  Fixes:
+  Bugfixes:
     - Disabled deconstruction planning of the fields
     - Bugfix selection of direction W not visible (but it was working)
     - Bugfix huge UPS drop on decay of the fields
@@ -57,7 +65,7 @@ Version: 2.0.1
 Date: 20. 1. 2018
   Features:
     - Added ability to copy/paste emitter settings (as you do with other buildings)
-  Fixes:
+  Bugfixes:
     - Deleted debug message when adding upgrades
     - Bugfix error trying to access global values
     - Bugfix purple wall not dealing damage upon destruction

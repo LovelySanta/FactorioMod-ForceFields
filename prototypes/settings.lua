@@ -43,7 +43,7 @@ prototypeSettings["gui"] =
 
 
 --------------------------------------------------------------------------------
------                          Blue forceField                              ----
+-----                          Blue Forcefield                              ----
 --------------------------------------------------------------------------------
 
 prototypeSettings["blue"] =
@@ -60,12 +60,13 @@ prototypeSettings["blue"] =
     {type = "laser"     , decrease = nil,  percent = 70  },
   },
   ["properties"]        = {
-    chargeRate = 0.2036111111111111,
+    --chargeRate = 0.2036111111111111, -- hp/tick
+    chargeRate = 0.2083333333333334, -- hp/tick
     degradeRate = 2.777777777777778,
-    respawnRate = 15,
-    energyPerCharge = 4200,
-    energyPerRespawn = 5000,
-    energyPerHealthLost = 17000,
+    respawnRate = 15,                -- ticks/tickRate/section
+    energyPerCharge = 4200,          -- energy/tick
+    energyPerRespawn = 5000,         -- energy/tickRate/section
+    energyPerHealthLost = 17000,     -- energy/hp
     damageWhenMined = 20,
     maxHealth = 300,
   },
@@ -105,7 +106,7 @@ prototypeSettings["blue"] =
 
 
 --------------------------------------------------------------------------------
------                          Green forceField                             ----
+-----                          Green Forcefield                             ----
 --------------------------------------------------------------------------------
 
 prototypeSettings["green"] =
@@ -143,7 +144,7 @@ prototypeSettings["green"] =
                         },
                         ["technologyRecipe"] = {
                           ["count"]       = 2 * prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["count"],
-                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["explosives"].unit.ingredients),
+                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["flamethrower"].unit.ingredients),
                           ["time"]        = prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
@@ -156,7 +157,7 @@ prototypeSettings["green"] =
                         },
                         ["technologyRecipe"] = {
                           ["count"]       = math.floor( 0.5 + 0.5 * ( 2 * prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["count"])),
-                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["explosives"].unit.ingredients),
+                          ["ingredients"] = util.table.deepcopy(data.raw["technology"]["flamethrower"].unit.ingredients),
                           ["time"]        = prototypeSettings["blue"]["wallTechnology"]["technologyRecipe"]["time"],
                         },
   },
@@ -165,7 +166,7 @@ prototypeSettings["green"] =
 
 
 --------------------------------------------------------------------------------
------                          Purple forceField                            ----
+-----                          Purple Forcefield                            ----
 --------------------------------------------------------------------------------
 
 prototypeSettings["purple"] =
@@ -226,7 +227,7 @@ prototypeSettings["purple"] =
 
 
 --------------------------------------------------------------------------------
------                          Red forceField                               ----
+-----                          Red Forcefield                               ----
 --------------------------------------------------------------------------------
 
 prototypeSettings["red"] =

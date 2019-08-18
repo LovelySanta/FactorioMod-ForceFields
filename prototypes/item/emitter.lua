@@ -5,6 +5,8 @@ data:extend{
   {
     type = "item",
     name = emitterSettings.emitterName,
+    localised_name = {"entity-name."..emitterSettings.emitterName},
+    localised_description = {"entity-description."..emitterSettings.emitterName},
     icon = modName .. "/graphics/" .. emitterSettings.emitterName .. "-icon.png",
     icon_size = 32,
     icons = nil,

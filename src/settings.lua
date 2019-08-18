@@ -26,8 +26,8 @@ settings.forcefieldDeathDamageName = prototypeSettings.forcefieldBuildDamageName
 
 
 -- emitter settings
-settings.emitterName = "forcefield-emitter"
-settings.tickRate = 20
+settings.emitterName = prototypeSettings["emitter"]["emitterName"]
+settings.tickRate = prototypeSettings["emitter"]["tickRate"]
 
 settings.emitterDefaultDistance = 10
 settings.maxRangeUpgrades = 23
