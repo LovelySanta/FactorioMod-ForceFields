@@ -15,6 +15,10 @@ prototypeSettings["emitter"] =
   ["crafting-category"] = "forcefield-crafter",
 }
 
+-- builder settings
+prototypeSettings["forcefieldBuildDamageName"] = "forcefield-build-damage"
+prototypeSettings["forcefieldDeathDamageName"] = "forcefield-death-damage"
+
 --------------------------------------------------------------------------------
 -----                               Gui                                     ----
 --------------------------------------------------------------------------------

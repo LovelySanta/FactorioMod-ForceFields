@@ -20,8 +20,8 @@ settings.guiTextfieldStyle                 = prototypeSettings.gui.guiTextfieldS
 settings.guiItemSlotStyle                  = prototypeSettings.gui.guiItemSlotStyle
 
 -- builder settings
-settings.forcefieldBuildDamageName = "forcefield-build-damage"
-settings.forcefieldDeathDamageName = "forcefield-death-damage"
+settings.forcefieldBuildDamageName = prototypeSettings.forcefieldBuildDamageName
+settings.forcefieldDeathDamageName = prototypeSettings.forcefieldBuildDamageName
 
 
 

@@ -10,54 +10,53 @@ Gui = {}
 
 
 Gui.guiEmitterLayout = require("prototypes/gui/layout/emitter")
-Gui.guiElementNames =
-{
+local guiNames = require("prototypes/gui/layout/guiElementNames")
+Gui.guiElementNames = {
   -- EMITTER GUI --
-  -- gui base
-  guiFrame = "emitterConfig",
-  buttonConfigure = "configureWallButton",
-  buttonHelp = "emitterHelpButton",
-  configTable = "emitterConfigTable",
-
+  -- gui layout
+  guiFrame        = guiNames.guiFrame,
+  buttonConfigure = guiNames.guiHeaderButton_ConfigureWall,
+  buttonHelp      = guiNames.guiHeaderButton_Help,
+  configTable     = guiNames.guiContentTable,
+  
   -- Direction of forcefield
-  directionLabel = "directionLabel",
-  directionTable = "directions",
-  directionOptionN = "directionN",
-  directionOptionS = "directionS",
-  directionOptionE = "directionE",
-  directionOptionW = "directionW",
+  directionLabel   = guiNames.directionLabel,
+  directionTable   = guiNames.directionTable,
+  directionOptionN = guiNames.directionOptionN,
+  directionOptionS = guiNames.directionOptionS,
+  directionOptionE = guiNames.directionOptionE,
+  directionOptionW = guiNames.directionOptionW,
 
   -- Type of forcefield
-  fieldTypeLabel = "fieldTypeLabel",
-  fieldTypeTable = "fields",
-  fieldTypeOptionB = "fieldB",
-  fieldTypeOptionG = "fieldG",
-  fieldTypeOptionR = "fieldR",
-  fieldTypeOptionP = "fieldP",
+  fieldTypeLabel   = guiNames.fieldTypeLabel,
+  fieldTypeTable   = guiNames.fieldTypeTable,
+  fieldTypeOptionB = guiNames.fieldTypeOptionB,
+  fieldTypeOptionG = guiNames.fieldTypeOptionG,
+  fieldTypeOptionR = guiNames.fieldTypeOptionR,
+  fieldTypeOptionP = guiNames.fieldTypeOptionP,
 
   -- Distance of forcefield
-  distanceLabel = "distanceLabel",
-  distanceTable = "distance",
-  distanceInput = "emitterDistance",
-  distanceMaxInput = "emitterMaxDistance",
-
+  distanceLabel    = guiNames.distanceLabel,
+  distanceTable    = guiNames.distanceTable,
+  distanceInput    = guiNames.distanceInput,
+  distanceMaxInput = guiNames.distanceMaxInput,
+  
   -- Width of forcefield
-  widthLabel = "currentWidthLabel",
-  widthTable = "width",
-  widthInput = "emitterWidth",
-  widthMaxInput = "emitterMaxWidth",
-
+  widthLabel    = guiNames.widthLabel,
+  widthTable    = guiNames.widthTable,
+  widthInput    = guiNames.widthInput,
+  widthMaxInput = guiNames.widthMaxInput,
+  
   -- Upgrades of emitter
-  upgradesLabel = "upgradesLabel",
-  upgradesTable = "upgrades",
-  upgradesDistance = "distanceUpgrades",
-  upgradesWidth = "widthUpgrades",
-  buttonRemoveUpgrades = "removeAllUpgrades",
-
+  upgradesLabel        = guiNames.upgradesLabel,
+  upgradesTable        = guiNames.upgradesTable,
+  upgradesDistance     = guiNames.upgradesDistance,
+  upgradesWidth        = guiNames.upgradesWidth,
+  buttonRemoveUpgrades = guiNames.buttonRemoveUpgrades,
+  
   -- Bottom buttons
-  buttonFrame = "buttonsFlow",
-  buttonApplySettings = "applyButton",
-
+  buttonApplySettings = guiNames.buttonApplySettings,
+  
   -- FORCEFIELD GUI --
   -- Gui base
   configFrame = "fieldConfig",
@@ -74,13 +73,18 @@ Gui.guiElementNames =
   configTableData = "fieldConfigTableData",
   configOptionLabel = "fieldConfigOptionLabel",
   configOption = "fieldConfigOption",
-
+  
   -- Bottom buttons
   configButtonFrame = "fieldConfigButtons",
   configButtonAlign = "fieldConfigButtonsAlign",
   configCancelButton = "fieldConfigButtonsCancel",
   configApplyButton = "fieldConfigButtonsApply",
 }
+
+Gui.guiElementPaths = {}
+for guiElementName, actualGuiElementName in pairs(Gui.guiElementNames) do
+  Gui.guiElementPaths[guiElementName] = LSlib.gui.layout.getElementPath(Gui.guiEmitterLayout, actualGuiElementName)
+end
 
 
 
@@ -99,14 +103,12 @@ function Gui:onCloseGui(guiElement, playerIndex)
       -- Check the upgrade items
       if global.forcefields.emitterConfigGuis["I" .. playerIndex][1]["entity"].valid then
         local emitterTable = global.forcefields.emitterConfigGuis["I" .. playerIndex][1]
-        local upgrades = guiElement[self.guiElementNames.configTable][self.guiElementNames.upgradesTable]
+        --local upgrades = guiElement[self.guiElementNames.configTable][self.guiElementNames.upgradesTable]
+        local upgrades = LSlib.gui.getElement(playerIndex, self.guiElementPaths.upgradesTable)
 
         -- Distance upgrades
         local oldDistanceUpgrades = emitterTable["distance-upgrades"]
-        local newDistanceUpgrades = tonumber(string.sub(upgrades[self.guiElementNames.upgradesDistance].caption, 2))
-        if not newDistanceUpgrades then
-          newDistanceUpgrades = 0
-        end
+        local newDistanceUpgrades = upgrades[self.guiElementNames.upgradesDistance].number
         if newDistanceUpgrades ~= oldDistanceUpgrades then
           if newDistanceUpgrades > oldDistanceUpgrades then
             transferToPlayer(game.players[playerIndex], {name = "advanced-circuit", count = newDistanceUpgrades - oldDistanceUpgrades})
@@ -117,10 +119,7 @@ function Gui:onCloseGui(guiElement, playerIndex)
 
         -- Width upgrades
         local oldWidthUpgrades = emitterTable["width-upgrades"]
-        local newWidthUpgrades = tonumber(string.sub(upgrades[self.guiElementNames.upgradesWidth].caption, 2))
-        if not newWidthUpgrades then
-          newWidthUpgrades = 0
-        end
+        local newWidthUpgrades = upgrades[self.guiElementNames.upgradesWidth].number
         if newWidthUpgrades ~= oldWidthUpgrades then
           if newWidthUpgrades > oldWidthUpgrades then
             transferToPlayer(game.players[playerIndex], {name = "processing-unit", count = newWidthUpgrades - oldWidthUpgrades})
@@ -170,37 +169,37 @@ function Gui:showEmitterGui(emitterTable, playerIndex)
     
     -- Type of forcefield
     if emitterTable["type"] == "blue" then
-      LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.fieldTypeOptionB)).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldTypeOptionB).style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["type"] == "green" then
-      LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.fieldTypeOptionG)).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldTypeOptionG).style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["type"] == "red" then
-      LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.fieldTypeOptionR)).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldTypeOptionR).style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["type"] == "purple" then
-      LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.fieldTypeOptionP)).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldTypeOptionP).style = settings.guiSelectButtonSelectedStyle
     end
 
     -- Direction of forcefield
     if emitterTable["direction"] == defines.direction.north then
-      LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.directionOptionN)).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionN).style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["direction"] == defines.direction.south then
-      LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.directionOptionS)).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionS).style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["direction"] == defines.direction.east then
-      LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.directionOptionE)).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionE).style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["direction"] == defines.direction.west then
-      LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.directionOptionW)).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionW).style = settings.guiSelectButtonSelectedStyle
     end
 
     -- Distance of forcefield
-    LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.distanceInput)).text = emitterTable["distance"]
-    LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.distanceMaxInput)).caption = "Max: " .. tostring(settings.emitterDefaultDistance + emitterTable["distance-upgrades"])
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceInput).text = emitterTable["distance"]
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceMaxInput).caption = "Max: " .. tostring(settings.emitterDefaultDistance + emitterTable["distance-upgrades"])
 
     -- Width of forcefield
-    LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.widthInput)).text = emitterTable["width"]
-    LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.widthMaxInput)).caption = "Max: " .. tostring(settings.emitterDefaultWidth + emitterTable["width-upgrades"] * settings.widthUpgradeMultiplier)
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = emitterTable["width"]
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthMaxInput).caption = "Max: " .. tostring(settings.emitterDefaultWidth + emitterTable["width-upgrades"] * settings.widthUpgradeMultiplier)
 
     -- Upgrades of emitter
-    LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.upgradesDistance)).number = emitterTable["distance-upgrades"]
-    LSlib.gui.getElement(playerIndex, LSlib.gui.layout.getElementPath(self.guiEmitterLayout, self.guiElementNames.upgradesWidth)).number = emitterTable["width-upgrades"]
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.upgradesDistance).number = emitterTable["distance-upgrades"]
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.upgradesWidth).number = emitterTable["width-upgrades"]
 
     -- Save gui
     if global.forcefields.emitterConfigGuis == nil then
@@ -300,7 +299,6 @@ end
 function Gui:handleGuiDirectionButtons(event)
   local playerIndex = event.element.player_index
   local player = game.players[playerIndex]
-  local frame = player.gui.center[self.guiElementNames.guiFrame]
   local nameToDirection =
   {
     [self.guiElementNames.directionOptionN] = defines.direction.north,
@@ -309,8 +307,8 @@ function Gui:handleGuiDirectionButtons(event)
     [self.guiElementNames.directionOptionW] = defines.direction.west
   }
 
-  if frame ~= nil then
-    local directions = frame[self.guiElementNames.configTable][self.guiElementNames.directionTable]
+  if LSlib.gui.getElement(playerIndex, self.guiElementPaths.guiFrame) ~= nil then
+    local directions = LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionTable)
 
     -- Save the newly selected direction
     global.forcefields.emitterConfigGuis["I" .. playerIndex][2] = nameToDirection[event.element.name]
@@ -330,7 +328,6 @@ function Gui:handleGuiFieldTypeButtons(event)
   local playerIndex = event.element.player_index
   local player = game.players[playerIndex]
   local force = player.force
-  local frame = player.gui.center[self.guiElementNames.guiFrame]
   local nameToFieldName =
   {
     [self.guiElementNames.fieldTypeOptionB] = "blue",
@@ -339,9 +336,9 @@ function Gui:handleGuiFieldTypeButtons(event)
     [self.guiElementNames.fieldTypeOptionP] = "purple"
   }
 
-  if frame ~= nil then
+  if LSlib.gui.getElement(playerIndex, self.guiElementPaths.guiFrame) ~= nil then
     -- Current fieldtype
-    local fields = frame[self.guiElementNames.configTable][self.guiElementNames.fieldTypeTable]
+    local fields = LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldTypeTable)
     local selectedButtonName = event.element.name
 
     -- Check if the force of that player has the required researched
@@ -375,32 +372,32 @@ end
 function Gui:handleGuiUpgradeButtons(event)
   local playerIndex = event.element.player_index
   local player = game.players[playerIndex]
-  local frame = player.gui.center[self.guiElementNames.guiFrame]
+  local frame = LSlib.gui.getElement(playerIndex, self.guiElementPaths.guiFrame)
   local nameToUpgradeLimit =
   {
     [self.guiElementNames.upgradesDistance] = settings.maxRangeUpgrades,
     [self.guiElementNames.upgradesWidth] = settings.maxWidthUpgrades
   }
-  local nameToStyle =
+  local nameToUpgradeItem =
   {
     [self.guiElementNames.upgradesDistance] = "advanced-circuit",
     [self.guiElementNames.upgradesWidth] = "processing-unit"
   }
-  local styleToName = {}
-  for k,v in pairs(nameToStyle) do
-    styleToName[v] = k
+  local UpgradeItemsToName = {}
+  for k,v in pairs(nameToUpgradeItem) do
+    UpgradeItemsToName[v] = k
   end
 
   if frame ~= nil then
-    local upgrades = frame[self.guiElementNames.configTable][self.guiElementNames.upgradesTable]
+    local upgrades = LSlib.gui.getElement(playerIndex, self.guiElementPaths.upgradesTable)
     local upgradeButton
     local count
 
     -- Check if the player has items on his cursor => increase upgrades
     local stack = player.cursor_stack
     if stack.valid_for_read then
-      if styleToName[stack.name] ~= nil then
-        upgradeButton = upgrades[styleToName[stack.name]]
+      if UpgradeItemsToName[stack.name] ~= nil then
+        upgradeButton = upgrades[UpgradeItemsToName[stack.name]]
         -- Add one to the upgrades
         count = upgradeButton.number + 1
 
@@ -418,15 +415,11 @@ function Gui:handleGuiUpgradeButtons(event)
     else -- player has an empty cursor => decrease upgrades
       upgradeButton = upgrades[event.element.name]
 
-      if upgradeButton.caption ~= " " then
-        count = tonumber(upgradeButton.number) - 1
-
-        if count >= 0 then
-          upgradeButton.number = count
-        end
-
+      count = upgradeButton.number
+      if count > 0 then
+        upgradeButton.number = count - 1
         self:updateMaxLabel(frame, upgradeButton)
-        transferToPlayer(player, {name = nameToStyle[upgradeButton.name], count = 1})
+        transferToPlayer(player, {name = nameToUpgradeItem[upgradeButton.name], count = 1})
       end
     end
   end
@@ -436,12 +429,11 @@ end
 
 function Gui:handleConfigureButton(event)
   -- get the width of the emitter, needed for the gui...
+  local playerIndex = event.player_index
   local player = game.players[event.player_index]
-  local guiCenter = player.gui.center
-  local emitterConfigTable = guiCenter[self.guiElementNames.guiFrame][self.guiElementNames.configTable]
 
-  local width = tonumber(emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthInput].text)
-  local maxWidth = tonumber(string.sub(emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthMaxInput].caption, 6))
+  local width = tonumber(LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text)
+  local maxWidth = tonumber(string.sub(LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthMaxInput).caption, 6))
   local settingsAreGood = true
 
   if not width then
@@ -449,19 +441,19 @@ function Gui:handleConfigureButton(event)
     settingsAreGood = false
   elseif width > maxWidth then
     player.print(string.format("New Width is larger than the allowed maximum (%i).", maxWidth))
-    emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthInput].text = tostring(maxWidth)
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(maxWidth)
     settingsAreGood = false
   elseif width < 1 then
     player.print("New Width is smaller than the allowed minimum (1).")
-    emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthInput].text = tostring(1)
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(1)
     settingsAreGood = false
   elseif math.floor(width) ~= width then
     player.print("New Width is not a valid number (can't have decimals).")
-    emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthInput].text = tostring(math.min(maxWidth, math.max(1, math.floor(width + .5))))
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(math.min(maxWidth, math.max(1, math.floor(width + .5))))
     settingsAreGood = false
   elseif (math.floor((width - 1) / 2) * 2) + 1 ~= width then
     player.print("New Width has to be an odd number.")
-    emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthInput].text = tostring((math.floor((width - 1) / 2) * 2) + 1)
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring((math.floor((width - 1) / 2) * 2) + 1)
     settingsAreGood = false
   end
 
@@ -469,7 +461,7 @@ function Gui:handleConfigureButton(event)
     -- We need to configure the wall/gates for this wall, depending on the current settings in the gui
     self:createForcefieldGui(event.player_index, width)
     -- It opened the configGui, now make the emitterGui invisible
-    guiCenter[self.guiElementNames.guiFrame].visible = false
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.guiFrame).visible = false
   end
 end
 
@@ -479,7 +471,7 @@ function Gui:handleGuiMenuButtons(event)
   local playerIndex = event.player_index
   local player = game.players[playerIndex]
   local guiCenter = player.gui.center
-  local frame = guiCenter[self.guiElementNames.guiFrame]
+  local frame = LSlib.gui.getElement(playerIndex, self.guiElementPaths.guiFrame)
   if frame ~= nil then
     -- Apply button
     if event.element.name == self.guiElementNames.buttonApplySettings then
@@ -496,10 +488,10 @@ function Gui:handleGuiMenuButtons(event)
         frame.destroy()
       end
     -- Help button
-  elseif event.element.name == self.guiElementNames.buttonHelp then
+    elseif event.element.name == self.guiElementNames.buttonHelp then
       self:printGuiHelp(player)
     -- Remove upgrades buttons
-  elseif event.element.name == self.guiElementNames.buttonRemoveUpgrades then
+    elseif event.element.name == self.guiElementNames.buttonRemoveUpgrades then
       self:removeAllUpgrades(playerIndex)
     end
   end
@@ -667,10 +659,10 @@ Gui.guiButtonHandlers =
 
   [Gui.guiElementNames.upgradesDistance] = Gui.handleGuiUpgradeButtons,
   [Gui.guiElementNames.upgradesWidth] = Gui.handleGuiUpgradeButtons,
-
+  
   [Gui.guiElementNames.buttonHelp] = Gui.handleGuiMenuButtons,
-  [Gui.guiElementNames.buttonRemoveUpgrades] = Gui.handleGuiMenuButtons,
   [Gui.guiElementNames.buttonConfigure] = Gui.handleConfigureButton,
+  [Gui.guiElementNames.buttonRemoveUpgrades] = Gui.handleGuiMenuButtons,
   [Gui.guiElementNames.buttonApplySettings] = Gui.handleGuiMenuButtons,
 
   -- Forcefield gui
@@ -713,9 +705,9 @@ function Gui:verifyAndSetFromGui(playerIndex)
   local player = game.players[playerIndex]
   local settingsAreGood = true
   local settingsChanged = false
-  local frame = player.gui.center[self.guiElementNames.guiFrame]
-  local emitterConfigTable = frame[self.guiElementNames.configTable]
-  local upgrades = emitterConfigTable[self.guiElementNames.upgradesTable]
+  --local frame = player.gui.center[self.guiElementNames.guiFrame]
+  --local emitterConfigTable = frame[self.guiElementNames.configTable]
+  --local upgrades = emitterConfigTable[self.guiElementNames.upgradesTable]
 
   if global.forcefields.emitterConfigGuis ~= nil
     and global.forcefields.emitterConfigGuis["I" .. playerIndex] ~= nil
@@ -745,42 +737,48 @@ function Gui:verifyAndSetFromGui(playerIndex)
     end
 
     -- Distance of forcefield
-    newDistance = tonumber(emitterConfigTable[self.guiElementNames.distanceTable][self.guiElementNames.distanceInput].text)
-    maxDistance = tonumber(string.sub(emitterConfigTable[self.guiElementNames.distanceTable][self.guiElementNames.distanceMaxInput].caption, 6))
-    newDistanceUpgrades = upgrades[self.guiElementNames.upgradesDistance].number
+    newDistance = tonumber(LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceInput).text)
+    maxDistance = tonumber(string.sub(LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceMaxInput).caption, 6))
+    newDistanceUpgrades = LSlib.gui.getElement(playerIndex, self.guiElementPaths.upgradesDistance).number
     if not newDistance then
       player.print("New Distance is not a valid number.")
       settingsAreGood = false
     elseif newDistance > maxDistance then
-      player.print("New Distance is larger than the allowed maximum.")
+      player.print(string.format("New Distance is larger than the allowed maximum (%i).", maxDistance))
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceInput).text = tostring(maxDistance)
       settingsAreGood = false
     elseif newDistance < 1 then
       player.print("New Distance is smaller than the allowed minimum (1).")
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceInput).text = tostring(1)
       settingsAreGood = false
     elseif math.floor(newDistance) ~= newDistance then
       player.print("New Distance is not a valid number (can't have decimals).")
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceInput).text = tostring(math.min(maxWidth, math.max(1, math.floor(newDistance + .5))))
       settingsAreGood = false
     end
 
     -- Width of forcefield
-    newWidth = tonumber(emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthInput].text)
-    maxWidth = tonumber(string.sub(emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthMaxInput].caption, 6))
-    newWidthUpgrades = upgrades[self.guiElementNames.upgradesWidth].number
+    newWidth = tonumber(LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text)
+    maxWidth = tonumber(string.sub(LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthMaxInput).caption, 6))
+    newWidthUpgrades = LSlib.gui.getElement(playerIndex, self.guiElementPaths.upgradesWidth).number
     if not newWidth then
       player.print("New Width is not a valid number.")
       settingsAreGood = false
     elseif newWidth > maxWidth then
-      player.print("New Width is larger than the allowed maximum.")
+      player.print(string.format("New Width is larger than the allowed maximum (%i).", maxWidth))
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(maxWidth)
       settingsAreGood = false
     elseif newWidth < 1 then
       player.print("New Width is smaller than the allowed minimum (1).")
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(1)
       settingsAreGood = false
     elseif math.floor(newWidth) ~= newWidth then
       player.print("New Width is not a valid number (can't have decimals).")
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(math.min(maxWidth, math.max(1, math.floor(newWidth + .5))))
       settingsAreGood = false
     elseif (math.floor((newWidth - 1) / 2) * 2) + 1 ~= newWidth then
       player.print("New Width has to be an odd number.")
-      emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthInput].text = tostring((math.floor((newWidth - 1) / 2) * 2) + 1)
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring((math.floor((newWidth - 1) / 2) * 2) + 1)
       settingsAreGood = false
     end
 

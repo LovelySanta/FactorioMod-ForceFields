@@ -118,7 +118,7 @@ function Forcefield:scanAndBuildFields(emitterTable)
         -- If another emitter (or even this one previously) has built a field at this location, skip trying to build there, same if we don't have to build here
         if (fields[index][pos.x] == nil or fields[index][pos.x][pos.y] == nil) and emitterTable["config"][n-fieldConfigOffset] ~= settings.fieldEmptySuffix then
           -- If that spot has no field, we need to try and build one
-          local fieldEntityName = emitterTable["type"] .. emitterTable["config"][n-fieldConfigOffset]
+          local fieldEntityName = emitterTable["config"][n-fieldConfigOffset] .. emitterTable["type"]
           -- check if we can build the field
           if surface.can_place_entity({name = fieldEntityName, position = pos, force = force, direction = direction}) then
             local newField = surface.create_entity({name = fieldEntityName, position = pos, force = force, direction = direction})
