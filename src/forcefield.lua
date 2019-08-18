@@ -71,17 +71,6 @@ end
 
 
 
-function Forcefield:onResearchFinished(research)
-  local recipeNames = settings.forcefieldTypes
-  for _,effect in pairs(research.effects) do
-    if effect.type == "unlock-recipe" and recipeNames[effect.recipe] ~= nil then
-      research.force.recipes[effect.recipe].enabled = false
-    end
-  end
-end
-
-
-
 function Forcefield:scanAndBuildFields(emitterTable)
   local buildField
 

@@ -50,6 +50,7 @@ prototypeSettings["blue"] =
 {
   ["name"]              = "forcefield-%s-%s",
   ["colorTint"]         = { r = 32/255, g = 82/255, b = 188/255, a = 0.80},
+  ["order"]             = "a",
   ["resistances"]       = {
     {type = "physical"  , decrease = 3  ,  percent = 20  },
     {type = "impact"    , decrease = 45 ,  percent = 100 },
@@ -111,6 +112,7 @@ prototypeSettings["green"] =
 {
   ["name"]              = prototypeSettings["blue"]["name"],
   ["colorTint"]         = { r = 62/255, g = 221/255, b = 88/255, a = prototypeSettings["blue"]["colorTint"].a},
+  ["order"]             = "b",
   ["resistances"]       = {
     {type = "physical"  , decrease = 3  ,  percent = 20  },
     {type = "impact"    , decrease = 45 ,  percent = 100 },
@@ -170,6 +172,7 @@ prototypeSettings["purple"] =
 {
   ["name"]              = prototypeSettings["blue"]["name"],
   ["colorTint"]         = { r = 89/255, g = 66/255, b = 206/255, a = prototypeSettings["blue"]["colorTint"].a},
+  ["order"]             = "c",
   ["resistances"]       = {
     {type = "physical"  , decrease = 3  ,  percent = 20  },
     {type = "impact"    , decrease = 45 ,  percent = 100 },
@@ -230,6 +233,7 @@ prototypeSettings["red"] =
 {
   ["name"]              = prototypeSettings["blue"]["name"],
   ["colorTint"]         = { r = 219/255, g = 30/255, b = 30/255, a = prototypeSettings["blue"]["colorTint"].a},
+  ["order"]             = "d",
   ["resistances"]       = {
     {type = "physical"  , decrease = 3  ,  percent = 20  },
     {type = "impact"    , decrease = 45 ,  percent = 100 },

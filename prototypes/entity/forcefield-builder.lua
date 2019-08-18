@@ -14,13 +14,21 @@ function forceFieldWallEntity(color)
 
   forceFieldWall.flags = forceFieldWall.flags or {}
   table.insert(forceFieldWall.flags, "not-repairable")
-
+  table.insert(forceFieldWall.flags, "not-blueprintable")
+  table.insert(forceFieldWall.flags, "not-deconstructable")
+  table.insert(forceFieldWall.flags, "hidden")
+  table.insert(forceFieldWall.flags, "not-upgradable")
+  table.insert(forceFieldWall.flags, "no-copy-paste")
+  
+  forceFieldWall.placeable_by           = {item = forceFieldWall.name, count = 1}
   forceFieldWall.minable                = {hardness = 0.2, mining_time = 1,
                                            result = (settings.manualPlaceable and forceFieldWall.name or nil),}
   forceFieldWall.mined_sound            = nil
   forceFieldWall.fast_replaceable_group = nil
 
-  forceFieldWall.order                  = "a[items]-f[forcefields]"
+  forceFieldWall.allow_copy_paste       = false
+
+  forceFieldWall.order                  = string.format("f[forcefields]-b[field]-%s[%s]-a[wall]", settings.order, color)
   forceFieldWall.subgroup               = "forcefield"
 
   forceFieldWall.max_health             = settings.properties.maxHealth
@@ -58,13 +66,21 @@ function forceFieldGateEntity(color)
 
   forceFieldGate.flags = forceFieldGate.flags or {}
   table.insert(forceFieldGate.flags, "not-repairable")
+  table.insert(forceFieldGate.flags, "not-blueprintable")
+  table.insert(forceFieldGate.flags, "not-deconstructable")
+  table.insert(forceFieldGate.flags, "hidden")
+  table.insert(forceFieldGate.flags, "not-upgradable")
+  table.insert(forceFieldGate.flags, "no-copy-paste")
 
+  forceFieldGate.placeable_by           = {item = forceFieldGate.name, count = 1}
   forceFieldGate.minable                = {hardness = 0.2, mining_time = 1,
                                            result = (settings.manualPlaceable and forceFieldGate.name or nil),}
   forceFieldGate.mined_sound            = nil
   forceFieldGate.fast_replaceable_group = nil
 
-  forceFieldGate.order                  = "a[items]-f[forcefields]"
+  forceFieldGate.allow_copy_paste       = false
+
+  forceFieldGate.order                  = string.format("f[forcefields]-b[field]-%s[%s]-b[gate]", settings.order, color)
   forceFieldGate.subgroup               = "forcefield"
 
   forceFieldGate.max_health             = settings.properties.maxHealth

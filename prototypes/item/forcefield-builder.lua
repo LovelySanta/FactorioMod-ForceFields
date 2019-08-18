@@ -11,7 +11,7 @@ function forceFieldWallItem(color)
   forceFieldWall.icon                   = nil
   forceFieldWall.icons                  = LSlib.item.getIcons("item", "stone-wall", nil, nil, settings.colorTint)
 
-  forceFieldWall.order                  = "a[items]-f[forcefields]"
+  forceFieldWall.order                  = string.format("f[forcefields]-b[field]-%s[%s]-a[wall]", settings.order, color)
   forceFieldWall.subgroup               = "forcefield"
 
   forceFieldWall.place_result           = (settings.manualPlaceable and forceFieldWall.name or nil)
@@ -33,7 +33,7 @@ function forceFieldGateItem(color)
   forceFieldGate.icon                   = nil
   forceFieldGate.icons                  = LSlib.item.getIcons("item", "gate", nil, nil, settings.colorTint)
 
-  forceFieldGate.order                  = "a[items]-f[forcefields]"
+  forceFieldGate.order                  = string.format("f[forcefields]-b[field]-%s[%s]-b[gate]", settings.order, color)
   forceFieldGate.subgroup               = "forcefield"
 
   forceFieldGate.place_result           = (settings.manualPlaceable and forceFieldGate.name or nil)

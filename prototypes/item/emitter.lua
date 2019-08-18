@@ -9,7 +9,7 @@ data:extend{
     icon_size = 32,
     icons = nil,
     subgroup = "forcefield",
-    order = "f[forcefield-emitter]",
+    order = "f[forcefield]-a[emitter]",
     place_result = emitterSettings.emitterName,
     stack_size = 50
   }
