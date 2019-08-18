@@ -572,7 +572,7 @@ function Gui:handleGuiConfigWallRowChange(event)
   local guiCenter = game.players[playerIndex].gui.center
   local emitterConfigTable = guiCenter[self.guiElementNames.guiFrame][self.guiElementNames.configTable]
   local fieldWidth = tonumber(emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthInput].text)
-  local configTableData = guiCenter[self.guiElementNames.configFrame][self.guiElementNames.configTableFrame][self.guiElementNames.configTableSlider][self.guiElementNames.configTableData]
+  local configTableData = LSlib.gui.getElement(playerIndex, self.guiElementPaths.configTableSlider)[self.guiElementNames.configTableData]
   for fieldIndex = 1, fieldWidth do
     configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = styleE
     configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = styleW
@@ -586,11 +586,9 @@ function Gui:handleGuiConfigWallClose(event)
   local playerIndex = event.player_index
   local guiCenter = game.players[playerIndex].gui.center
 
-  local emitterConfigTable = guiCenter[self.guiElementNames.guiFrame][self.guiElementNames.configTable]
-  --local fieldWidth = (#configTableData.children_names)/4
-  local fieldWidth = tonumber(emitterConfigTable[self.guiElementNames.widthTable][self.guiElementNames.widthInput].text)
+  local fieldWidth = tonumber(LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text)
   local fieldOffset = (fieldWidth + 1)/2
-  local configTableData = guiCenter[self.guiElementNames.configFrame][self.guiElementNames.configTableFrame][self.guiElementNames.configTableSlider][self.guiElementNames.configTableData]
+  local configTableData = LSlib.gui.getElement(playerIndex, self.guiElementPaths.configTableSlider)[self.guiElementNames.configTableData]
 
   local configTable -- Undo all the changes that has been done
   if not global.forcefields.emitterConfigGuis["I" .. playerIndex][4] then
