@@ -1,113 +1,74 @@
 require 'src/utilities'
-local loaded
+local prototypeSettings = require('prototypes/settings')
 
-Settings = {}
+local settings = {}
 
 
-Settings.modName = "__ForceFields2__"
+settings.modName = prototypeSettings.modName
 
 
 
 -- gui settings
-Settings.configWallIconName = "forcefield-config-tool"
+settings.configWallSprite = prototypeSettings.gui.configWallSprite
 
-Settings.guiSelectButtonStyle = "selectbuttons"
-Settings.guiSelectButtonSelectedStyle = "selectbuttonsselected"
-Settings.guiSmallSelectButtonStyle = "smallselectbuttons"
-Settings.guiSmallSelectButtonSelectedStyle = "smallselectbuttonsselected"
-
+settings.guiLabelStyle                     = prototypeSettings.gui.guiLabelStyle
+settings.guiSelectButtonStyle              = prototypeSettings.gui.guiSelectButtonStyle
+settings.guiSelectButtonSelectedStyle      = prototypeSettings.gui.guiSelectButtonSelectedStyle
+settings.guiSmallSelectButtonStyle         = prototypeSettings.gui.guiSmallSelectButtonStyle
+settings.guiSmallSelectButtonSelectedStyle = prototypeSettings.gui.guiSmallSelectButtonSelectedStyle
+settings.guiTextfieldStyle                 = prototypeSettings.gui.guiTextfieldStyle
+settings.guiItemSlotStyle                  = prototypeSettings.gui.guiItemSlotStyle
 
 -- builder settings
-Settings.forcefieldBuildDamageName = "forcefield-build-damage"
-Settings.forcefieldDeathDamageName = "forcefield-death-damage"
+settings.forcefieldBuildDamageName = prototypeSettings.forcefieldBuildDamageName
+settings.forcefieldDeathDamageName = prototypeSettings.forcefieldBuildDamageName
 
 
 
 -- emitter settings
-Settings.emitterName = "forcefield-emitter"
-Settings.tickRate = 20
+settings.emitterName = prototypeSettings["emitter"]["emitterName"]
+settings.tickRate = prototypeSettings["emitter"]["tickRate"]
 
-Settings.emitterDefaultDistance = 10
-Settings.maxRangeUpgrades = 23
-Settings.emitterMaxDistance = Settings.emitterDefaultDistance + Settings.maxRangeUpgrades
+settings.emitterDefaultDistance = 10
+settings.maxRangeUpgrades = 23
+settings.emitterMaxDistance = settings.emitterDefaultDistance + settings.maxRangeUpgrades
 
-Settings.emitterDefaultWidth = 25
-Settings.maxWidthUpgrades = 10
-Settings.widthUpgradeMultiplier = 4
-Settings.emitterMaxWidth = Settings.emitterDefaultWidth + (Settings.maxWidthUpgrades * Settings.widthUpgradeMultiplier)
+settings.emitterDefaultWidth = 25
+settings.maxWidthUpgrades = 10
+settings.widthUpgradeMultiplier = 4
+settings.emitterMaxWidth = settings.emitterDefaultWidth + (settings.maxWidthUpgrades * settings.widthUpgradeMultiplier)
 
-Settings.maxFieldDistance = math.max(Settings.emitterMaxDistance, Settings.emitterMaxWidth)
+settings.maxFieldDistance = math.max(settings.emitterMaxDistance, settings.emitterMaxWidth)
 
 
 
 -- forcefields settings
-Settings.fieldSuffix = "-forcefield"
-Settings.fieldGateSuffix = "-forcefield-gate"
-Settings.fieldEmptySuffix = "-forcefield-empty"
-Settings.defaultFieldSuffix = Settings.fieldSuffix
+settings.fieldSuffix      = string.format(prototypeSettings["blue"].name, "wall", "")
+settings.fieldGateSuffix  = string.format(prototypeSettings["blue"].name, "gate", "")
+settings.fieldEmptySuffix = string.format(prototypeSettings["blue"].name, "empty", "")
+settings.defaultFieldSuffix = settings.fieldSuffix
 
-Settings.defaultFieldType = "blue"
-Settings.defaultFieldDirection = defines.direction.north
-Settings.forcefieldTypes =
+settings.defaultFieldType = "blue"
+settings.defaultFieldDirection = defines.direction.north
+settings.forcefieldTypes =
 {
-  ["blue" .. Settings.fieldSuffix] =
-  {
-    chargeRate = 0.2036111111111111,
-    degradeRate = 2.777777777777778,
-    respawnRate = 15,
-    energyPerCharge = 4200,
-    energyPerRespawn = 5000,
-    energyPerHealthLost = 17000,
-    damageWhenMined = 20,
-    maxHealth = 300
-  },
-  ["green" .. Settings.fieldSuffix] =
-  {
-    chargeRate = 0.175,
-    degradeRate = 2,
-    respawnRate = 50,
-    energyPerCharge = 4000,
-    energyPerRespawn = 20000,
-    energyPerHealthLost = 16000,
-    damageWhenMined = 30,
-    maxHealth = 700
-  },
-  ["purple" .. Settings.fieldSuffix] =
-  {
-    chargeRate = 0.2083333333333334,
-    degradeRate = 3.333333333333333,
-    respawnRate = 100,
-    energyPerCharge = 7000,
-    energyPerRespawn = 10000,
-    energyPerHealthLost = 25000,
-    damageWhenMined = 15,
-    deathEntity = Settings.forcefieldDeathDamageName,
-    maxHealth = 150
-  },
-  ["red" .. Settings.fieldSuffix] =
-  {
-    chargeRate = 0.175,
-    degradeRate = 4.333333333333333,
-    respawnRate = 30,
-    energyPerCharge = 10000,
-    energyPerRespawn = 50000,
-    energyPerHealthLost = 40000,
-    damageWhenMined = 99,
-    maxHealth = 300
-  }
+  [settings.fieldSuffix .. "blue"  ] = prototypeSettings["blue"  ].properties,
+  [settings.fieldSuffix .. "green" ] = prototypeSettings["green" ].properties,
+  [settings.fieldSuffix .. "purple"] = prototypeSettings["purple"].properties,
+  [settings.fieldSuffix .. "red"   ] = prototypeSettings["red"   ].properties,
 }
-Settings.forcefieldTypes["blue" .. Settings.fieldGateSuffix] = Settings.forcefieldTypes["blue" .. Settings.fieldSuffix]
-Settings.forcefieldTypes["green" .. Settings.fieldGateSuffix] = Settings.forcefieldTypes["green" .. Settings.fieldSuffix]
-Settings.forcefieldTypes["purple" .. Settings.fieldGateSuffix] = Settings.forcefieldTypes["purple" .. Settings.fieldSuffix]
-Settings.forcefieldTypes["red" .. Settings.fieldGateSuffix] = Settings.forcefieldTypes["red" .. Settings.fieldSuffix]
+settings.forcefieldTypes[settings.fieldGateSuffix .. "blue"  ] = settings.forcefieldTypes[settings.fieldSuffix .. "blue"  ]
+settings.forcefieldTypes[settings.fieldGateSuffix .. "green" ] = settings.forcefieldTypes[settings.fieldSuffix .. "green" ]
+settings.forcefieldTypes[settings.fieldGateSuffix .. "purple"] = settings.forcefieldTypes[settings.fieldSuffix .. "purple"]
+settings.forcefieldTypes[settings.fieldGateSuffix .. "red"   ] = settings.forcefieldTypes[settings.fieldSuffix .. "red"   ]
 
---Settings.fieldEmptySetting = 0
---Settings.fieldWallSetting = 1
---Settings.fieldGateSetting = 2
+--settings.fieldEmptySetting = 0
+--settings.fieldWallSetting = 1
+--settings.fieldGateSetting = 2
 
 
 
-function Settings:verifySettings()
+function settings:verifySettings()
   if self.tickRate < 0 then
     self.tickRate = 0
     throwError("Tick rate must be >= 0.")
@@ -138,3 +99,5 @@ function Settings:verifySettings()
     throwError("Emitter default field type isn't known.")
   end
 end
+
+return settings

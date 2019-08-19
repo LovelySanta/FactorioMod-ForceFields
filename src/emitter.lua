@@ -1,4 +1,4 @@
-require 'src/settings'
+local settings = require 'src/settings'
 require 'src/utilities'
 
 require 'util'
@@ -17,22 +17,22 @@ function Emitter:onEmitterBuilt(createdEntity)
     global.forcefields.emitters = {}
     global.forcefields.emitterNEI = 1 -- NextEmitterIndex
   end
-  local maxWidth = Settings.emitterMaxWidth
+  local maxWidth = settings.emitterMaxWidth
   local widthOffset = (maxWidth + 1)/2
-  local defaultType = Settings.defaultFieldSuffix
+  local defaultType = settings.defaultFieldSuffix
 
   -- emitter data
   newEmitter["emitter-NEI"] = "I" .. global.forcefields.emitterNEI
   newEmitter["entity"] = createdEntity
   -- emitter settings
-  newEmitter["type"] = Settings.defaultFieldType
+  newEmitter["type"] = settings.defaultFieldType
   newEmitter["config"] = {}
   for i=1, maxWidth do
     newEmitter["config"][i-widthOffset] = defaultType
   end
-  newEmitter["distance"] = Settings.emitterDefaultDistance
-  newEmitter["width"] = Settings.emitterDefaultWidth
-  newEmitter["direction"] = Settings.defaultFieldDirection
+  newEmitter["distance"] = settings.emitterDefaultDistance
+  newEmitter["width"] = settings.emitterDefaultWidth
+  newEmitter["direction"] = settings.defaultFieldDirection
   newEmitter["width-upgrades"] = 0
   newEmitter["distance-upgrades"] = 0
   -- emitter state
@@ -142,8 +142,8 @@ function Emitter:onEntitySettingsPasted(event)
 
   -- If any changes on the forcefield, we need to rebuild it
   local hasEnoughUpgrades = true
-  local maxWidth = Settings.emitterDefaultWidth + (destinationEmitterTable["width-upgrades"] * Settings.widthUpgradeMultiplier)
-  local maxDistance = Settings.emitterDefaultDistance + destinationEmitterTable["distance-upgrades"]
+  local maxWidth = settings.emitterDefaultWidth + (destinationEmitterTable["width-upgrades"] * settings.widthUpgradeMultiplier)
+  local maxDistance = settings.emitterDefaultDistance + destinationEmitterTable["distance-upgrades"]
   if destinationEmitterTable["disabled"] ~= false
     or destinationEmitterTable["distance"] ~= sourceEmitterTable["distance"]
     or destinationEmitterTable["width"] ~= sourceEmitterTable["width"]
@@ -203,8 +203,8 @@ function Emitter:setActive(emitterTable, enableCheckBuildingFields, skipResetTim
 
   if enableCheckBuildingFields then
     emitterTable["build-scan"] = true
-    if not skipResetTimer and emitterTable["build-tick"] > Settings.forcefieldTypes[emitterTable["type"] .. Settings.defaultFieldSuffix]["respawnRate"] or not emitterTable["active"] then
-      emitterTable["build-tick"] = Settings.forcefieldTypes[emitterTable["type"] .. Settings.defaultFieldSuffix]["respawnRate"]
+    if not skipResetTimer and emitterTable["build-tick"] > settings.forcefieldTypes[settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"] or not emitterTable["active"] then
+      emitterTable["build-tick"] = settings.forcefieldTypes[settings.defaultFieldSuffix .. emitterTable["type"]]["respawnRate"]
     end
   end
 
@@ -222,7 +222,7 @@ end
 
 function Emitter:activateTicker()
   if not global.forcefields.ticking then
-    global.forcefields.ticking = Settings.tickRate
+    global.forcefields.ticking = settings.tickRate
     script.on_event(defines.events.on_tick, function(_) Emitter:onTick() end)
   end
 end
@@ -231,7 +231,7 @@ end
 
 function Emitter:onTick()
   if global.forcefields.ticking == 0 then
-    global.forcefields.ticking = Settings.tickRate - 1
+    global.forcefields.ticking = settings.tickRate - 1
     self:updateTick()
   else
     global.forcefields.ticking = global.forcefields.ticking - 1
@@ -305,7 +305,7 @@ function Emitter:updateTick()
       --  v["fieldEntity"] = v["entity"]
       --end
       if v["fieldEntity"].valid then
-        v["fieldEntity"].health = v["fieldEntity"].health - (Settings.forcefieldTypes[v["fieldEntity"].name]["degradeRate"] * Settings.tickRate)
+        v["fieldEntity"].health = v["fieldEntity"].health - (settings.forcefieldTypes[v["fieldEntity"].name]["degradeRate"] * settings.tickRate)
         if v["fieldEntity"].health == 0 then
           v["fieldEntity"].destroy()
           if not Forcefield:removeDegradingFieldID(k) then
