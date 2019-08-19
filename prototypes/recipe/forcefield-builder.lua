@@ -1,4 +1,4 @@
-function forceFieldWallRecipe(color)
+function forcefieldWallRecipe(color)
   local settings = require("prototypes/settings")[color]
   local emitter  = require("prototypes/settings")["emitter"]
   data:extend{
@@ -18,7 +18,7 @@ end
 
 
 
-function forceFieldGateRecipe(color)
+function forcefieldGateRecipe(color)
   local settings = require("prototypes/settings")[color]
   local emitter  = require("prototypes/settings")["emitter"]
   data:extend{

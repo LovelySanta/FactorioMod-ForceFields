@@ -16,8 +16,11 @@ prototypeSettings["emitter"] =
 }
 
 -- builder settings
-prototypeSettings["forcefieldBuildDamageName"] = "forcefield-build-damage"
-prototypeSettings["forcefieldDeathDamageName"] = "forcefield-death-damage"
+prototypeSettings["forcefieldBuildDamageName"   ] = "forcefield-build-damage"
+
+prototypeSettings["forcefieldDeathDamageName"   ] = "forcefield-death-damage"
+prototypeSettings["forcefieldDeathDamageAmount" ] = 280
+prototypeSettings["forcefieldDeathDamageRange"  ] = 4
 
 --------------------------------------------------------------------------------
 -----                               Gui                                     ----
@@ -191,6 +194,8 @@ prototypeSettings["purple"] =
     energyPerHealthLost = 25000,
     damageWhenMined = 15,
     deathEntity = prototypeSettings.forcefieldDeathDamageName,
+    deathDamage = prototypeSettings.forcefieldDeathDamageAmount,
+    deathRange  = prototypeSettings.forcefieldDeathDamageRange,
     maxHealth = 150
   },
   ["manualPlaceable"] = prototypeSettings["blue"]["manualPlaceable"],
@@ -251,6 +256,8 @@ prototypeSettings["red"] =
     energyPerRespawn = 50000,
     energyPerHealthLost = 40000,
     damageWhenMined = 99,
+    reflectDamage = 5,
+    reflectRange = 2,
     maxHealth = 300
   },
   ["manualPlaceable"] = prototypeSettings["blue"]["manualPlaceable"],

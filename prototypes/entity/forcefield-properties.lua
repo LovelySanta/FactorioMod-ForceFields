@@ -37,16 +37,67 @@ fieldProperties.max_health = function(color)
   return {"", string.format("%i", maxHealth)}
 end
 
+fieldProperties.has_damage_reflect = function(color)
+  local damageReflect = settings[color]["properties"]["reflectDamage"] or 0
+  return damageReflect > 0 and damageReflect or false
+end
+
+fieldProperties.damage_reflect_amount = function(color)
+  local damageReflect = fieldProperties.has_damage_reflect(color)
+  return damageReflect and {"", string.format("%i ", damageReflect), {"damage-type-name.laser"}} or ""
+end
+
+fieldProperties.damage_reflect_range = function(color)
+  local damageRange = fieldProperties.has_damage_reflect(color) and settings[color]["properties"]["reflectRange"]
+  return damageRange and {"", string.format("%i ", damageRange)} or ""
+end
+
+fieldProperties.has_damage_death = function(color)
+  local damageDeath = settings[color]["properties"]["deathDamage"] or 0
+  return damageDeath > 0 and damageDeath or false
+end
+
+fieldProperties.damage_death_amount = function(color)
+  local damageDeath = fieldProperties.has_damage_death(color)
+  return damageDeath and {"", string.format("%i ", damageDeath), {"damage-type-name.poison"}} or ""
+end
+
+fieldProperties.damage_death_range = function(color)
+  local damageRange = fieldProperties.has_damage_death(color) and settings[color]["properties"]["deathRange"]
+  return damageRange and {"", string.format("%i", damageRange)} or ""
+end
+
 fieldProperties.generate_properties = function(self, color, options)
+  -- options: + damage : show damage statistics
+  --          + respawn: show respawn statistics
+  --          + repair : show repair statistics
   options = options or {}
 
-  return {"", (not LSlib.utils.table.isEmpty(options)) and "\n" or nil,
-    options.respawn                       and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.respawn-rate" }, self.respawn_rate (color)} or nil,
-    options.respawn                       and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.respawn-cost" }, self.respawn_cost (color)} or nil,
-    options.repair                        and "\n"                                                                                                             or nil,
-    options.repair                        and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.repair-rate"  }, self.repair_rate  (color)} or nil,
-    options.repair                        and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.repair-cost"  }, self.repair_cost  (color)} or nil,
-    options.repair and options.max_health and {"tooltip-description.custom-parameter", {"description.max-health"                 }, self.max_health   (color)} or nil,
+  options.damage_reflect = options.damage and self.has_damage_reflect(color) and true or false
+  options.damage_death   = options.damage and self.has_damage_death  (color) and true or false
+  options.damage         = options.damage_reflect or options.damage_death
+
+  options.max_health     = options.repair and options.max_health
+
+  options.new_line_1     = options.damage or options.respawn or options.repair
+  options.new_line_2     = options.damage and (options.respawn or options.repair)
+  options.new_line_3     = options.respawn and options.repair
+
+  return {"",
+    options.damage_reflect and {"", " ", {"forcefield-parameter-description.reflect-damage"}}                                                            or "",
+    options.damage_death   and {"", " ", {"forcefield-parameter-description.death-damage"  }}                                                            or "",
+    options.new_line_1     and "\n"                                                                                                                      or "",
+    options.damage_reflect and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.reflect-range" }, self.damage_reflect_range (color)} or "",
+    options.damage_reflect and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.reflect-damage"}, self.damage_reflect_amount(color)} or "",
+    options.damage_death   and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.death-range"   }, self.damage_death_range   (color)} or "",
+    options.damage_death   and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.death-damage"  }, self.damage_death_amount  (color)} or "",
+    options.new_line_2     and "\n"                                                                                                                      or "",
+    options.respawn        and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.respawn-rate"  }, self.respawn_rate         (color)} or "",
+    options.respawn        and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.respawn-cost"  }, self.respawn_cost         (color)} or "",
+    options.new_line_3     and "\n"                                                                                                                      or "",
+    options.repair         and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.repair-rate"   }, self.repair_rate          (color)} or "",
+    options.repair         and {"tooltip-description.custom-parameter", {"forcefield-parameter-name.repair-cost"   }, self.repair_cost          (color)} or "",
+    options.max_health     and {"tooltip-description.custom-parameter", {"description.max-health"                  }, self.max_health           (color)} or "",
   }
 end
 

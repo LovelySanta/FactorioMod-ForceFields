@@ -1,14 +1,14 @@
 require 'prototypes/entity/forcefield-builder'
 require 'prototypes/technology/forcefield-builder'
 
-function addForceField(color)
-  forceFieldWallEntity(color)
-  forceFieldWallTech(color)
-  forceFieldGateEntity(color)
-  forceFieldGateTech(color)
+function addForcefield(color)
+  forcefieldWallEntity(color)
+  forcefieldWallTech(color)
+  forcefieldGateEntity(color)
+  forcefieldGateTech(color)
 end
 
-addForceField("blue")
-addForceField("green")
-addForceField("purple")
-addForceField("red")
+addForcefield("blue")
+addForcefield("green")
+addForcefield("purple")
+addForcefield("red")

@@ -2,59 +2,59 @@ require 'prototypes/item/forcefield-builder'
 require 'prototypes/recipe/forcefield-builder'
 require "__LSlib__/LSlib"
 
-function forceFieldWallTech(color)
+function forcefieldWallTech(color)
 
   --required for technology effect
-  forceFieldWallItem(color)
-  forceFieldWallRecipe(color)
+  forcefieldWallItem(color)
+  forcefieldWallRecipe(color)
 
-  local forceFieldWallTech = util.table.deepcopy(data.raw["technology"]["stone-walls"])
+  local forcefieldWallTech = util.table.deepcopy(data.raw["technology"]["stone-walls"])
   local settings = require("prototypes/settings")[color]
 
-  forceFieldWallTech.name             = string.format(settings.name, "wall", color)
+  forcefieldWallTech.name             = string.format(settings.name, "wall", color)
 
-  forceFieldWallTech.icon             = nil
-  forceFieldWallTech.icon_size        = nil
-  forceFieldWallTech.icons            = LSlib.technology.getIcons("stone-walls", nil, nil, settings.colorTint)
+  forcefieldWallTech.icon             = nil
+  forcefieldWallTech.icon_size        = nil
+  forcefieldWallTech.icons            = LSlib.technology.getIcons("stone-walls", nil, nil, settings.colorTint)
 
-  forceFieldWallTech.prerequisites    = util.table.deepcopy(settings["wallTechnology"]["additionalPrerequisites"])
-  forceFieldWallTech.effects          = util.table.deepcopy(settings["wallTechnology"]["additionalEffects"])
-  table.insert(forceFieldWallTech.effects, {type = "unlock-recipe", recipe = forceFieldWallTech.name})
+  forcefieldWallTech.prerequisites    = util.table.deepcopy(settings["wallTechnology"]["additionalPrerequisites"])
+  forcefieldWallTech.effects          = util.table.deepcopy(settings["wallTechnology"]["additionalEffects"])
+  table.insert(forcefieldWallTech.effects, {type = "unlock-recipe", recipe = forcefieldWallTech.name})
 
-  forceFieldWallTech.unit             = util.table.deepcopy(settings["wallTechnology"]["technologyRecipe"])
+  forcefieldWallTech.unit             = util.table.deepcopy(settings["wallTechnology"]["technologyRecipe"])
 
-  forceFieldWallTech.order            = "f-f-e"
+  forcefieldWallTech.order            = "f-f-e"
 
-  data:extend{forceFieldWallTech}
+  data:extend{forcefieldWallTech}
 
 end
 
 
 
-function forceFieldGateTech(color)
+function forcefieldGateTech(color)
 
   --required for technology effect
-  forceFieldGateItem(color)
-  forceFieldGateRecipe(color)
+  forcefieldGateItem(color)
+  forcefieldGateRecipe(color)
 
-  local forceFieldGateTech = util.table.deepcopy(data.raw["technology"]["gates"])
+  local forcefieldGateTech = util.table.deepcopy(data.raw["technology"]["gates"])
   local settings = require("prototypes/settings")[color]
 
-  forceFieldGateTech.name             = string.format(settings.name, "gate", color)
+  forcefieldGateTech.name             = string.format(settings.name, "gate", color)
 
-  forceFieldGateTech.icon             = nil
-  forceFieldGateTech.icon_size        = nil
-  forceFieldGateTech.icons            = LSlib.technology.getIcons("gates", nil, nil, settings.colorTint)
+  forcefieldGateTech.icon             = nil
+  forcefieldGateTech.icon_size        = nil
+  forcefieldGateTech.icons            = LSlib.technology.getIcons("gates", nil, nil, settings.colorTint)
 
-  forceFieldGateTech.prerequisites    = util.table.deepcopy(settings["gateTechnology"]["additionalPrerequisites"])
-  table.insert(forceFieldGateTech.prerequisites, string.format(settings.name, "wall", color))
-  forceFieldGateTech.effects          = util.table.deepcopy(settings["gateTechnology"]["additionalEffects"])
-  table.insert(forceFieldGateTech.effects, {type = "unlock-recipe", recipe = forceFieldGateTech.name})
+  forcefieldGateTech.prerequisites    = util.table.deepcopy(settings["gateTechnology"]["additionalPrerequisites"])
+  table.insert(forcefieldGateTech.prerequisites, string.format(settings.name, "wall", color))
+  forcefieldGateTech.effects          = util.table.deepcopy(settings["gateTechnology"]["additionalEffects"])
+  table.insert(forcefieldGateTech.effects, {type = "unlock-recipe", recipe = forcefieldGateTech.name})
 
-  forceFieldGateTech.unit             = util.table.deepcopy(settings["gateTechnology"]["technologyRecipe"])
+  forcefieldGateTech.unit             = util.table.deepcopy(settings["gateTechnology"]["technologyRecipe"])
 
-  forceFieldGateTech.order            = "f-f-e"
+  forcefieldGateTech.order            = "f-f-e"
 
-  data:extend{forceFieldGateTech}
+  data:extend{forcefieldGateTech}
 
 end

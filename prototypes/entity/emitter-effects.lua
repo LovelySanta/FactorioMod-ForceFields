@@ -91,7 +91,7 @@ data:extend{
           action =
           {
             type = "area",
-            radius = 4,
+            radius = settings.forcefieldDeathDamageRange,
             entity_flags = {"breaths-air"},
             action_delivery =
             {
@@ -99,7 +99,7 @@ data:extend{
               target_effects =
               {
                 type = "damage",
-                damage = {amount = 280, type = "poison"}
+                damage = {amount = settings.forcefieldDeathDamageAmount, type = "poison"}
               }
             }
           }
