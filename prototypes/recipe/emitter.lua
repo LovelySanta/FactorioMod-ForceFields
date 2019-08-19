@@ -15,5 +15,6 @@ data:extend{
     result = emitterSettings.emitterName,
     enabled = "false",
     always_show_made_in = "true",
+    allow_decomposition = "false",
   }
 }

@@ -14,6 +14,7 @@ function forcefieldWallItem(color)
   forcefieldWall.localised_description  = {"",
     {"entity-description.forcefield-wall"},
     fieldProperties:generate_properties(color, {damage=true, respawn=true, repair=true, max_health=true}),
+    (not settings.manualPlaceable) and {"tooltip-description.unobtainable", {"mod-name.ForceFields2"}} or "",
   }
 
   forcefieldWall.icon_size              = nil
@@ -45,6 +46,7 @@ function forcefieldGateItem(color)
   forcefieldGate.localised_description  = {"",
     {"entity-description.forcefield-gate"},
     fieldProperties:generate_properties(color, {damage=true, respawn=true, repair=true, max_health=true}),
+    (not settings.manualPlaceable) and {"tooltip-description.unobtainable", {"mod-name.ForceFields2"}} or "",
   }
 
   forcefieldGate.icon_size              = nil
