@@ -8,6 +8,6 @@
   "description": "Adds multiple types of electric powered, self healing walls to keep the biters out.",
   "dependencies": [
     "base >= 0.17.0",
-    "LSlib >= 2019.8.17"
+    "LSlib >= 2019.8.19"
   ]
 }

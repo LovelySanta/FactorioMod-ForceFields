@@ -251,40 +251,45 @@ function Gui:createForcefieldGui(playerIndex, fieldWidth)
     if not guiCenter[self.guiElementNames.configFrame] then
       -- If config gui doesn't exist yet we have to make it
       LSlib.gui.create(playerIndex, self.guiForcefieldLayout)
-
-      local configTableData = LSlib.gui.getElement(playerIndex, self.guiElementPaths.configTableSlider).add{type ="table", name = self.guiElementNames.configTableData, column_count = fieldWidth}
-      for fieldIndex=1, fieldWidth do
-        configTableData.style.column_alignments[fieldIndex] = "center"
-      end
-      for fieldIndex=1, fieldWidth do
-        configTableData.add{type = "label", name = self.guiElementNames.configOptionLabel ..string.format("%02d", fieldIndex), caption = string.format("%02d", fieldIndex), ignored_by_interaction = true}
-      end
-      for fieldIndex=1, fieldWidth do
-        configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
-      end
-      for fieldIndex=1, fieldWidth do
-        configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
-      end
-      for fieldIndex=1, fieldWidth do
-        configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
-      end
-      
-      -- Select the correct setting for each wall
-      local fieldOffset = (fieldWidth + 1)/2
-      local emitterWallConfigTable = emitterTable["config"]
-      for fieldIndex = 1, fieldWidth do
-        local type = emitterWallConfigTable[fieldIndex-fieldOffset]
-        if type == settings.fieldSuffix then
-          configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
-        elseif type == settings.fieldGateSuffix then
-          configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
-        else
-          configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
-        end
-      end
     else
       -- Config gui does exist, we just make it visible
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.configFrame).visible = true
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.configTableSlider)[self.guiElementNames.configTableData].destroy()
+    end
+
+    -- now add the configuration
+    local configTableSlider = LSlib.gui.getElement(playerIndex, self.guiElementPaths.configTableSlider)
+    configTableSlider.style.maximal_width = math.floor(player.display_resolution.width/player.display_scale/2)
+
+    local configTableData = configTableSlider.add{type ="table", name = self.guiElementNames.configTableData, column_count = fieldWidth}
+    for fieldIndex=1, fieldWidth do
+      configTableData.style.column_alignments[fieldIndex] = "center"
+    end
+    for fieldIndex=1, fieldWidth do
+      configTableData.add{type = "label", name = self.guiElementNames.configOptionLabel ..string.format("%02d", fieldIndex), caption = string.format("%02d", fieldIndex), ignored_by_interaction = true}
+    end
+    for fieldIndex=1, fieldWidth do
+      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
+    end
+    for fieldIndex=1, fieldWidth do
+      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
+    end
+    for fieldIndex=1, fieldWidth do
+      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
+    end
+    
+    -- Select the correct setting for each wall
+    local fieldOffset = (fieldWidth + 1)/2
+    local emitterWallConfigTable = emitterTable["config"]
+    for fieldIndex = 1, fieldWidth do
+      local type = emitterWallConfigTable[fieldIndex-fieldOffset]
+      if type == settings.fieldSuffix then
+        configTableData[self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
+      elseif type == settings.fieldGateSuffix then
+        configTableData[self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
+      else
+        configTableData[self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex)].style = settings.guiSmallSelectButtonSelectedStyle
+      end
     end
   end
 end

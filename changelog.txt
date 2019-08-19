@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.0
-Date: 18. 8. 2019
+Date: 19. 8. 2019
   Features:
     - Updated to 0.17 with a new GUI
+    - Detailed description about the fields, including dummy recipes
   Changes:
     - Green fields now require military science packs
     - Forcefields will now not be selected when deconstructing/blueprinting
