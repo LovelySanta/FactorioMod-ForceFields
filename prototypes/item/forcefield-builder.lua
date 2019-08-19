@@ -44,7 +44,7 @@ function forcefieldGateItem(color)
   forcefieldGate.localised_name         = {"entity-name."..forcefieldGate.name}
   forcefieldGate.localised_description  = {"",
     {"entity-description.forcefield-gate"},
-    fieldProperties:generate_properties(color, {respawn=true, repair=true, max_health=true}),
+    fieldProperties:generate_properties(color, {damage=true, respawn=true, repair=true, max_health=true}),
   }
 
   forcefieldGate.icon_size              = nil
