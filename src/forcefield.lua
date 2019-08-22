@@ -392,6 +392,9 @@ end
 
 
 function Forcefield:findForcefieldsRadius(surface, position, radius, includeFullHealth)
+  if (not surface) or (not surface.valid) then return end
+  if (not radius) or (radius < 0) then return end
+  
   local walls = surface.find_entities_filtered({area = {{x = position.x - radius, y = position.y - radius}, {x = position.x + radius, y = position.y + radius}}, type = "wall"})
   local gates = surface.find_entities_filtered({area = {{x = position.x - radius, y = position.y - radius}, {x = position.x + radius, y = position.y + radius}}, type = "gate"})
   local foundFields = {}
@@ -478,11 +481,15 @@ function Forcefield:removeDegradingFieldID(fieldID)
       local pos = global.forcefields.degradingFields[fieldID].position
       local surface = global.forcefields.degradingFields[fieldID].surface
       table.remove(global.forcefields.degradingFields, fieldID)
-      local emitters = surface.find_entities_filtered({area = {{x = pos.x - settings.maxFieldDistance, y = pos.y - settings.maxFieldDistance}, {x = pos.x + settings.maxFieldDistance, y = pos.y + settings.maxFieldDistance}}, name = settings.emitterName})
-      for _,emitter in pairs(emitters) do
-        emitterTable = Emitter:findEmitter(emitter)
-        if emitterTable then
-          Emitter:setActive(emitterTable, true)
+
+      -- check if this field could be part of any emitter
+      if surface and surface.valid then
+        local emitters = surface.find_entities_filtered({area = {{x = pos.x - settings.maxFieldDistance, y = pos.y - settings.maxFieldDistance}, {x = pos.x + settings.maxFieldDistance, y = pos.y + settings.maxFieldDistance}}, name = settings.emitterName})
+        for _,emitter in pairs(emitters) do
+          emitterTable = Emitter:findEmitter(emitter)
+          if emitterTable then
+            Emitter:setActive(emitterTable, true)
+          end
         end
       end
     end

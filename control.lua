@@ -104,6 +104,29 @@ script.on_event({defines.events.on_entity_died       ,
   end
 end)
 
+script.on_event({defines.events.on_pre_surface_cleared,
+                 defines.events.on_pre_surface_deleted}, function(event)
+  local surface = game.surfaces[event.surface_index]
+
+  -- Step 1: delete all emitters
+  for _,emitter in pairs(surface.find_entities_filtered{
+    name = settings.emitterName,
+  }) do
+    emitter.destroy{raise_destroy = true}
+  end
+
+  -- Step 2: delete all forcefields
+  local forcefieldNames = {}
+  for forcefieldType,_ in pairs(settings.forcefieldTypes) do
+    forcefieldNames[#forcefieldNames + 1] = forcefieldType
+  end
+  for _,forcefield in pairs(surface.find_entities_filtered{
+    name = forcefieldNames,
+  }) do
+    forcefield.destroy{raise_destroy = true}
+  end
+end)
+
 
 
 -- When entities get mined/deconstructed
