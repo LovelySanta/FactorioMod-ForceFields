@@ -68,7 +68,28 @@ settings.forcefieldTypes[settings.fieldGateSuffix .. "red"   ] = settings.forcef
 
 
 
+function settings:verifyRemoteSettings()
+  local modName = string.sub(settings.modName, 3, -3)
+
+  if game.active_mods["warptorio2"] then
+    log("Verify remote settings for warptorio2")
+
+    local interfaceName = "warptorio2"
+    if remote.interfaces[interfaceName] then
+      for fieldName,_ in pairs(self.forcefieldTypes) do
+        if not remote.call(interfaceName, "is_warp_blacklisted", modName, fieldName) then
+          remote.call(interfaceName, "insert_warp_blacklist", modName, fieldName)
+        end
+      end
+    end
+  end
+end
+
+
+
 function settings:verifySettings()
+  log(("Verify mod settings for %s"):format(string.sub(settings.modName, 3, -3)))
+
   if self.tickRate < 0 then
     self.tickRate = 0
     throwError("Tick rate must be >= 0.")
@@ -93,11 +114,13 @@ function settings:verifySettings()
     self.maxFieldDistance = math.max(self.emitterMaxDistance, self.emitterMaxWidth)
   end
 
-  if not self.forcefieldTypes[self.defaultFieldType .. self.defaultFieldSuffix] then
+  if not self.forcefieldTypes[self.defaultFieldSuffix .. self.defaultFieldType] then
     self.defaultFieldType = "blue"
     self.defaultFieldSuffix = self.fieldSuffix
     throwError("Emitter default field type isn't known.")
   end
+
+  self:verifyRemoteSettings()
 end
 
 return settings

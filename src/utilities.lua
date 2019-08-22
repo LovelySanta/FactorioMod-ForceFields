@@ -1,5 +1,6 @@
 
 function throwError(what)
+    log(what)
     game.print(what)
 end
 

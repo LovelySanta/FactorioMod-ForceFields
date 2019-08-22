@@ -108,35 +108,43 @@ end
 
 function Emitter:onEntitySettingsPasted(event)
   local playerIndex = event.player_index
-  local player = game.players[playerIndex]
+  local player = playerIndex and game.players[playerIndex] or nil
   local sourceEmitterTable = self:findEmitter(event.source)
   local destinationEmitterTable = self:findEmitter(event.destination)
 
   if sourceEmitterTable["disabled"] == true then
-    player.print("You cannot paste settings from a disabled emitter. Please reconfigure that one first.")
+    if playerIndex then
+      player.print("You cannot paste settings from a disabled emitter. Please reconfigure that one first.")
+    end
     return
   end
 
-  -- Check distance upgrades
-  if destinationEmitterTable["distance-upgrades"] ~= sourceEmitterTable["distance-upgrades"] then
-    if destinationEmitterTable["distance-upgrades"] < sourceEmitterTable["distance-upgrades"] then
-      -- Not enough distanceUpgrades, try take some from the player
-      local missingAmount = takeFromPlayer(game.players[playerIndex], {name = "advanced-circuit", count = sourceEmitterTable["distance-upgrades"] - destinationEmitterTable["distance-upgrades"]})
-      destinationEmitterTable["distance-upgrades"] = sourceEmitterTable["distance-upgrades"] - missingAmount
-    else -- too many distanceUpgrades, give some back to the player
-      transferToPlayer(game.players[playerIndex], {name = "advanced-circuit", count = destinationEmitterTable["distance-upgrades"] - sourceEmitterTable["distance-upgrades"]})
-      destinationEmitterTable["distance-upgrades"] = sourceEmitterTable["distance-upgrades"]
+  if not playerIndex then
+    -- assume this is not done by a player, we don't care about taking/giving upgrades
+    destinationEmitterTable["distance-upgrades"] = sourceEmitterTable["distance-upgrades"]
+    destinationEmitterTable["width-upgrades"] = sourceEmitterTable["width-upgrades"]
+  else
+    -- Check distance upgrades
+    if destinationEmitterTable["distance-upgrades"] ~= sourceEmitterTable["distance-upgrades"] then
+      if destinationEmitterTable["distance-upgrades"] < sourceEmitterTable["distance-upgrades"] then
+        -- Not enough distanceUpgrades, try take some from the player
+        local missingAmount = takeFromPlayer(player, {name = "advanced-circuit", count = sourceEmitterTable["distance-upgrades"] - destinationEmitterTable["distance-upgrades"]})
+        destinationEmitterTable["distance-upgrades"] = sourceEmitterTable["distance-upgrades"] - missingAmount
+      else -- too many distanceUpgrades, give some back to the player
+        transferToPlayer(player, {name = "advanced-circuit", count = destinationEmitterTable["distance-upgrades"] - sourceEmitterTable["distance-upgrades"]})
+        destinationEmitterTable["distance-upgrades"] = sourceEmitterTable["distance-upgrades"]
+      end
     end
-  end
-  -- Check width upgrades
-  if destinationEmitterTable["width-upgrades"] ~= sourceEmitterTable["width-upgrades"] then
-    if destinationEmitterTable["width-upgrades"] < sourceEmitterTable["width-upgrades"] then
-      -- Not enough distanceUpgrades, try take some from the player
-      local missingAmount = takeFromPlayer(game.players[playerIndex], {name = "processing-unit", count = sourceEmitterTable["width-upgrades"] - destinationEmitterTable["width-upgrades"]})
-      destinationEmitterTable["width-upgrades"] = sourceEmitterTable["width-upgrades"] - missingAmount
-    else -- too many distanceUpgrades, give some back to the player
-      transferToPlayer(game.players[playerIndex], {name = "processing-unit", count = destinationEmitterTable["width-upgrades"] - sourceEmitterTable["width-upgrades"]})
-      destinationEmitterTable["width-upgrades"] = sourceEmitterTable["width-upgrades"]
+    -- Check width upgrades
+    if destinationEmitterTable["width-upgrades"] ~= sourceEmitterTable["width-upgrades"] then
+      if destinationEmitterTable["width-upgrades"] < sourceEmitterTable["width-upgrades"] then
+        -- Not enough distanceUpgrades, try take some from the player
+        local missingAmount = takeFromPlayer(game.players[playerIndex], {name = "processing-unit", count = sourceEmitterTable["width-upgrades"] - destinationEmitterTable["width-upgrades"]})
+        destinationEmitterTable["width-upgrades"] = sourceEmitterTable["width-upgrades"] - missingAmount
+      else -- too many distanceUpgrades, give some back to the player
+        transferToPlayer(game.players[playerIndex], {name = "processing-unit", count = destinationEmitterTable["width-upgrades"] - sourceEmitterTable["width-upgrades"]})
+        destinationEmitterTable["width-upgrades"] = sourceEmitterTable["width-upgrades"]
+      end
     end
   end
 
@@ -149,7 +157,7 @@ function Emitter:onEntitySettingsPasted(event)
     or destinationEmitterTable["width"] ~= sourceEmitterTable["width"]
     or destinationEmitterTable["type"] ~= sourceEmitterTable["type"]
     or destinationEmitterTable["direction"] ~= sourceEmitterTable["direction"]
-    or not tablesAreEqual(destinationEmitterTable["config"], sourceEmitterTable["config"]) then --TODO config setting
+    or not LSlib.utils.table.areEqual(destinationEmitterTable["config"], sourceEmitterTable["config"]) then --TODO config setting
 
     Forcefield:degradeLinkedFields(destinationEmitterTable)
     destinationEmitterTable["damaged-fields"] = nil
@@ -175,7 +183,9 @@ function Emitter:onEntitySettingsPasted(event)
     destinationEmitterTable["disabled"] = sourceEmitterTable["disabled"]
 
     if not hasEnoughUpgrades then
-      player.print("Could not paste all settings becose you don't have enough upgrades for it.")
+      if playerIndex then
+        player.print("Could not paste all settings becose you don't have enough upgrades for it.")
+      end
     end
 
     self:setActive(destinationEmitterTable, true, false)

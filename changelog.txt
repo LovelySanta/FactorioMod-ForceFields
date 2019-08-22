@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 22. 8. 2019
+  Modding:
+    - Added compatibility to event script_raised_build
+    - Added compatibility to event script_raised_destroy
+    - Added compatibility to event on_entity_cloned
+---------------------------------------------------------------------------------------------------
 Version: 2.2.0
 Date: 19. 8. 2019
   Features:
