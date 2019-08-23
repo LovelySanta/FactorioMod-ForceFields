@@ -11,106 +11,30 @@ Gui = {}
 
 Gui.guiEmitterLayout = require("prototypes/gui/layout/emitter")
 Gui.guiForcefieldLayout = require("prototypes/gui/layout/forcefield")
-local guiNames = require("prototypes/gui/layout/guiElementNames")
-Gui.guiElementNames = {
-  -- EMITTER GUI --
-  -- gui layout
-  guiFrame        = guiNames.guiFrame,
-  buttonConfigure = guiNames.guiHeaderButton_ConfigureWall,
-  buttonHelp      = guiNames.guiHeaderButton_Help,
-  configTable     = guiNames.guiContentTable,
-  
-  -- Direction of forcefield
-  directionLabel   = guiNames.directionLabel,
-  directionTable   = guiNames.directionTable,
-  directionOptionN = guiNames.directionOptionN,
-  directionOptionS = guiNames.directionOptionS,
-  directionOptionE = guiNames.directionOptionE,
-  directionOptionW = guiNames.directionOptionW,
-
-  -- Type of forcefield
-  fieldTypeLabel   = guiNames.fieldTypeLabel,
-  fieldTypeTable   = guiNames.fieldTypeTable,
-  fieldTypeOptionB = guiNames.fieldTypeOptionB,
-  fieldTypeOptionG = guiNames.fieldTypeOptionG,
-  fieldTypeOptionR = guiNames.fieldTypeOptionR,
-  fieldTypeOptionP = guiNames.fieldTypeOptionP,
-
-  -- Distance of forcefield
-  distanceLabel    = guiNames.distanceLabel,
-  distanceTable    = guiNames.distanceTable,
-  distanceInput    = guiNames.distanceInput,
-  distanceMaxInput = guiNames.distanceMaxInput,
-  
-  -- Width of forcefield
-  widthLabel    = guiNames.widthLabel,
-  widthTable    = guiNames.widthTable,
-  widthInput    = guiNames.widthInput,
-  widthMaxInput = guiNames.widthMaxInput,
-  
-  -- Upgrades of emitter
-  upgradesLabel        = guiNames.upgradesLabel,
-  upgradesTable        = guiNames.upgradesTable,
-  upgradesDistance     = guiNames.upgradesDistance,
-  upgradesWidth        = guiNames.upgradesWidth,
-  buttonRemoveUpgrades = guiNames.buttonRemoveUpgrades,
-  
-  -- Bottom buttons
-  buttonApplySettings   = guiNames.buttonApplySettings,
-  buttonDiscardSettings = guiNames.buttonDiscardSettings,
-  
-  -- FORCEFIELD GUI --
-  -- Gui layout
-  configFrame      = guiNames.configFrame,
-  configTableFrame = guiNames.configTableFrame,
-
-  -- Wall table row header
-  configTableHeader         = guiNames.configTableHeader,
-  configRowOptionLabel      = guiNames.configRowOptionLabel,
-  configRowOption           = guiNames.configRowOption,
-  configRowDescriptionLabel = guiNames.configRowDescriptionLabel,
-
-  -- Wall table row data
-  configTableSlider = guiNames.configTableSlider,
-  configTableData   = guiNames.configTableData,
-  configOptionLabel = guiNames.configOptionLabel,
-  configOption      = guiNames.configOption,
-  
-  -- Bottom buttons
-  configCancelButton = guiNames.configCancelButton,
-  configApplyButton  = guiNames.configApplyButton,
-}
+Gui.guiElementNames = util.table.deepcopy(require("prototypes/gui/layout/guiElementNames"))
+-- keep backwards compatibility
+for oldName, newName in pairs{
+  ["buttonConfigure"] = "guiHeaderButton_ConfigureWall",
+  ["buttonHelp"     ] = "guiHeaderButton_Help"         ,
+  ["configTable"    ] = "guiContentTable"              ,
+} do
+  if Gui.guiElementNames[oldName] ~= nil then
+    log(("guiElementName %q is already taken!"):format(oldName))
+  else
+    Gui.guiElementNames[oldName] = Gui.guiElementNames[newName]
+  end
+end
 
 Gui.guiElementPaths = {}
-for _, emitterGuiElementName in pairs{
-  -- Gui layout
-  "guiFrame", "buttonConfigure", "buttonHelp", "configTable",
-  -- Direction of forcefield
-  "directionLabel", "directionTable", "directionOptionN", "directionOptionS", "directionOptionE", "directionOptionW",
-  -- Type of forcefield
-  "fieldTypeLabel", "fieldTypeTable", "fieldTypeOptionB", "fieldTypeOptionG", "fieldTypeOptionR", "fieldTypeOptionP",
-  -- Distance of forcefield
-  "distanceLabel", "distanceTable", "distanceInput", "distanceMaxInput",
-  -- Width of forcefield
-  "widthLabel", "widthTable", "widthInput", "widthMaxInput",
-  -- Upgrades of emitter
-  "upgradesLabel", "upgradesTable", "upgradesDistance", "upgradesWidth", "buttonRemoveUpgrades",
-  -- Bottom buttons
-  "buttonApplySettings", "buttonDiscardSettings",
-} do
-  Gui.guiElementPaths[emitterGuiElementName] = LSlib.gui.layout.getElementPath(Gui.guiEmitterLayout, Gui.guiElementNames[emitterGuiElementName])
-end
-for _, forcefieldGuiElementName in pairs{
-  -- Gui layout
-  "configFrame", "configTableFrame",
-  -- Wall table row header
-  "configTableHeader", "configRowOptionLabel", "configRowOption", "configRowDescriptionLabel",
-  -- Wall table row data
-  "configTableSlider", "configTableData", "configOptionLabel", "configOption",
-  -- Bottom buttons
-  "configCancelButton", "configApplyButton",
-} do
-  Gui.guiElementPaths[forcefieldGuiElementName] = LSlib.gui.layout.getElementPath(Gui.guiForcefieldLayout, Gui.guiElementNames[forcefieldGuiElementName])
+for guiElement, guiElementName in pairs(Gui.guiElementNames) do
+  local emitterPath = LSlib.gui.layout.getElementPath(Gui.guiEmitterLayout, guiElementName)
+  local forcefieldPath = LSlib.gui.layout.getElementPath(Gui.guiForcefieldLayout, guiElementName)
+
+  if emitterPath and forcefieldPath then
+    log("ERROR: multiple paths found")
+  else
+    Gui.guiElementPaths[guiElement] = emitterPath or forcefieldPath or nil
+  end
 end
 
 
@@ -159,7 +83,7 @@ function Gui:onCloseGui(guiElement, playerIndex)
       -- Delete the gui data now...
       global.forcefields.emitterConfigGuis["I" .. playerIndex] = nil
     end
-    if tableIsEmpty(global.forcefields.emitterConfigGuis) then
+    if LSlib.utils.table.isEmpty(global.forcefields.emitterConfigGuis) then
       global.forcefields.emitterConfigGuis = nil
     end
     if game.players[playerIndex].gui.center[self.guiElementNames.configFrame] then
@@ -478,7 +402,7 @@ function Gui:handleGuiMenuButtons(event)
       if self:verifyAndSetFromGui(playerIndex) then
         -- Close the gui in the data
         global.forcefields.emitterConfigGuis["I" .. playerIndex] = nil
-        if tableIsEmpty(global.forcefields.emitterConfigGuis) then
+        if LSlib.utils.table.isEmpty(global.forcefields.emitterConfigGuis) then
           global.forcefields.emitterConfigGuis = nil
         end
         -- Close the gui visualy
@@ -799,7 +723,7 @@ function Gui:verifyAndSetFromGui(playerIndex)
         or emitterTable["distance"] ~= newDistance
         or emitterTable["type"] ~= newFieldType
         or emitterTable["direction"] ~= newDirection
-        or not tablesAreEqual(emitterTable["config"], newFieldConfig) then
+        or not LSlib.utils.table.areEqual(emitterTable["config"], newFieldConfig) then
 
         Forcefield:degradeLinkedFields(emitterTable)
 
@@ -857,7 +781,7 @@ function Gui:removeAllUpgrades(playerIndex)
     else -- invalid emitter entity (for example when someone destroys the emitter while another person is viewing the gui)
       if global.forcefields.emitterConfigGuis ~= nil and global.forcefields.emitterConfigGuis["I" .. playerIndex] ~= nil then
         global.forcefields.emitterConfigGuis["I" .. playerIndex] = nil
-        if tableIsEmpty(global.forcefields.emitterConfigGuis) then
+        if LSlib.utils.table.isEmpty(global.forcefields.emitterConfigGuis) then
           global.forcefields.emitterConfigGuis = nil
         end
       end

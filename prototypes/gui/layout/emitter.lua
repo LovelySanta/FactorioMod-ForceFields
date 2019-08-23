@@ -57,12 +57,12 @@ LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directio
   sprite = "virtual-signal/signal-N",
   style = guiSettings["guiSelectButtonStyle"],
 })  
-LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionS, {
-  sprite = "virtual-signal/signal-S",
-  style = guiSettings["guiSelectButtonStyle"],
-})  
 LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionE, {
   sprite = "virtual-signal/signal-E",
+  style = guiSettings["guiSelectButtonStyle"],
+})  
+LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionS, {
+  sprite = "virtual-signal/signal-S",
   style = guiSettings["guiSelectButtonStyle"],
 })  
 LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionW, {

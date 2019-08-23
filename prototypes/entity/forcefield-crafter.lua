@@ -1,18 +1,22 @@
 local emitterSettings = require("prototypes/settings")["emitter"]
 
-local forceFieldCrafter = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
+local forcefieldCrafter = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
 
-forceFieldCrafter.name = emitterSettings.emitterName .. "-crafter"
+forcefieldCrafter.name = emitterSettings.emitterName .. "-crafter"
+forcefieldCrafter.localised_name = {"entity-name."..emitterSettings.emitterName}
+forcefieldCrafter.localised_description = {"",
+  {"entity-description."..emitterSettings.emitterName},
+  {"tooltip-description.unobtainable", {"mod-name.ForceFields2"}},
+}
 
-forceFieldCrafter.minable.result = nil
-forceFieldCrafter.order = data.raw["item"][emitterSettings.emitterName].order
-forceFieldCrafter.subgroup = data.raw["item"][emitterSettings.emitterName].subgroup
+forcefieldCrafter.minable.result = nil
+forcefieldCrafter.order = data.raw["item"][emitterSettings.emitterName].order
+forcefieldCrafter.subgroup = data.raw["item"][emitterSettings.emitterName].subgroup
 
-forceFieldCrafter.crafting_categories = {emitterSettings["crafting-category"]}
+forcefieldCrafter.crafting_categories = {emitterSettings["crafting-category"]}
 
-forceFieldCrafter.icon = data.raw["item"][emitterSettings.emitterName].icon
-forceFieldCrafter.icon_size = data.raw["item"][emitterSettings.emitterName].icon_size
-forceFieldCrafter.icons = util.table.deepcopy(data.raw["item"][emitterSettings.emitterName].icons)
+forcefieldCrafter.icon = data.raw["item"][emitterSettings.emitterName].icon
+forcefieldCrafter.icon_size = data.raw["item"][emitterSettings.emitterName].icon_size
+forcefieldCrafter.icons = util.table.deepcopy(data.raw["item"][emitterSettings.emitterName].icons)
 
-
-data:extend{forceFieldCrafter}
+data:extend{forcefieldCrafter}

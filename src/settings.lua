@@ -1,4 +1,5 @@
 require 'src/utilities'
+require "__LSlib__/LSlib"
 local prototypeSettings = require('prototypes/settings')
 
 local settings = {}
@@ -72,7 +73,7 @@ function settings:verifyRemoteSettings()
   local modName = string.sub(settings.modName, 3, -3)
 
   if game.active_mods["warptorio2"] then
-    log("Verify remote settings for warptorio2")
+    LSlib.utils.log.log("Verify remote settings for warptorio2")
 
     local interfaceName = "warptorio2"
     if remote.interfaces[interfaceName] then
@@ -88,28 +89,30 @@ end
 
 
 function settings:verifySettings()
-  log(("Verify mod settings for %s"):format(string.sub(settings.modName, 3, -3)))
+  local loggingDisabled = not LSlib.utils.log.isEnabled()
+  if loggingDisabled then LSlib.utils.log.enable() end
+  LSlib.utils.log.log(("Verify mod settings for %s"):format(string.sub(settings.modName, 3, -3)))
 
   if self.tickRate < 0 then
     self.tickRate = 0
-    throwError("Tick rate must be >= 0.")
+    LSlib.utils.log.log("Tick rate must be >= 0.")
   end
 
   if self.emitterDefaultDistance < 1 then
     self.emitterDefaultDistance = 1
     self.emitterMaxDistance = self.emitterDefaultDistance + self.maxRangeUpgrades
     self.maxFieldDistance = math.max(self.emitterMaxDistance, self.emitterMaxWidth)
-    throwError("Emitter default distance must be >= 1.")
+    LSlib.utils.log.log("Emitter default distance must be >= 1.")
   end
 
   if self.emitterDefaultWidth < 1 then
     self.emitterDefaultWidth = 1
-    throwError("Emitter default width must be >= 1.")
+    LSlib.utils.log.log("Emitter default width must be >= 1.")
     self.emitterMaxWidth = self.emitterDefaultWidth + (self.maxWidthUpgrades * self.widthUpgradeMultiplier)
     self.maxFieldDistance = math.max(self.emitterMaxDistance, self.emitterMaxWidth)
   elseif (math.floor((self.emitterDefaultWidth - 1) / 2) * 2) + 1 ~= self.emitterDefaultWidth then
     self.emitterDefaultWidth = 25
-    throwError("Emitter default width must be an odd number (or one).")
+    LSlib.utils.log.log("Emitter default width must be an odd number (or one).")
     self.emitterMaxWidth = self.emitterDefaultWidth + (self.maxWidthUpgrades * self.widthUpgradeMultiplier)
     self.maxFieldDistance = math.max(self.emitterMaxDistance, self.emitterMaxWidth)
   end
@@ -117,10 +120,11 @@ function settings:verifySettings()
   if not self.forcefieldTypes[self.defaultFieldSuffix .. self.defaultFieldType] then
     self.defaultFieldType = "blue"
     self.defaultFieldSuffix = self.fieldSuffix
-    throwError("Emitter default field type isn't known.")
+    LSlib.utils.log.log("Emitter default field type isn't known.")
   end
 
   self:verifyRemoteSettings()
+  if loggingDisabled then LSlib.utils.log.disable() end
 end
 
 return settings

@@ -1,5 +1,6 @@
 local settings = require 'src/settings'
 require 'src/utilities'
+require "__LSlib__/LSlib"
 
 require 'util'
 
@@ -372,7 +373,7 @@ function Emitter:removeEmitterID(emitterID)
     if global.forcefields.emitters[emitterID] ~= nil then
       Forcefield:degradeLinkedFields(global.forcefields.emitters[emitterID])
       global.forcefields.emitters[emitterID] = nil
-      if tableIsEmpty(global.forcefields.emitters) then
+      if LSlib.utils.table.isEmpty(global.forcefields.emitters) then
         global.forcefields.emitters = nil
         global.forcefields.emitterNEI = nil
       else

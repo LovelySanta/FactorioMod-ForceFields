@@ -1,4 +1,5 @@
 require 'util'
+require "__LSlib__/LSlib"
 
 
 ConfigChanges = {}
@@ -39,7 +40,7 @@ function ConfigChanges:updateToVersion_1_2()
       if global.forcefields.emitterConfigGuis["I" .. playerIndex] ~= nil then
         guiCenter["emitterConfig"].destroy()
         global.forcefields.emitterConfigGuis["I" .. playerIndex] = nil
-        if tableIsEmpty(global.forcefields.emitterConfigGuis) then
+        if LSlib.utils.table.isEmpty(global.forcefields.emitterConfigGuis) then
           global.forcefields.emitterConfigGuis = nil
           break
         end

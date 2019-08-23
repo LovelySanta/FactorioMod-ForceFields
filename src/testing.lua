@@ -49,12 +49,12 @@ remote.add_interface("forcefields", {
       miny = miny * 32
       maxy = maxy * 32
 
-      for name in pairs(settings.forcefieldTypes) do
+      for name,_ in pairs(settings.forcefieldTypes) do
         for _,v in pairs(surface.find_entities_filtered({area = {{minx, miny}, {maxx, maxy}}, name = name})) do
           v.destroy()
         end
       end
-      for _,v in pairs(surface.find_entities_filtered({area = {{minx, miny}, {maxx, maxy}}, name = emitterName})) do
+      for _,v in pairs(surface.find_entities_filtered({area = {{minx, miny}, {maxx, maxy}}, name = settings.emitterName})) do
         v.destroy()
       end
     end

@@ -1,10 +1,16 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.1
 Date: 22. 8. 2019
+  Features:
+    - Added compatibility with warptorio2
+  Changes:
+    - Fixed ordening of entities in /editor
   Modding:
     - Added compatibility to event script_raised_build
     - Added compatibility to event script_raised_destroy
     - Added compatibility to event on_entity_cloned
+    - Added compatibility to event on_pre_surface_cleared
+    - Added compatibility to event on_pre_surface_deleted
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.0
 Date: 19. 8. 2019

@@ -1,5 +1,6 @@
 local settings = require 'src/settings'
 require 'src/utilities'
+require "__LSlib__/LSlib"
 
 
 Forcefield = {}
@@ -158,17 +159,17 @@ function Forcefield:scanAndBuildFields(emitterTable)
         end
 
         -- onto the next field section of this field
-        pos.x = pos.x + xInc
-        pos.y = pos.y + yInc
+        pos.x = pos.x + (xInc[n] or 0)
+        pos.y = pos.y + (yInc[n] or 0)
       end
 
       -- full field is build
       if fields then
-        if tableIsEmpty(fields[index]) then
+        if LSlib.utils.table.isEmpty(fields[index]) then
           fields[index] = nil
         end
 
-        if tableIsEmpty(fields) then
+        if LSlib.utils.table.isEmpty(fields) then
           fields = nil
         end
       end
@@ -337,28 +338,29 @@ end
 function Forcefield:getFieldsArea(emitterTable)
   local scanDirection = emitterTable["direction"]
   local pos = {}
-  local xInc = 0
-  local yInc = 0
+  local xInc = {}
+  local yInc = {}
+  local incTimes = emitterTable["width"]
 
   if scanDirection == defines.direction.north then
-    pos.x = emitterTable["entity"].position.x - (emitterTable["width"] - 1) / 2
+    pos.x = emitterTable["entity"].position.x - (incTimes - 1) / 2
     pos.y = emitterTable["entity"].position.y - emitterTable["distance"]
-    xInc = 1
+    for n=1,incTimes do xInc[n] = 1 end
   elseif scanDirection == defines.direction.east then
     pos.x = emitterTable["entity"].position.x + emitterTable["distance"]
-    pos.y = emitterTable["entity"].position.y - (emitterTable["width"] - 1) / 2
-    yInc = 1
+    pos.y = emitterTable["entity"].position.y - (incTimes - 1) / 2
+    for n=1,incTimes do yInc[n] = 1 end
   elseif scanDirection == defines.direction.south then
-    pos.x = emitterTable["entity"].position.x + (emitterTable["width"] - 1) / 2
+    pos.x = emitterTable["entity"].position.x + (incTimes - 1) / 2
     pos.y = emitterTable["entity"].position.y + emitterTable["distance"]
-    xInc = -1
+    for n=1,incTimes do xInc[n] = -1 end
   else
     pos.x = emitterTable["entity"].position.x - emitterTable["distance"]
-    pos.y = emitterTable["entity"].position.y + (emitterTable["width"] - 1) / 2
-    yInc = -1
+    pos.y = emitterTable["entity"].position.y + (incTimes - 1) / 2
+    for n=1,incTimes do yInc[n] = -1 end
   end
 
-  return pos, xInc, yInc, emitterTable["width"]
+  return pos, xInc, yInc, incTimes
 end
 
 
@@ -425,10 +427,16 @@ end
 function Forcefield:degradeLinkedFields(emitterTable)
   if global.forcefields.fields ~= nil and emitterTable["entity"].valid then
     local pos1, xInc, yInc, incTimes = self:getFieldsArea(emitterTable)
-    local pos2 = {x = pos1.x + (xInc * incTimes), y = pos1.y + (yInc * incTimes)}
+    local pos2 = pos1
+    for n=1,incTimes do
+      pos2 = {
+        x = pos2.x + (xInc[n] or 0),
+        y = pos2.y + (yInc[n] or 0),
+      }
+    end
     local surface = emitterTable["entity"].surface
     local fields
-    if xInc == -1 or yInc == -1 then
+    if pos2.x < pos1.x or pos2.y < pos1.y then
       fields = self:findForcefieldsArea(surface, {pos2, pos1}, true)
     else
       fields = self:findForcefieldsArea(surface, {pos1, pos2}, true)
@@ -520,12 +528,12 @@ end
 function Forcefield:removeForceFieldID(index, x, y)
   -- Does no checking, make sure its a valid table index
   global.forcefields.fields[index][x][y] = nil
-  if tableIsEmpty(global.forcefields.fields[index][x]) then
+  if LSlib.utils.table.isEmpty(global.forcefields.fields[index][x]) then
     global.forcefields.fields[index][x] = nil
-    if tableIsEmpty(global.forcefields.fields[index]) then
+    if LSlib.utils.table.isEmpty(global.forcefields.fields[index]) then
       global.forcefields.fields[index] = nil
     end
-    if tableIsEmpty(global.forcefields.fields) then
+    if LSlib.utils.table.isEmpty(global.forcefields.fields) then
       global.forcefields.fields = nil
     end
   end

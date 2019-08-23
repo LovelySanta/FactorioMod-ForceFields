@@ -50,7 +50,7 @@ data:extend(
       },
       max_sounds_per_type = 5
     },
-    order="s[electric-energy-interface]-t1",
-    subgroup = "forcefield"
+    --order="f[forcefield]-a[emitter]",
+    --subgroup = "forcefield"
   },
 })
