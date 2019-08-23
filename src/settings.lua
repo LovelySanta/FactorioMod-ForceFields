@@ -50,6 +50,7 @@ settings.fieldEmptySuffix = string.format(prototypeSettings["blue"].name, "empty
 settings.defaultFieldSuffix = settings.fieldSuffix
 
 settings.defaultFieldType = "blue"
+settings.defaultFieldSetup = "straight" -- options: "straight", "corner"
 settings.defaultFieldDirection = defines.direction.north
 settings.forcefieldTypes =
 {
@@ -62,6 +63,64 @@ settings.forcefieldTypes[settings.fieldGateSuffix .. "blue"  ] = settings.forcef
 settings.forcefieldTypes[settings.fieldGateSuffix .. "green" ] = settings.forcefieldTypes[settings.fieldSuffix .. "green" ]
 settings.forcefieldTypes[settings.fieldGateSuffix .. "purple"] = settings.forcefieldTypes[settings.fieldSuffix .. "purple"]
 settings.forcefieldTypes[settings.fieldGateSuffix .. "red"   ] = settings.forcefieldTypes[settings.fieldSuffix .. "red"   ]
+
+local function createFieldCircleData()
+  -- STEP 1: get the circles
+  local circles = {}
+  for radius = 1, settings.emitterMaxDistance do
+    circles[radius] = LSlib.utils.shapes.getCircleContour({0, 0}, radius)
+  end
+
+  -- STEP 2: split the circles into segments
+  local circleSegments = {}
+  for radius,circleContour in pairs(circles) do
+    circleSegments[radius] = {}
+    local numberOfPoints = #circleContour
+    for index,direction in pairs{
+      -- iterating in CCW starting from x-axis
+      defines.direction.south, -- SE
+      defines.direction.west , -- SW
+      defines.direction.north, -- NW
+      defines.direction.east , -- NE
+    } do
+      circleSegments[radius][direction] = {}
+
+      local startPoint = 1 + ((index - 1) * numberOfPoints/4)
+      local pointsToAdd = numberOfPoints/4 + 1
+      for pointIndex = 1, pointsToAdd do
+        local contourIndex = startPoint + (pointIndex - 1)
+        contourIndex = contourIndex <= numberOfPoints and contourIndex or contourIndex - numberOfPoints
+        circleSegments[radius][direction][pointIndex] = util.table.deepcopy(circleContour[contourIndex])
+      end
+    end
+  end
+
+  -- STEP 3: create incremental data for these circles
+  local fieldCircleData = {}
+  for radius, circleSegment in pairs(circleSegments) do
+    fieldCircleData[radius] = {}
+    for direction, circleSegmentContour in pairs(circleSegment) do
+      local prevPos = circleSegmentContour[1] -- start point
+
+      fieldCircleData[radius][direction] = {
+        pos = util.table.deepcopy(prevPos),
+        xInc = {},
+        yInc = {},
+        incTimes = 1,
+      }
+
+      for contourIndex = 2, #circleSegmentContour do
+        fieldCircleData[radius][direction].xInc[contourIndex - 1] = circleSegmentContour[contourIndex].x - prevPos.x
+        fieldCircleData[radius][direction].yInc[contourIndex - 1] = circleSegmentContour[contourIndex].y - prevPos.y
+        fieldCircleData[radius][direction].incTimes = fieldCircleData[radius][direction].incTimes + 1
+        prevPos = circleSegmentContour[contourIndex]
+      end
+    end
+  end
+
+  return util.table.deepcopy(fieldCircleData)
+end
+settings.forcefieldCircleData = createFieldCircleData()
 
 --settings.fieldEmptySetting = 0
 --settings.fieldWallSetting = 1

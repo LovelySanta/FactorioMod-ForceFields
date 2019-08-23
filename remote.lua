@@ -1,3 +1,4 @@
+require '__LSlib__/LSlib'
 require 'src/utilities'
 local settings = require 'src/settings'
 
@@ -63,5 +64,34 @@ remote.add_interface("forcefields", {
         player.gui.center.emitterConfig.destroy()
       end
     end
-  end
+  end,
+
+
+  -- test circle logic
+  circle = function(radius)
+    -- reset area
+    local resetRange = 50
+    local tilesToReset = {}
+    for x = -resetRange, resetRange do
+      for y = -resetRange, resetRange do
+        tilesToReset[#tilesToReset + 1] = {
+          name = "grass-1",
+          position = {x = x, y = y},
+        }
+      end
+    end
+    game.surfaces["nauvis"].set_tiles(tilesToReset, true)
+
+    -- draw circle
+    tilesToReset = {}
+    local circle = LSlib.utils.shapes.getCircleContour({x = 0, y = 0}, radius)
+    for _,circlePos in pairs(circle) do
+      tilesToReset[#tilesToReset + 1] = {
+        name = "concrete",
+        position = circlePos,
+      }
+    end
+    game.surfaces["nauvis"].set_tiles(tilesToReset, false)
+  end,
+
 })

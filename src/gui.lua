@@ -11,12 +11,13 @@ Gui = {}
 
 Gui.guiEmitterLayout = require("prototypes/gui/layout/emitter")
 Gui.guiForcefieldLayout = require("prototypes/gui/layout/forcefield")
+
 Gui.guiElementNames = util.table.deepcopy(require("prototypes/gui/layout/guiElementNames"))
 -- keep backwards compatibility
 for oldName, newName in pairs{
-  ["buttonConfigure"] = "guiHeaderButton_ConfigureWall",
-  ["buttonHelp"     ] = "guiHeaderButton_Help"         ,
-  ["configTable"    ] = "guiContentTable"              ,
+  ["buttonConfigure"] = "fieldConfigOptionA",
+  ["buttonHelp"     ] = "guiButtonHelp"     ,
+  ["configTable"    ] = "guiContentTable"   ,
 } do
   if Gui.guiElementNames[oldName] ~= nil then
     log(("guiElementName %q is already taken!"):format(oldName))
@@ -127,6 +128,22 @@ function Gui:showEmitterGui(emitterTable, playerIndex)
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldTypeOptionR).style = settings.guiSelectButtonSelectedStyle
     elseif emitterTable["type"] == "purple" then
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldTypeOptionP).style = settings.guiSelectButtonSelectedStyle
+    end
+    
+    -- Setup of field
+    if emitterTable["setup"] == "straight" then
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupOptionS).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupOptionA).enabled = true
+    elseif emitterTable["setup"] == "corner" then
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupOptionC).style = settings.guiSelectButtonSelectedStyle
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupOptionA).enabled = false
+
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionN).sprite = "forcefield_direction_NW"
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionS).sprite = "forcefield_direction_SE"
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionE).sprite = "forcefield_direction_NE"
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionW).sprite = "forcefield_direction_SW"
+
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).enabled = false
     end
 
     -- Direction of forcefield
@@ -252,7 +269,7 @@ function Gui:handleGuiFieldTypeButtons(event)
   local playerIndex = event.element.player_index
   local player = game.players[playerIndex]
   local force = player.force
-  local nameToFieldName =
+  local nameToFieldType =
   {
     [self.guiElementNames.fieldTypeOptionB] = "blue",
     [self.guiElementNames.fieldTypeOptionG] = "green",
@@ -277,7 +294,7 @@ function Gui:handleGuiFieldTypeButtons(event)
 
     if shouldSwitch then
       -- Save the newly selected direction
-      global.forcefields.emitterConfigGuis["I" .. playerIndex][3] = nameToFieldName[selectedButtonName]
+      global.forcefields.emitterConfigGuis["I" .. playerIndex][3] = nameToFieldType[selectedButtonName]
 
       -- Set the buttons accordingly to pressed selection
       fields[self.guiElementNames.fieldTypeOptionB].style = settings.guiSelectButtonStyle
@@ -287,6 +304,53 @@ function Gui:handleGuiFieldTypeButtons(event)
       fields[selectedButtonName].style = settings.guiSelectButtonSelectedStyle
     else
       player.print("You need to complete the required research before this field type can be used.")
+    end
+  end
+end
+
+
+
+function Gui:handleGuiFieldSetupButtons(event)
+  local playerIndex = event.element.player_index
+  local player = game.players[playerIndex]
+  local force = player.force
+  local nameToFieldSetup =
+  {
+    [self.guiElementNames.fieldSetupOptionS] = "straight",
+    [self.guiElementNames.fieldSetupOptionC] = "corner",
+  }
+
+  if LSlib.gui.getElement(playerIndex, self.guiElementPaths.guiFrame) ~= nil then
+    -- Current fieldtype
+    local setups = LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupTable)
+    local selectedButtonName = event.element.name
+
+    -- Check if the force of that player has the required researched
+    local shouldSwitch = true
+    if selectedButtonName == self.guiElementNames.fieldSetupOptionC then
+      shouldSwitch = true -- TODO: bind a tech to unlock corner walls, maybe for each color?
+    end
+
+    if shouldSwitch then
+      -- Save the newly selected setup
+      global.forcefields.emitterConfigGuis["I" .. playerIndex][5] = nameToFieldSetup[selectedButtonName]
+
+      -- Set the buttons accordingly to pressed selection
+      setups[self.guiElementNames.fieldSetupOptionS].style = settings.guiSelectButtonStyle
+      setups[self.guiElementNames.fieldSetupOptionC].style = settings.guiSelectButtonStyle
+      setups[selectedButtonName].style = settings.guiSelectButtonSelectedStyle
+
+      -- Set other buttons depending on selection
+      local hasStraightSelection = (selectedButtonName == self.guiElementNames.fieldSetupOptionS)
+      setups[self.guiElementNames.fieldSetupOptionA].enabled = hasStraightSelection
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).enabled = hasStraightSelection
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionN).sprite = hasStraightSelection and "virtual-signal/signal-N" or "forcefield_direction_NW"
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionS).sprite = hasStraightSelection and "virtual-signal/signal-S" or "forcefield_direction_SE"
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionE).sprite = hasStraightSelection and "virtual-signal/signal-E" or "forcefield_direction_NE"
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionW).sprite = hasStraightSelection and "virtual-signal/signal-W" or "forcefield_direction_SW"
+
+    else
+      player.print("You need to complete the required research before this corner field setup can be used.")
     end
   end
 end
@@ -572,30 +636,33 @@ end
 Gui.guiButtonHandlers =
 {
   -- Emitter gui
-  [Gui.guiElementNames.directionOptionN] = Gui.handleGuiDirectionButtons,
-  [Gui.guiElementNames.directionOptionS] = Gui.handleGuiDirectionButtons,
-  [Gui.guiElementNames.directionOptionE] = Gui.handleGuiDirectionButtons,
-  [Gui.guiElementNames.directionOptionW] = Gui.handleGuiDirectionButtons,
-
-  [Gui.guiElementNames.fieldTypeOptionB] = Gui.handleGuiFieldTypeButtons,
-  [Gui.guiElementNames.fieldTypeOptionG] = Gui.handleGuiFieldTypeButtons,
-  [Gui.guiElementNames.fieldTypeOptionR] = Gui.handleGuiFieldTypeButtons,
-  [Gui.guiElementNames.fieldTypeOptionP] = Gui.handleGuiFieldTypeButtons,
-
-  [Gui.guiElementNames.upgradesDistance] = Gui.handleGuiUpgradeButtons,
-  [Gui.guiElementNames.upgradesWidth] = Gui.handleGuiUpgradeButtons,
+  [Gui.guiElementNames["fieldTypeOptionB"]] = Gui.handleGuiFieldTypeButtons,
+  [Gui.guiElementNames["fieldTypeOptionG"]] = Gui.handleGuiFieldTypeButtons,
+  [Gui.guiElementNames["fieldTypeOptionR"]] = Gui.handleGuiFieldTypeButtons,
+  [Gui.guiElementNames["fieldTypeOptionP"]] = Gui.handleGuiFieldTypeButtons,
   
-  [Gui.guiElementNames.buttonHelp] = Gui.handleGuiMenuButtons,
-  [Gui.guiElementNames.buttonConfigure] = Gui.handleConfigureButton,
-  [Gui.guiElementNames.buttonRemoveUpgrades] = Gui.handleGuiMenuButtons,
-  [Gui.guiElementNames.buttonApplySettings] = Gui.handleGuiMenuButtons,
-  [Gui.guiElementNames.buttonDiscardSettings] = Gui.handleGuiMenuButtons,
+  [Gui.guiElementNames["fieldSetupOptionS"]] = Gui.handleGuiFieldSetupButtons,
+  [Gui.guiElementNames["fieldSetupOptionC"]] = Gui.handleGuiFieldSetupButtons,
+  [Gui.guiElementNames["fieldSetupOptionA"]] = Gui.handleConfigureButton,
+
+  [Gui.guiElementNames["directionOptionN"]] = Gui.handleGuiDirectionButtons,
+  [Gui.guiElementNames["directionOptionS"]] = Gui.handleGuiDirectionButtons,
+  [Gui.guiElementNames["directionOptionE"]] = Gui.handleGuiDirectionButtons,
+  [Gui.guiElementNames["directionOptionW"]] = Gui.handleGuiDirectionButtons,
+  
+  [Gui.guiElementNames["upgradesDistance"]] = Gui.handleGuiUpgradeButtons,
+  [Gui.guiElementNames["upgradesWidth"   ]] = Gui.handleGuiUpgradeButtons,
+  
+  [Gui.guiElementNames["buttonHelp"           ]] = Gui.handleGuiMenuButtons,
+  [Gui.guiElementNames["buttonRemoveUpgrades" ]] = Gui.handleGuiMenuButtons,
+  [Gui.guiElementNames["buttonApplySettings"  ]] = Gui.handleGuiMenuButtons,
+  [Gui.guiElementNames["buttonDiscardSettings"]] = Gui.handleGuiMenuButtons,
 
   -- Forcefield gui
-  [Gui.guiElementNames.configOption] = Gui.handleGuiConfigWallChange,
-  [Gui.guiElementNames.configRowOption] = Gui.handleGuiConfigWallRowChange,
-  [Gui.guiElementNames.configCancelButton] = Gui.handleGuiConfigWallClose,
-  [Gui.guiElementNames.configApplyButton] = Gui.handleGuiConfigWallClose,
+  [Gui.guiElementNames["configOption"      ]] = Gui.handleGuiConfigWallChange,
+  [Gui.guiElementNames["configRowOption"   ]] = Gui.handleGuiConfigWallRowChange,
+  [Gui.guiElementNames["configCancelButton"]] = Gui.handleGuiConfigWallClose,
+  [Gui.guiElementNames["configApplyButton" ]] = Gui.handleGuiConfigWallClose,
 }
 
 
@@ -662,6 +729,16 @@ function Gui:verifyAndSetFromGui(playerIndex)
       newFieldType = emitterTable["type"]
     end
 
+    -- Setting of forcefield
+    if global.forcefields.emitterConfigGuis["I" .. playerIndex][5] ~= nil then
+      newFieldSetup = global.forcefields.emitterConfigGuis["I" .. playerIndex][5]
+    elseif emitterTable["setup"] == nil then
+      player.print("No wall setup selected.")
+      settingsAreGood = false
+    else
+      newFieldSetup = emitterTable["setup"]
+    end
+
     -- Distance of forcefield
     newDistance = tonumber(LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceInput).text)
     maxDistance = tonumber(string.sub(LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceMaxInput).caption, 6))
@@ -722,6 +799,7 @@ function Gui:verifyAndSetFromGui(playerIndex)
         or emitterTable["width"] ~= newWidth
         or emitterTable["distance"] ~= newDistance
         or emitterTable["type"] ~= newFieldType
+        or emitterTable["setup"] ~= newFieldSetup
         or emitterTable["direction"] ~= newDirection
         or not LSlib.utils.table.areEqual(emitterTable["config"], newFieldConfig) then
 
@@ -732,6 +810,7 @@ function Gui:verifyAndSetFromGui(playerIndex)
         emitterTable["width"] = newWidth
         emitterTable["distance"] = newDistance
         emitterTable["type"] = newFieldType
+        emitterTable["setup"] = newFieldSetup
         emitterTable["config"] = newFieldConfig
         emitterTable["direction"] = newDirection
         emitterTable["generating-fields"] = nil

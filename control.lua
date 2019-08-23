@@ -6,7 +6,7 @@ require 'src/emitter'
 require 'src/gui'
 
 require 'src/config-changes'
-require 'src/testing'
+require 'remote'
 
 
 

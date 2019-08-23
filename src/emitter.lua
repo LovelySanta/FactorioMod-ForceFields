@@ -27,6 +27,7 @@ function Emitter:onEmitterBuilt(createdEntity)
   newEmitter["entity"] = createdEntity
   -- emitter settings
   newEmitter["type"] = settings.defaultFieldType
+  newEmitter["setup"] = settings.defaultFieldSetup
   newEmitter["config"] = {}
   for i=1, maxWidth do
     newEmitter["config"][i-widthOffset] = defaultType
@@ -50,6 +51,7 @@ function Emitter:onEmitterBuilt(createdEntity)
       if killedEmitter["surface"] == surface and killedEmitter["position"].x == createdEntity.position.x and killedEmitter["position"].y == createdEntity.position.y then
         newEmitter["disabled"] = killedEmitter["disabled"]
         newEmitter["type"] = killedEmitter["type"]
+        newEmitter["setup"] = killedEmitter["setup"]
         newEmitter["config"] = util.table.deepcopy(killedEmitter["config"])
         newEmitter["distance"] = killedEmitter["distance"]
         newEmitter["width"] = killedEmitter["width"]
@@ -157,6 +159,7 @@ function Emitter:onEntitySettingsPasted(event)
     or destinationEmitterTable["distance"] ~= sourceEmitterTable["distance"]
     or destinationEmitterTable["width"] ~= sourceEmitterTable["width"]
     or destinationEmitterTable["type"] ~= sourceEmitterTable["type"]
+    or destinationEmitterTable["setup"] ~= sourceEmitterTable["setup"]
     or destinationEmitterTable["direction"] ~= sourceEmitterTable["direction"]
     or not LSlib.utils.table.areEqual(destinationEmitterTable["config"], sourceEmitterTable["config"]) then --TODO config setting
 
@@ -178,6 +181,7 @@ function Emitter:onEntitySettingsPasted(event)
     end
 
     destinationEmitterTable["type"] = sourceEmitterTable["type"]
+    destinationEmitterTable["setup"] = sourceEmitterTable["setup"]
     destinationEmitterTable["direction"] = sourceEmitterTable["direction"]
     destinationEmitterTable["config"] = util.table.deepcopy(sourceEmitterTable["config"])
     destinationEmitterTable["generating-fields"] = nil

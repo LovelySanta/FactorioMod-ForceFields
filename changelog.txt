@@ -1,7 +1,8 @@
 ---------------------------------------------------------------------------------------------------
-Version: 2.2.1
+Version: 2.3.0
 Date: 22. 8. 2019
   Features:
+    - Added forcefield corner pieces
     - Added compatibility with warptorio2
   Changes:
     - Fixed ordening of entities in /editor

@@ -1,11 +1,10 @@
 return {
   -- EMITTER GUI --
   -- gui base
-  guiFrame                      = "emitterConfig",
-  guiHeaderButton_ConfigureWall = "configureWallButton",
-  guiHeaderButton_Help          = "emitterHelpButton",
-  guiContentTable               = "emitterConfigTable",
-
+  guiFrame        = "emitterConfig",
+  guiContentTable = "emitterConfigTable",
+  guiButtonHelp   = "emitterHelpButton",
+  
   -- Direction of forcefield
   directionLabel   = "directionLabel",
   directionTable   = "directions",
@@ -13,7 +12,7 @@ return {
   directionOptionS = "directionS",
   directionOptionE = "directionE",
   directionOptionW = "directionW",
-
+  
   -- Type of forcefield
   fieldTypeLabel   = "fieldTypeLabel",
   fieldTypeTable   = "fields",
@@ -21,6 +20,13 @@ return {
   fieldTypeOptionG = "fieldG",
   fieldTypeOptionR = "fieldR",
   fieldTypeOptionP = "fieldP",
+  
+  -- Setup of forcefield
+  fieldSetupLabel   = "fieldSetupLabel",
+  fieldSetupTable   = "fieldSetups",
+  fieldSetupOptionS = "fieldSetupStraight",
+  fieldSetupOptionC = "fieldSetupCorner",
+  fieldSetupOptionA = "fieldSetupAdvanced",
 
   -- Distance of forcefield
   distanceLabel    = "distanceLabel",

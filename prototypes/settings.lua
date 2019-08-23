@@ -3,7 +3,6 @@ prototypeSettings["modName"] = "__ForceFields2__"
 
 local prototyping = data and data.raw or false
 
-
 --------------------------------------------------------------------------------
 -----                             Emitter                                   ----
 --------------------------------------------------------------------------------
@@ -39,11 +38,16 @@ prototypeSettings["gui"] =
   ["guiItemSlotStyle" ] = "emitter_item_slot_button",
   
   ["configWallSprite"] = "forcefield_config_tool",
+  ["configSetupStraightSprite"] = "forcefield_setup_S",
+  ["configSetupCornerSprite"  ] = "forcefield_setup_C",
+  ["configDirectionNESprite"] = "forcefield_direction_NE",
+  ["configDirectionNWSprite"] = "forcefield_direction_NW",
+  ["configDirectionSESprite"] = "forcefield_direction_SE",
+  ["configDirectionSWSprite"] = "forcefield_direction_SW",
 
   ["guiTableRowHeaderStyle"     ] = "forcefield_config_tableRowHeader_table",
   ["guiTableRowHeaderLabelStyle"] = "forcefield_config_tableRowHeader_label",
 }
-
 
 --------------------------------------------------------------------------------
 -----                          Blue Forcefield                              ----
@@ -106,8 +110,6 @@ prototypeSettings["blue"] =
     },
 }
 
-
-
 --------------------------------------------------------------------------------
 -----                          Green Forcefield                             ----
 --------------------------------------------------------------------------------
@@ -165,8 +167,6 @@ prototypeSettings["green"] =
                         },
   },
 }
-
-
 
 --------------------------------------------------------------------------------
 -----                          Purple Forcefield                            ----
@@ -228,8 +228,6 @@ prototypeSettings["purple"] =
                         },
   },
 }
-
-
 
 --------------------------------------------------------------------------------
 -----                          Red Forcefield                               ----

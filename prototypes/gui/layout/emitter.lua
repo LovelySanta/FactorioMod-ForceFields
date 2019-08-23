@@ -34,40 +34,9 @@ LSlib.gui.layout.addFrame(guiLayout, guiFrameHeaderFlow, guiNames.guiFrame.."-he
   style = "LSlib_default_header_filler",
   ignored_by_interaction = true,
 })
-LSlib.gui.layout.addSpriteButton(guiLayout, guiFrameHeaderFlow, guiNames.guiHeaderButton_ConfigureWall, {
-  sprite = guiSettings["configWallSprite"],
-  style = "LSlib_default_header_button",
-})
-LSlib.gui.layout.addSpriteButton(guiLayout, guiFrameHeaderFlow, guiNames.guiHeaderButton_Help, {
+LSlib.gui.layout.addSpriteButton(guiLayout, guiFrameHeaderFlow, guiNames.guiButtonHelp, {
   sprite = "utility/questionmark"      ,
   style = "LSlib_default_header_button",
-})
-
-
-
-
--- Direction of forcefield
-LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.directionLabel, {
-  caption = "Direction:",
-  style = guiSettings["guiLabelStyle"],
-  ignored_by_interaction = true,
-})  
-local guiFieldDirection = LSlib.gui.layout.addTable(guiLayout, guiFrameContent, guiNames.directionTable, 4)
-LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionN, {
-  sprite = "virtual-signal/signal-N",
-  style = guiSettings["guiSelectButtonStyle"],
-})  
-LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionE, {
-  sprite = "virtual-signal/signal-E",
-  style = guiSettings["guiSelectButtonStyle"],
-})  
-LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionS, {
-  sprite = "virtual-signal/signal-S",
-  style = guiSettings["guiSelectButtonStyle"],
-})  
-LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionW, {
-  sprite = "virtual-signal/signal-W",
-  style = guiSettings["guiSelectButtonStyle"],
 })
 
 
@@ -98,9 +67,57 @@ LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldType, guiNames.fieldTypeOpti
 
 
 
+-- Setup of forcefield
+LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.fieldSetupLabel, {
+  caption = "Field configuration:",
+  style = guiSettings["guiLabelStyle"],
+  ignored_by_interaction = true,
+})
+local guifieldSetup = LSlib.gui.layout.addTable(guiLayout, guiFrameContent, guiNames.fieldSetupTable, 3)
+LSlib.gui.layout.addSpriteButton(guiLayout, guifieldSetup, guiNames.fieldSetupOptionS, {
+  sprite = guiSettings["configSetupStraightSprite"],
+  style = guiSettings["guiSelectButtonStyle"],
+})
+LSlib.gui.layout.addSpriteButton(guiLayout, guifieldSetup, guiNames.fieldSetupOptionC, {
+  sprite = guiSettings["configSetupCornerSprite"],
+  style = guiSettings["guiSelectButtonStyle"],
+})
+LSlib.gui.layout.addSpriteButton(guiLayout, guifieldSetup, guiNames.fieldSetupOptionA, {
+  sprite = guiSettings["configWallSprite"],
+  style = guiSettings["guiSelectButtonStyle"],
+})
+
+
+
+-- Direction of forcefield
+LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.directionLabel, {
+  caption = "Field direction:",
+  style = guiSettings["guiLabelStyle"],
+  ignored_by_interaction = true,
+})  
+local guiFieldDirection = LSlib.gui.layout.addTable(guiLayout, guiFrameContent, guiNames.directionTable, 4)
+LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionN, {
+  sprite = "virtual-signal/signal-N",
+  style = guiSettings["guiSelectButtonStyle"],
+})  
+LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionE, {
+  sprite = "virtual-signal/signal-E",
+  style = guiSettings["guiSelectButtonStyle"],
+})  
+LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionS, {
+  sprite = "virtual-signal/signal-S",
+  style = guiSettings["guiSelectButtonStyle"],
+})  
+LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionW, {
+  sprite = "virtual-signal/signal-W",
+  style = guiSettings["guiSelectButtonStyle"],
+})
+
+
+
 -- Distance of forcefield
 LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.distanceLabel, {
-  caption = "Emitter distance:",
+  caption = "Emitting distance:",
   style = guiSettings["guiLabelStyle"],
   ignored_by_interaction = true,
 })
@@ -117,7 +134,7 @@ LSlib.gui.layout.addLabel(guiLayout, guiEmitterDistance, guiNames.distanceMaxInp
 
 -- Width of forcefield
 LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.widthLabel, {
-  caption = "Emitter width:",
+  caption = "Emitting width:",
   style = guiSettings["guiLabelStyle"],
   ignored_by_interaction = true,
 })

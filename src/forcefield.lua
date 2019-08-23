@@ -90,9 +90,9 @@ function Forcefield:scanAndBuildFields(emitterTable)
 
       -- Check the direction of the wall
       if emitterTable["direction"] == defines.direction.north or emitterTable["direction"] == defines.direction.south then
-        direction = defines.direction.east
+        direction = defines.direction.east -- horizontal
       else
-        direction = defines.direction.north
+        direction = defines.direction.north -- vertical
       end
 
       -- Check if table for that surface exist, if not, make it
@@ -108,7 +108,7 @@ function Forcefield:scanAndBuildFields(emitterTable)
         -- If another emitter (or even this one previously) has built a field at this location, skip trying to build there, same if we don't have to build here
         if (fields[index][pos.x] == nil or fields[index][pos.x][pos.y] == nil) and emitterTable["config"][n-fieldConfigOffset] ~= settings.fieldEmptySuffix then
           -- If that spot has no field, we need to try and build one
-          local fieldEntityName = emitterTable["config"][n-fieldConfigOffset] .. emitterTable["type"]
+          local fieldEntityName = (emitterTable["setup"] == "straight" and emitterTable["config"][n-fieldConfigOffset] or settings.fieldSuffix) .. emitterTable["type"]
           -- check if we can build the field
           if surface.can_place_entity({name = fieldEntityName, position = pos, force = force, direction = direction}) then
             local newField = surface.create_entity({name = fieldEntityName, position = pos, force = force, direction = direction})
@@ -336,28 +336,48 @@ end
 
 
 function Forcefield:getFieldsArea(emitterTable)
-  local scanDirection = emitterTable["direction"]
   local pos = {}
   local xInc = {}
   local yInc = {}
-  local incTimes = emitterTable["width"]
+  local incTimes = nil
 
-  if scanDirection == defines.direction.north then
-    pos.x = emitterTable["entity"].position.x - (incTimes - 1) / 2
-    pos.y = emitterTable["entity"].position.y - emitterTable["distance"]
-    for n=1,incTimes do xInc[n] = 1 end
-  elseif scanDirection == defines.direction.east then
-    pos.x = emitterTable["entity"].position.x + emitterTable["distance"]
-    pos.y = emitterTable["entity"].position.y - (incTimes - 1) / 2
-    for n=1,incTimes do yInc[n] = 1 end
-  elseif scanDirection == defines.direction.south then
-    pos.x = emitterTable["entity"].position.x + (incTimes - 1) / 2
-    pos.y = emitterTable["entity"].position.y + emitterTable["distance"]
-    for n=1,incTimes do xInc[n] = -1 end
-  else
-    pos.x = emitterTable["entity"].position.x - emitterTable["distance"]
-    pos.y = emitterTable["entity"].position.y + (incTimes - 1) / 2
-    for n=1,incTimes do yInc[n] = -1 end
+  if emitterTable["setup"] == "straight" then
+    local scanDirection = emitterTable["direction"]
+    incTimes = emitterTable["width"]
+
+    if scanDirection == defines.direction.north then
+      pos.x = emitterTable["entity"].position.x - (incTimes - 1) / 2
+      pos.y = emitterTable["entity"].position.y - emitterTable["distance"]
+      for n=1,incTimes do xInc[n] = 1 end
+    elseif scanDirection == defines.direction.east then
+      pos.x = emitterTable["entity"].position.x + emitterTable["distance"]
+      pos.y = emitterTable["entity"].position.y - (incTimes - 1) / 2
+      for n=1,incTimes do yInc[n] = 1 end
+    elseif scanDirection == defines.direction.south then
+      pos.x = emitterTable["entity"].position.x + (incTimes - 1) / 2
+      pos.y = emitterTable["entity"].position.y + emitterTable["distance"]
+      for n=1,incTimes do xInc[n] = -1 end
+    else
+      pos.x = emitterTable["entity"].position.x - emitterTable["distance"]
+      pos.y = emitterTable["entity"].position.y + (incTimes - 1) / 2
+      for n=1,incTimes do yInc[n] = -1 end
+    end
+
+  elseif emitterTable["setup"] == "corner" then
+    local radius = emitterTable["distance"]
+    local direction = emitterTable["direction"]
+    local fieldPosData = settings.forcefieldCircleData[radius][direction]
+
+    pos = {
+      x = emitterTable["entity"].position.x + fieldPosData.pos.x,
+      y = emitterTable["entity"].position.y + fieldPosData.pos.y,
+    }
+    xInc = util.table.deepcopy(fieldPosData.xInc)
+    yInc = util.table.deepcopy(fieldPosData.yInc)
+    incTimes = fieldPosData.incTimes
+
+  else -- something is wrong...
+    error("invalid emitterTable setup")
   end
 
   return pos, xInc, yInc, incTimes
@@ -426,20 +446,32 @@ end
 
 function Forcefield:degradeLinkedFields(emitterTable)
   if global.forcefields.fields ~= nil and emitterTable["entity"].valid then
-    local pos1, xInc, yInc, incTimes = self:getFieldsArea(emitterTable)
-    local pos2 = pos1
-    for n=1,incTimes do
-      pos2 = {
-        x = pos2.x + (xInc[n] or 0),
-        y = pos2.y + (yInc[n] or 0),
-      }
-    end
-    local surface = emitterTable["entity"].surface
     local fields
-    if pos2.x < pos1.x or pos2.y < pos1.y then
-      fields = self:findForcefieldsArea(surface, {pos2, pos1}, true)
-    else
-      fields = self:findForcefieldsArea(surface, {pos1, pos2}, true)
+    local surface = emitterTable["entity"].surface
+    local pos1, xInc, yInc, incTimes = self:getFieldsArea(emitterTable)
+    if emitterTable["setup"] == "straight" then
+      xInc = xInc[1] or 0
+      yInc = yInc[1] or 0
+      local pos2 = {x = pos1.x + (xInc * incTimes), y = pos1.y + (yInc * incTimes)}
+      if xInc == -1 or yInc == -1 then
+        fields = self:findForcefieldsArea(surface, {pos2, pos1}, true)
+      else
+        fields = self:findForcefieldsArea(surface, {pos1, pos2}, true)
+      end
+    else -- emitterTable["setup"] == "corner"
+      fields = {}
+      local pos2 = pos1
+      for n=1, incTimes do
+        local field = self:findForcefieldsArea(surface, {pos2, pos2}, true)
+        for _,f in pairs(field or {}) do
+          table.insert(fields, f)
+        end
+        pos2 = {
+          x = pos2.x + (xInc[n] or 0),
+          y = pos2.y + (yInc[n] or 0),
+        }
+      end
+      if LSlib.utils.table.isEmpty(fields) then fields = nil end
     end
 
     --we need to degrade all found fields
