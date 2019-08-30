@@ -46,6 +46,8 @@ prototypeSettings["gui"] =
   ["configDirectionSWSprite"] = "forcefield_direction_SW",
 
   ["guiTableRowHeaderStyle"     ] = "forcefield_config_tableRowHeader_table",
+  ["guiTableRowHeaderFlowStyle" ] = "forcefield_config_tableRowHeader_flow",
+  ["guiTableRowHeaderIconStyle" ] = "forcefield_config_tableRowHeader_icon",
   ["guiTableRowHeaderLabelStyle"] = "forcefield_config_tableRowHeader_label",
 }
 

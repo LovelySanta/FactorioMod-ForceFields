@@ -43,10 +43,15 @@ LSlib.gui.layout.addLabel(guiLayout, guiConfigTable, guiNames.configRowOptionLab
   caption = "All",
   ignored_by_interaction = true,
 })
-LSlib.gui.layout.addLabel(guiLayout, guiConfigTable, guiNames.configRowDescriptionLabel, {
-  caption = "",
-  style = guiSettings["guiTableRowHeaderLabelStyle"],
+local guiRowDescriptionTable = LSlib.gui.layout.addTable(guiLayout, guiConfigTable, guiNames.configRowDescriptionLabel.."-table", 2)
+LSlib.gui.layout.addFlow(guiLayout, guiRowDescriptionTable, guiNames.configRowDescriptionLabel.."-flow", "horizontal", {
+  style = guiSettings["guiTableRowHeaderFlowStyle"],
   ignored_by_interaction = true,
+})
+LSlib.gui.layout.addLabel(guiLayout, guiRowDescriptionTable, guiNames.configRowDescriptionLabel, {
+  caption = "[img=info]",
+  tooltip = {"forcefields-gui-description.forcefield-configure-segments"},
+  style = guiSettings["guiTableRowHeaderIconStyle"],
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guiConfigTable, guiNames.configRowOption.."E", {
   tooltip = {"forcefields-gui-description.forcefield-configure-all-empty"},

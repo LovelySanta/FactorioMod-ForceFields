@@ -1,14 +1,16 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.0
-Date: 22. 8. 2019
+Date: 30. 8. 2019
   Features:
     - Added forcefield corner pieces
+    - Gui has localised names and show tooltips in alot of places
     - Added compatibility with warptorio2
   Changes:
-    - Fixed ordening of entities in /editor
-    - An emitter can now build 27 wall sections without upgrades (was 25 before)
-    - An emitter can now build up to 8 tiles far without upgrades (was 10 before)
+    - An emitter can now build up to 27 wall sections without upgrades (was 25 before)
+    - An emitter can now build up to 8 tiles distance without upgrades (was 10 before)
     - An emitter can now have 25 distance upgrades (was 23 before)
+  Bugfixes:
+    - Fixed ordening of entities in /editor
   Modding:
     - Added compatibility to event script_raised_build
     - Added compatibility to event script_raised_destroy
