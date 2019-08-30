@@ -162,6 +162,10 @@ function Gui:showEmitterGui(emitterTable, playerIndex)
     LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceMaxInput).caption = "Max: " .. tostring(settings.emitterDefaultDistance + emitterTable["distance-upgrades"])
 
     -- Width of forcefield
+    self:handleGuiConfigTextfieldChanges{
+      player_index = playerIndex,
+      element = LSlib.gui.getElement(playerIndex, self.guiElementPaths["distanceInput"]),
+    }
     LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = emitterTable["width"]
     LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthMaxInput).caption = "Max: " .. tostring(settings.emitterDefaultWidth + emitterTable["width-upgrades"] * settings.widthUpgradeMultiplier)
 
@@ -818,10 +822,19 @@ function Gui:verifyAndSetFromGui(playerIndex)
     end
 
     -- New field configuration
-    if global.forcefields.emitterConfigGuis["I" .. playerIndex][4] ~= nil then
-      newFieldConfig = global.forcefields.emitterConfigGuis["I" .. playerIndex][4]
+    if newFieldSetup == settings.fieldSetupCorner then
+      local maxWidth = settings.emitterMaxWidth
+      local widthOffset = (maxWidth + 1)/2
+      newFieldConfig = {}
+      for i=1, maxWidth do
+        newFieldConfig[i-widthOffset] = settings.defaultFieldSuffix
+      end
     else
-      newFieldConfig = util.table.deepcopy(emitterTable["config"])
+      if global.forcefields.emitterConfigGuis["I" .. playerIndex][4] ~= nil then
+        newFieldConfig = global.forcefields.emitterConfigGuis["I" .. playerIndex][4]
+      else
+        newFieldConfig = util.table.deepcopy(emitterTable["config"])
+      end
     end
 
     -- If settings are all checked and correct, we can update the emitterTable
