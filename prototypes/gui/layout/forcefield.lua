@@ -49,32 +49,32 @@ LSlib.gui.layout.addLabel(guiLayout, guiConfigTable, guiNames.configRowDescripti
   ignored_by_interaction = true,
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guiConfigTable, guiNames.configRowOption.."E", {
-  tooltip = "Set all segments to none",
+  tooltip = {"forcefields-gui-description.forcefield-configure-all-empty"},
   sprite  = "utility/set_bar_slot",
   style   = guiSettings["guiSmallSelectButtonStyle"],
 })
 LSlib.gui.layout.addLabel(guiLayout, guiConfigTable, guiNames.configRowOptionLabel.."E", {
-  caption = "Empty",
+  caption = {"forcefields-gui-name.forcefield-configure-empty"},
   style = guiSettings["guiTableRowHeaderLabelStyle"],
   ignored_by_interaction = true,
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guiConfigTable, guiNames.configRowOption.."W", {
-  tooltip = "Set all segments to walls",
+  tooltip = {"forcefields-gui-description.forcefield-configure-all-wall"},
   sprite  = "item/stone-wall",
   style   = guiSettings["guiSmallSelectButtonStyle"],
 })
 LSlib.gui.layout.addLabel(guiLayout, guiConfigTable, guiNames.configRowOptionLabel.."W", {
-  caption = "Wall",
+  caption = {"forcefields-gui-name.forcefield-configure-wall"},
   style = guiSettings["guiTableRowHeaderLabelStyle"],
   ignored_by_interaction = true,
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guiConfigTable, guiNames.configRowOption.."G", {
-  tooltip = "Set all segments to gates",
+  tooltip = {"forcefields-gui-description.forcefield-configure-all-gate"},
   sprite  = "item/gate",
   style   = guiSettings["guiSmallSelectButtonStyle"],
 })
 LSlib.gui.layout.addLabel(guiLayout, guiConfigTable, guiNames.configRowOptionLabel.."G", {
-  caption = "Gate",
+  caption = {"forcefields-gui-name.forcefield-configure-gate"},
   style = guiSettings["guiTableRowHeaderLabelStyle"],
   ignored_by_interaction = true,
 })
@@ -91,7 +91,8 @@ LSlib.gui.layout.addScrollPane(guiLayout, guiConfigFrameContent, guiNames.config
 
 -- Footer buttons
 LSlib.gui.layout.addButton(guiLayout, guiConfigFrameFooterFlow, guiNames.configCancelButton, {
-  caption = "Discard changes",
+  caption = {"forcefields-gui-name.discard"},
+  tooltip = {"forcefields-gui-description.forcefield-configure-discard"},
   style = "red_back_button",
 })
 LSlib.gui.layout.addFrame(guiLayout, guiConfigFrameFooterFlow, guiNames.guiFrame.."-footer-filler", "vertical", {
@@ -99,7 +100,8 @@ LSlib.gui.layout.addFrame(guiLayout, guiConfigFrameFooterFlow, guiNames.guiFrame
   ignored_by_interaction = true,
 })
 LSlib.gui.layout.addButton(guiLayout, guiConfigFrameFooterFlow, guiNames.configApplyButton, {
-  caption = "Save configuration",
+  caption = {"forcefields-gui-name.apply"},
+  tooltip = {"forcefields-gui-description.forcefield-configure-apply"},
   style = "confirm_button",
 })
 

@@ -208,6 +208,7 @@ LSlib.gui.layout.addFrame(guiLayout, guiFrameFooterFlow, guiNames.guiFrame.."-fo
 })
 LSlib.gui.layout.addButton(guiLayout, guiFrameFooterFlow, guiNames.buttonApplySettings, {
   caption = {"forcefields-gui-name.apply"},
+  tooltip = {"forcefields-gui-description.emitter-configure-apply"},
   style = "confirm_button",
 })
 

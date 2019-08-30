@@ -210,17 +210,41 @@ function Gui:createForcefieldGui(playerIndex, fieldWidth)
     for fieldIndex=1, fieldWidth do
       configTableData.style.column_alignments[fieldIndex] = "center"
     end
+    local fieldIndexFormat = "%02d"
     for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "label", name = self.guiElementNames.configOptionLabel ..string.format("%02d", fieldIndex), caption = string.format("%02d", fieldIndex), ignored_by_interaction = true}
+      configTableData.add{
+        type = "label",
+        name = self.guiElementNames.configOptionLabel .. string.format("%02d", fieldIndex),
+        caption = string.format(fieldIndexFormat, fieldIndex),
+        ignored_by_interaction = true,
+      }
     end
     for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
+      configTableData.add{
+        type = "sprite-button",
+        name = self.guiElementNames.configOption .. "E" .. string.format("%02d", fieldIndex),
+        sprite = "utility/pump_cannot_connect_icon",
+        tooltip = {"forcefields-gui-description.forcefield-configure-empty", string.format(fieldIndexFormat, fieldIndex)},
+        style = settings.guiSmallSelectButtonStyle,
+      }
     end
     for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
+      configTableData.add{
+        type = "sprite-button",
+        name = self.guiElementNames.configOption .. "W" .. string.format("%02d", fieldIndex),
+        sprite = "utility/pump_cannot_connect_icon",
+        tooltip = {"forcefields-gui-description.forcefield-configure-wall", string.format(fieldIndexFormat, fieldIndex)},
+        style = settings.guiSmallSelectButtonStyle,
+      }
     end
     for fieldIndex=1, fieldWidth do
-      configTableData.add{type = "sprite-button", name = self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex), sprite = "utility/pump_cannot_connect_icon", style = settings.guiSmallSelectButtonStyle}
+      configTableData.add{
+        type = "sprite-button",
+        name = self.guiElementNames.configOption .. "G" .. string.format("%02d", fieldIndex),
+        sprite = "utility/pump_cannot_connect_icon",
+        tooltip = {"forcefields-gui-description.forcefield-configure-gate", string.format(fieldIndexFormat, fieldIndex)},
+        style = settings.guiSmallSelectButtonStyle,
+      }
     end
     
     -- Select the correct setting for each wall
