@@ -1,6 +1,7 @@
 require "__LSlib__/LSlib"
-local settings = require("prototypes/settings")
-local guiSettings = settings["gui"]
+local protoSettings = require("prototypes/settings")
+local runSettings = require("src/settings")
+local guiSettings = protoSettings["gui"]
 local guiNames = require("prototypes/gui/layout/guiElementNames")
 
 
@@ -26,7 +27,7 @@ local guiFrameFooterFlow = LSlib.gui.layout.addFlow(guiLayout, guiFrame, guiName
 
 -- gui header
 LSlib.gui.layout.addLabel(guiLayout, guiFrameHeaderFlow, guiNames.guiFrame.."-header-title", {
-  caption = {"entity-name."..settings["emitter"]["emitterName"]},
+  caption = {"entity-name."..protoSettings["emitter"]["emitterName"]},
   style   = "LSlib_default_frame_title",
   ignored_by_interaction = true,
 })
@@ -42,26 +43,43 @@ LSlib.gui.layout.addSpriteButton(guiLayout, guiFrameHeaderFlow, guiNames.guiButt
 
 
 -- Type of forcefield
+local fieldProperties = require("prototypes/entity/forcefield-properties")
 LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.fieldTypeLabel, {
-  caption = "Field type:",
+  caption = {"", {"forcefields-gui-name.emitter-field-type"}, ": [img=info]"},
+  tooltip = {"forcefields-gui-description.emitter-field-type"},
   style = guiSettings["guiLabelStyle"],
-  ignored_by_interaction = true,
 })
 local guiFieldType = LSlib.gui.layout.addTable(guiLayout, guiFrameContent, guiNames.fieldTypeTable, 4)
 LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldType, guiNames.fieldTypeOptionB, {
-  sprite = "item/"..string.format(settings["blue"].name, "wall", "blue"),
+  sprite = "item/"..string.format(protoSettings["blue"].name, "wall", "blue"),
+  tooltip = {"",
+    {"entity-description.forcefield-wall"},
+    fieldProperties:generate_properties("blue", {damage=true, respawn=true, repair=true, max_health=true}),
+  },
   style = guiSettings["guiSelectButtonStyle"],
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldType, guiNames.fieldTypeOptionG, {
-  sprite = "item/"..string.format(settings["green"].name, "wall", "green"),
+  sprite = "item/"..string.format(protoSettings["green"].name, "wall", "green"),
+  tooltip = {"",
+    {"entity-description.forcefield-wall"},
+    fieldProperties:generate_properties("green", {damage=true, respawn=true, repair=true, max_health=true}),
+  },
   style = guiSettings["guiSelectButtonStyle"],
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldType, guiNames.fieldTypeOptionR, {
-  sprite = "item/"..string.format(settings["red"].name, "wall", "red"),
+  sprite = "item/"..string.format(protoSettings["red"].name, "wall", "red"),
+  tooltip = {"",
+    {"entity-description.forcefield-wall"},
+    fieldProperties:generate_properties("red", {damage=true, respawn=true, repair=true, max_health=true}),
+  },
   style = guiSettings["guiSelectButtonStyle"],
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldType, guiNames.fieldTypeOptionP, {
-  sprite = "item/"..string.format(settings["purple"].name, "wall", "purple"),
+  sprite = "item/"..string.format(protoSettings["purple"].name, "wall", "purple"),
+  tooltip = {"",
+    {"entity-description.forcefield-wall"},
+    fieldProperties:generate_properties("purple", {damage=true, respawn=true, repair=true, max_health=true}),
+  },
   style = guiSettings["guiSelectButtonStyle"],
 })
 
@@ -69,21 +87,24 @@ LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldType, guiNames.fieldTypeOpti
 
 -- Setup of forcefield
 LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.fieldSetupLabel, {
-  caption = "Field configuration:",
+  caption = {"", {"forcefields-gui-name.emitter-field-configuration"}, ": [img=info]"},
+  tooltip = {"forcefields-gui-description.emitter-field-configuration"},
   style = guiSettings["guiLabelStyle"],
-  ignored_by_interaction = true,
 })
 local guifieldSetup = LSlib.gui.layout.addTable(guiLayout, guiFrameContent, guiNames.fieldSetupTable, 3)
 LSlib.gui.layout.addSpriteButton(guiLayout, guifieldSetup, guiNames.fieldSetupOptionS, {
   sprite = guiSettings["configSetupStraightSprite"],
+  tooltip = {"forcefields-gui-description.emitter-field-configuration-straight"},
   style = guiSettings["guiSelectButtonStyle"],
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guifieldSetup, guiNames.fieldSetupOptionC, {
   sprite = guiSettings["configSetupCornerSprite"],
+  tooltip = {"forcefields-gui-description.emitter-field-configuration-corner"},
   style = guiSettings["guiSelectButtonStyle"],
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guifieldSetup, guiNames.fieldSetupOptionA, {
   sprite = guiSettings["configWallSprite"],
+  tooltip = {"forcefields-gui-description.emitter-field-configuration-advanced"},
   style = guiSettings["guiSelectButtonStyle"],
 })
 
@@ -91,9 +112,9 @@ LSlib.gui.layout.addSpriteButton(guiLayout, guifieldSetup, guiNames.fieldSetupOp
 
 -- Direction of forcefield
 LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.directionLabel, {
-  caption = "Field direction:",
+  caption = {"", {"forcefields-gui-name.emitter-field-direction"}, ": [img=info]"},
+  tooltip = {"forcefields-gui-description.emitter-field-direction"},
   style = guiSettings["guiLabelStyle"],
-  ignored_by_interaction = true,
 })  
 local guiFieldDirection = LSlib.gui.layout.addTable(guiLayout, guiFrameContent, guiNames.directionTable, 4)
 LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directionOptionN, {
@@ -117,9 +138,9 @@ LSlib.gui.layout.addSpriteButton(guiLayout, guiFieldDirection, guiNames.directio
 
 -- Distance of forcefield
 LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.distanceLabel, {
-  caption = "Emitting distance:",
+  caption = {"", {"forcefields-gui-name.emitter-distance"}, ": [img=info]"},
+  tooltip = {"forcefields-gui-description.emitter-distance"},
   style = guiSettings["guiLabelStyle"],
-  ignored_by_interaction = true,
 })
 local guiEmitterDistance = LSlib.gui.layout.addTable(guiLayout, guiFrameContent, guiNames.distanceTable, 2)
 LSlib.gui.layout.addTextfield(guiLayout, guiEmitterDistance, guiNames.distanceInput, {
@@ -134,9 +155,9 @@ LSlib.gui.layout.addLabel(guiLayout, guiEmitterDistance, guiNames.distanceMaxInp
 
 -- Width of forcefield
 LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.widthLabel, {
-  caption = "Emitting width:",
+  caption = {"", {"forcefields-gui-name.emitter-width"}, ": [img=info]"},
+  tooltip = {"forcefields-gui-description.emitter-width"},
   style = guiSettings["guiLabelStyle"],
-  ignored_by_interaction = true,
 })
 local guiEmitterWidth = LSlib.gui.layout.addTable(guiLayout, guiFrameContent, guiNames.widthTable, 2)
 LSlib.gui.layout.addTextfield(guiLayout, guiEmitterWidth, guiNames.widthInput, {
@@ -151,23 +172,25 @@ LSlib.gui.layout.addLabel(guiLayout, guiEmitterWidth, guiNames.widthMaxInput, {
 
 -- Upgrades of emitter
 LSlib.gui.layout.addLabel(guiLayout, guiFrameContent, guiNames.upgradesLabel, {
-  caption = "Upgrades applied:",
+  caption = {"", {"forcefields-gui-name.emitter-upgrades"}, ": [img=info]"},
+  tooltip = {"forcefields-gui-description.emitter-upgrades"},
   style = guiSettings["guiLabelStyle"],
-  ignored_by_interaction = true,
 })
 local guiEmitterUpgrades = LSlib.gui.layout.addTable(guiLayout, guiFrameContent, guiNames.upgradesTable, 3)
 LSlib.gui.layout.addSpriteButton(guiLayout, guiEmitterUpgrades, guiNames.upgradesDistance, {
   number = 0, show_percent_for_small_numbers = false,
   sprite = "item/advanced-circuit",
+  tooltip = {"forcefields-gui-description.emitter-upgrades-distance", string.format("+%i", 1)},
   style = guiSettings["guiItemSlotStyle"],
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guiEmitterUpgrades, guiNames.upgradesWidth, {
   number = 0, show_percent_for_small_numbers = false,
   sprite = "item/processing-unit",
+  tooltip = {"forcefields-gui-description.emitter-upgrades-width", string.format("+%i", runSettings.widthUpgradeMultiplier)},
   style = guiSettings["guiItemSlotStyle"],
 })
 LSlib.gui.layout.addSpriteButton(guiLayout, guiEmitterUpgrades, guiNames.buttonRemoveUpgrades, {
-  tooltip = "Remove all upgrades",
+  tooltip = {"forcefields-gui-description.emitter-upgrades-remove"},
   sprite  = "utility/reset",
   style   = guiSettings["guiItemSlotStyle"],
 })
@@ -176,7 +199,7 @@ LSlib.gui.layout.addSpriteButton(guiLayout, guiEmitterUpgrades, guiNames.buttonR
 
 -- Footer buttons
 LSlib.gui.layout.addButton(guiLayout, guiFrameFooterFlow, guiNames.buttonDiscardSettings, {
-  caption = "Discard",
+  caption = {"forcefields-gui-name.discard"},
   style = "red_back_button",
 })
 LSlib.gui.layout.addFrame(guiLayout, guiFrameFooterFlow, guiNames.guiFrame.."-footer-filler", "vertical", {
@@ -184,7 +207,7 @@ LSlib.gui.layout.addFrame(guiLayout, guiFrameFooterFlow, guiNames.guiFrame.."-fo
   ignored_by_interaction = true,
 })
 LSlib.gui.layout.addButton(guiLayout, guiFrameFooterFlow, guiNames.buttonApplySettings, {
-  caption = "Apply changes",
+  caption = {"forcefields-gui-name.apply"},
   style = "confirm_button",
 })
 
