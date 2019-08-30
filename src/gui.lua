@@ -131,10 +131,10 @@ function Gui:showEmitterGui(emitterTable, playerIndex)
     end
     
     -- Setup of field
-    if emitterTable["setup"] == "straight" then
+    if emitterTable["setup"] == settings.fieldSetupStraight then
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupOptionS).style = settings.guiSelectButtonSelectedStyle
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupOptionA).enabled = true
-    elseif emitterTable["setup"] == "corner" then
+    elseif emitterTable["setup"] == settings.fieldSetupCorner then
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupOptionC).style = settings.guiSelectButtonSelectedStyle
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupOptionA).enabled = false
 
@@ -316,8 +316,8 @@ function Gui:handleGuiFieldSetupButtons(event)
   local force = player.force
   local nameToFieldSetup =
   {
-    [self.guiElementNames.fieldSetupOptionS] = "straight",
-    [self.guiElementNames.fieldSetupOptionC] = "corner",
+    [self.guiElementNames.fieldSetupOptionS] = settings.fieldSetupStraight,
+    [self.guiElementNames.fieldSetupOptionC] = settings.fieldSetupCorner,
   }
 
   if LSlib.gui.getElement(playerIndex, self.guiElementPaths.guiFrame) ~= nil then
@@ -348,9 +348,38 @@ function Gui:handleGuiFieldSetupButtons(event)
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionS).sprite = hasStraightSelection and "virtual-signal/signal-S" or "forcefield_direction_SE"
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionE).sprite = hasStraightSelection and "virtual-signal/signal-E" or "forcefield_direction_NE"
       LSlib.gui.getElement(playerIndex, self.guiElementPaths.directionOptionW).sprite = hasStraightSelection and "virtual-signal/signal-W" or "forcefield_direction_SW"
+      if not hasStraightSelection then
+        self:handleGuiConfigTextfieldChanges{
+          player_index = playerIndex,
+          element = LSlib.gui.getElement(playerIndex, self.guiElementPaths["distanceInput"]),
+        }
+      end
 
     else
       player.print("You need to complete the required research before this corner field setup can be used.")
+    end
+  end
+end
+
+
+
+function Gui:handleGuiConfigTextfieldChanges(event)
+  local playerIndex = event.player_index
+  local player = game.players[event.player_index]
+
+  if event.element.name == Gui.guiElementNames["distanceInput"] then
+    -- update width depending on distance when setting corner pieces
+    if LSlib.gui.getElement(playerIndex, self.guiElementPaths.fieldSetupOptionC).style.name == settings.guiSelectButtonSelectedStyle then
+      -- we are configuring a corner piece
+      local distance = tonumber(LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceInput).text) or 1
+      if distance < 1 then
+        distance = 1
+      elseif distance > settings.emitterMaxDistance then
+        distance = settings.emitterMaxDistance
+      end
+
+      local requiredWidth = settings.forcefieldCircleData[distance][defines.direction.north].incTimes or 0
+      LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(requiredWidth)
     end
   end
 end
@@ -633,7 +662,7 @@ end
 
 
 
-Gui.guiButtonHandlers =
+Gui.guiInteractionHandlers =
 {
   -- Emitter gui
   [Gui.guiElementNames["fieldTypeOptionB"]] = Gui.handleGuiFieldTypeButtons,
@@ -650,6 +679,7 @@ Gui.guiButtonHandlers =
   [Gui.guiElementNames["directionOptionE"]] = Gui.handleGuiDirectionButtons,
   [Gui.guiElementNames["directionOptionW"]] = Gui.handleGuiDirectionButtons,
   
+  [Gui.guiElementNames["distanceInput"   ]] = Gui.handleGuiConfigTextfieldChanges,
   [Gui.guiElementNames["upgradesDistance"]] = Gui.handleGuiUpgradeButtons,
   [Gui.guiElementNames["upgradesWidth"   ]] = Gui.handleGuiUpgradeButtons,
   
@@ -769,7 +799,9 @@ function Gui:verifyAndSetFromGui(playerIndex)
       settingsAreGood = false
     elseif newWidth > maxWidth then
       player.print(string.format("New Width is larger than the allowed maximum (%i).", maxWidth))
-      LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(maxWidth)
+      if newFieldSetup ~= settings.fieldSetupCorner then
+        LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(maxWidth)
+      end
       settingsAreGood = false
     elseif newWidth < 1 then
       player.print("New Width is smaller than the allowed minimum (1).")

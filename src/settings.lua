@@ -35,8 +35,8 @@ settings.maxRangeUpgrades = 23
 settings.emitterMaxDistance = settings.emitterDefaultDistance + settings.maxRangeUpgrades
 
 settings.emitterDefaultWidth = 25
-settings.maxWidthUpgrades = 10
-settings.widthUpgradeMultiplier = 4
+settings.maxWidthUpgrades = 14
+settings.widthUpgradeMultiplier = 3
 settings.emitterMaxWidth = settings.emitterDefaultWidth + (settings.maxWidthUpgrades * settings.widthUpgradeMultiplier)
 
 settings.maxFieldDistance = math.max(settings.emitterMaxDistance, settings.emitterMaxWidth)
@@ -49,8 +49,11 @@ settings.fieldGateSuffix  = string.format(prototypeSettings["blue"].name, "gate"
 settings.fieldEmptySuffix = string.format(prototypeSettings["blue"].name, "empty", "")
 settings.defaultFieldSuffix = settings.fieldSuffix
 
+settings.fieldSetupStraight = "straight"
+settings.fieldSetupCorner = "corner"
+
 settings.defaultFieldType = "blue"
-settings.defaultFieldSetup = "straight" -- options: "straight", "corner"
+settings.defaultFieldSetup = settings.fieldSetupStraight
 settings.defaultFieldDirection = defines.direction.north
 settings.forcefieldTypes =
 {
