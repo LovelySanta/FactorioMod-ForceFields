@@ -30,13 +30,13 @@ settings.forcefieldDeathDamageName = prototypeSettings.forcefieldBuildDamageName
 settings.emitterName = prototypeSettings["emitter"]["emitterName"]
 settings.tickRate = prototypeSettings["emitter"]["tickRate"]
 
-settings.emitterDefaultDistance = 10
-settings.maxRangeUpgrades = 23
+settings.emitterDefaultDistance = 8
+settings.maxRangeUpgrades = 25
 settings.emitterMaxDistance = settings.emitterDefaultDistance + settings.maxRangeUpgrades
 
-settings.emitterDefaultWidth = 25
-settings.maxWidthUpgrades = 14
-settings.widthUpgradeMultiplier = 3
+settings.emitterDefaultWidth = 27
+settings.maxWidthUpgrades = 10
+settings.widthUpgradeMultiplier = 4
 settings.emitterMaxWidth = settings.emitterDefaultWidth + (settings.maxWidthUpgrades * settings.widthUpgradeMultiplier)
 
 settings.maxFieldDistance = math.max(settings.emitterMaxDistance, settings.emitterMaxWidth)
