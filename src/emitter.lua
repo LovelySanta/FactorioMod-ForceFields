@@ -72,14 +72,10 @@ end
 
 function Emitter:onEmitterMined(emitter, playerIndex)
   local emitterTable = self:findEmitter(emitter)
-  local player
+  if not emitterTable then return end
+  local player = playerIndex and game.players[playerIndex] or nil
 
-  if emitterTable ~= nil then
-    self:removeEmitterID(emitterTable["emitter-NEI"])
-  end
-  if playerIndex then
-    player = game.players[playerIndex]
-  end
+  self:removeEmitterID(emitterTable["emitter-NEI"])
 
   if emitterTable["distance-upgrades"] ~= 0 then
     if player then
@@ -95,16 +91,17 @@ function Emitter:onEmitterMined(emitter, playerIndex)
       dropOnGround(emitterTable["entity"].surface, emitterTable["entity"].position, {name = "processing-unit", count = emitterTable["width-upgrades"]}, true, emitterTable["entity"].force)
     end
   end
+  
 end
 
 
 
 function Emitter:onEmitterDied(emitter)
   local emitterTable = self:findEmitter(emitter)
-  if emitterTable ~= nil then
-    self:removeEmitterID(emitterTable["emitter-NEI"])
-    self:storeKilledEmitter(emitterTable)
-  end
+  if emitterTable == nil then return end
+
+  self:removeEmitterID(emitterTable["emitter-NEI"])
+  self:storeKilledEmitter(emitterTable)
 end
 
 

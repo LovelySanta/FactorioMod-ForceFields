@@ -4,7 +4,7 @@ require "__LSlib__/LSlib"
 
 ConfigChanges = {}
 
-ConfigChanges.currentVersion = 1.3
+ConfigChanges.currentVersion = 1.4
 
 
 
@@ -22,6 +22,10 @@ function ConfigChanges:onConfigurationChanged()
     if global.forcefields.version == 1.2 then
       log("Updating ForceFields from version 1.2 to version 1.3")
       self:updateToVersion_1_3()
+    end
+    if global.forcefields.version == 1.3 then
+      log("Updating ForceFields from version 1.3 to version 1.4")
+      self:updateToVersion_1_4()
     end
   end
   log("ForceFields are updated! Have a nice gaming session!")
@@ -154,4 +158,65 @@ function ConfigChanges:updateToVersion_1_3()
 
   -- now we are up to date to this version
   global.forcefields.version = 1.3
+end
+
+
+
+function ConfigChanges:updateToVersion_1_4()
+  -- close all gui's
+  if global.forcefields.emitterConfigGuis ~= nil then
+    for playerIndex,  player in pairs(game.players) do
+      local guiCenter = player.gui.center
+      if global.forcefields.emitterConfigGuis["I" .. playerIndex] ~= nil then
+        guiCenter["emitterConfig"].destroy()
+        if guiCenter["fieldConfig"] then guiCenter["fieldConfig"].destroy() end
+        global.forcefields.emitterConfigGuis["I" .. playerIndex] = nil
+        if LSlib.utils.table.isEmpty(global.forcefields.emitterConfigGuis) then
+          global.forcefields.emitterConfigGuis = nil
+          break
+        end
+      end
+    end
+  end
+
+  -- add setup to all emitter tables (emitterConfig)
+  local getConfigName = function(oldConfig)
+    if not oldConfig then
+      return "forcefield-wall-"
+    elseif oldConfig == "-forcefield" then
+      return "forcefield-wall-"
+    elseif config == "-forcefield-gate" then
+      return "forcefield-gate-"
+    end
+  end
+  if global.forcefields.killedEmitters ~= nil then
+    local killedEmitters = global.forcefields.killedEmitters
+    for k,emitterTable in pairs(killedEmitters) do
+      for index, emitterConfig in pairs(emitterTable["config"] or {}) do
+        killedEmitters[k]["config"][index] = getConfigName(killedEmitters[k]["config"][index])
+      end
+    end
+    global.forcefields.killedEmitters = killedEmitters
+  end
+  if global.forcefields.emitters ~= nil then
+    local emitters = global.forcefields.emitters
+    for k,emitterTable in pairs(emitters) do
+      for index, emitterConfig in pairs(emitterTable["config"] or {}) do
+      emitters[k]["config"][index] = getConfigName(emitters[k]["config"][index])
+      end
+    end
+    global.forcefields.emitters = emitters
+  end
+  if global.forcefields.activeEmitters ~= nil then
+    local activeEmitters = global.forcefields.activeEmitters
+    for k,emitterTable in pairs(activeEmitters) do
+      for index, emitterConfig in pairs(emitterTable["config"] or {}) do
+      activeEmitters[k]["config"][index] = getConfigName(activeEmitters[k]["config"][index])
+      end
+    end
+    global.forcefields.activeEmitters = activeEmitters
+  end
+
+  -- now we are up to date to this version
+  global.forcefields.version = 1.4
 end

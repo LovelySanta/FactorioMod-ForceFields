@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 31. 8. 2019
+  Bugfixes:
+    - Fixed crash related to faulty emitters
+    - Fixed crash related to old data not migrating
+---------------------------------------------------------------------------------------------------
 Version: 2.3.0
 Date: 30. 8. 2019
   Features:
