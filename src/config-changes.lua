@@ -4,7 +4,7 @@ require "__LSlib__/LSlib"
 
 ConfigChanges = {}
 
-ConfigChanges.currentVersion = 1.4
+ConfigChanges.currentVersion = 1.5
 
 
 
@@ -26,6 +26,10 @@ function ConfigChanges:onConfigurationChanged()
     if global.forcefields.version == 1.3 then
       log("Updating ForceFields from version 1.3 to version 1.4")
       self:updateToVersion_1_4()
+    end
+    if global.forcefields.version == 1.4 then
+      log("Updating ForceFields from version 1.4 to version 1.5")
+      self:updateToVersion_1_5()
     end
   end
   log("ForceFields are updated! Have a nice gaming session!")
@@ -179,7 +183,7 @@ function ConfigChanges:updateToVersion_1_4()
     end
   end
 
-  -- add setup to all emitter tables (emitterConfig)
+  -- add config to all emitter tables (emitterConfig)
   local getConfigName = function(oldConfig)
     if not oldConfig then
       return "forcefield-wall-"
@@ -219,4 +223,50 @@ function ConfigChanges:updateToVersion_1_4()
 
   -- now we are up to date to this version
   global.forcefields.version = 1.4
+end
+
+
+
+function ConfigChanges:updateToVersion_1_5()
+  -- close all gui's
+  if global.forcefields.emitterConfigGuis ~= nil then
+    for playerIndex,  player in pairs(game.players) do
+      local guiCenter = player.gui.center
+      if global.forcefields.emitterConfigGuis["I" .. playerIndex] ~= nil then
+        guiCenter["emitterConfig"].destroy()
+        if guiCenter["fieldConfig"] then guiCenter["fieldConfig"].destroy() end
+        global.forcefields.emitterConfigGuis["I" .. playerIndex] = nil
+        if LSlib.utils.table.isEmpty(global.forcefields.emitterConfigGuis) then
+          global.forcefields.emitterConfigGuis = nil
+          break
+        end
+      end
+    end
+  end
+
+  -- add setup to fix errors in emitter table
+  if global.forcefields.killedEmitters ~= nil then
+    local killedEmitters = global.forcefields.killedEmitters
+    for k,_ in pairs(killedEmitters) do
+      killedEmitters[k]["setup"] = killedEmitters[k]["setup"] or "straight"
+    end
+    global.forcefields.killedEmitters = killedEmitters
+  end
+  if global.forcefields.emitters ~= nil then
+    local emitters = global.forcefields.emitters
+    for k,_ in pairs(emitters) do
+      emitters[k]["setup"] = emitters[k]["setup"] or "straight"
+    end
+    global.forcefields.emitters = emitters
+  end
+  if global.forcefields.activeEmitters ~= nil then
+    local activeEmitters = global.forcefields.activeEmitters
+    for k,_ in pairs(activeEmitters) do
+      activeEmitters[k]["setup"] = activeEmitters[k]["setup"] or "straight"
+    end
+    global.forcefields.activeEmitters = activeEmitters
+  end
+
+  -- now we are up to date to this version
+  global.forcefields.version = 1.5
 end

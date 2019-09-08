@@ -417,6 +417,7 @@ function Emitter:storeKilledEmitter(emitterTable)
   newKilledEmitter["disabled"] = emitterTable["disabled"]
   newKilledEmitter["surface"] = emitterTable["entity"].surface
   newKilledEmitter["position"] = emitterTable["entity"].position
+  newKilledEmitter["setup"] = emitterTable["setup"]
   newKilledEmitter["width"] = emitterTable["width"]
   newKilledEmitter["distance"] = emitterTable["distance"]
   newKilledEmitter["type"] = emitterTable["type"]
