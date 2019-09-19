@@ -170,8 +170,8 @@ function Emitter:onEntitySettingsPasted(event)
       destinationEmitterTable["width"] = sourceEmitterTable["width"]
     end
     -- For the distance check if there are enough upgrades
-    if sourceEmitterTable["distance"] > maxWidth then
-      destinationEmitterTable["distance"] = maxWidth
+    if sourceEmitterTable["distance"] > maxDistance then
+      destinationEmitterTable["distance"] = maxDistance
       hasEnoughUpgrades = false
     else
       destinationEmitterTable["distance"] = sourceEmitterTable["distance"]
