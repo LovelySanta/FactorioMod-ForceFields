@@ -140,7 +140,9 @@ function settings:verifyRemoteSettings()
     local interfaceName = "warptorio2"
     if remote.interfaces[interfaceName] then
       for fieldName,_ in pairs(self.forcefieldTypes) do
-        if not remote.call(interfaceName, "is_warp_blacklisted", modName, fieldName) then
+        if remote.interfaces[interfaceName]["is_warp_blacklisted"] and
+           (not remote.call(interfaceName, "is_warp_blacklisted", modName, fieldName)) and
+           remote.interfaces[interfaceName]["insert_warp_blacklist"] then
           remote.call(interfaceName, "insert_warp_blacklist", modName, fieldName)
         end
       end
