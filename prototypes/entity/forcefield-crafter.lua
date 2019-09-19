@@ -13,6 +13,7 @@ forcefieldCrafter.minable.result = nil
 forcefieldCrafter.order = data.raw["item"][emitterSettings.emitterName].order
 forcefieldCrafter.subgroup = data.raw["item"][emitterSettings.emitterName].subgroup
 
+forcefieldCrafter.next_upgrade = nil
 forcefieldCrafter.crafting_categories = {emitterSettings["crafting-category"]}
 
 forcefieldCrafter.icon = data.raw["item"][emitterSettings.emitterName].icon
