@@ -21,6 +21,12 @@ function forcefieldWallItem(color)
   forcefieldWall.icon                   = nil
   forcefieldWall.icons                  = LSlib.item.getIcons("item", "stone-wall", nil, nil, colorTint)
 
+  if forcefieldWall.flags then
+    table.insert(forcefieldWall.flags, "hidden")
+  else
+    forcefieldWall.flags = { "hidden" }
+  end
+
   forcefieldWall.order                  = string.format("f[forcefields]-b[field]-%s[%s]-a[wall]", settings.order, color)
   forcefieldWall.subgroup               = "forcefield"
 
@@ -52,6 +58,12 @@ function forcefieldGateItem(color)
   forcefieldGate.icon_size              = nil
   forcefieldGate.icon                   = nil
   forcefieldGate.icons                  = LSlib.item.getIcons("item", "gate", nil, nil, colorTint)
+
+  if forcefieldGate.flags then
+    table.insert(forcefieldGate.flags, "hidden")
+  else
+    forcefieldGate.flags = { "hidden" }
+  end
 
   forcefieldGate.order                  = string.format("f[forcefields]-b[field]-%s[%s]-b[gate]", settings.order, color)
   forcefieldGate.subgroup               = "forcefield"

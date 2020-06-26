@@ -1,13 +1,13 @@
 {
   "name": "ForceFields2",
-  "version": "2.3.3",
-  "factorio_version": "0.17",
+  "version": "2.3.5",
+  "factorio_version": "0.18",
   "title": "Force Fields",
   "author": "lovely_santa",
   "homepage": "https://mods.factorio.com/mod/ForceFields2",
   "description": "Adds multiple types of electric powered, self healing walls to keep the biters out.",
   "dependencies": [
-    "base >= 0.17.0",
-    "LSlib >= 2019.8.30"
+    "base >= 0.18.33",
+    "LSlib >= 2020.5.26"
   ]
 }
