@@ -83,7 +83,7 @@ prototypeSettings["blue"] =
   ["wallTechnology"] = prototyping and {
                         ["additionalPrerequisites"] = {
                          "optics",
-                         "stone-walls",
+                         "stone-wall",
                          "military-2",
                          "advanced-electronics",
                          "battery",
@@ -99,7 +99,7 @@ prototypeSettings["blue"] =
     },
   ["gateTechnology"] = prototyping and {
                         ["additionalPrerequisites"] = {
-                          "gates",
+                          "gate",
                         },
                         ["additionalEffects"] = {
 

@@ -158,7 +158,7 @@ function Gui:showEmitterGui(emitterTable, playerIndex)
     end
 
     -- Distance of forcefield
-    LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceInput).text = emitterTable["distance"]
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceInput).text = tostring(emitterTable["distance"])
     LSlib.gui.getElement(playerIndex, self.guiElementPaths.distanceMaxInput).caption = "Max: " .. tostring(settings.emitterDefaultDistance + emitterTable["distance-upgrades"])
 
     -- Width of forcefield
@@ -166,7 +166,7 @@ function Gui:showEmitterGui(emitterTable, playerIndex)
       player_index = playerIndex,
       element = LSlib.gui.getElement(playerIndex, self.guiElementPaths["distanceInput"]),
     }
-    LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = emitterTable["width"]
+    LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthInput).text = tostring(emitterTable["width"])
     LSlib.gui.getElement(playerIndex, self.guiElementPaths.widthMaxInput).caption = "Max: " .. tostring(settings.emitterDefaultWidth + emitterTable["width-upgrades"] * settings.widthUpgradeMultiplier)
 
     -- Upgrades of emitter

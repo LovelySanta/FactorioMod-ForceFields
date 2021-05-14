@@ -3,7 +3,7 @@ local emitterSettings = require("prototypes/settings")["emitter"]
 local forcefieldCrafter = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
 
 forcefieldCrafter.name = emitterSettings.emitterName .. "-crafter"
-forcefieldCrafter.localised_name = {"entity-name."..emitterSettings.emitterName}
+forcefieldCrafter.localised_name = {"", {"entity-name."..emitterSettings.emitterName}, "                         "}
 forcefieldCrafter.localised_description = {"",
   {"entity-description."..emitterSettings.emitterName},
   {"tooltip-description.unobtainable", {"mod-name.ForceFields2"}},

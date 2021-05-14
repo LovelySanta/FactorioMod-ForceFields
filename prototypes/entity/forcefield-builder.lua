@@ -29,7 +29,6 @@ function forcefieldWallEntity(color)
                                            result = (settings.manualPlaceable and forcefieldWall.name or nil),}
   forcefieldWall.mined_sound            = nil
   forcefieldWall.fast_replaceable_group = nil
-  forcefieldWall.next_upgrade           = nil
 
   forcefieldWall.allow_copy_paste       = false
 
@@ -107,7 +106,6 @@ function forcefieldGateEntity(color)
                                            result = (settings.manualPlaceable and forcefieldGate.name or nil),}
   forcefieldGate.mined_sound            = nil
   forcefieldGate.fast_replaceable_group = nil
-  forcefieldGate.next_upgrade           = nil
 
   forcefieldGate.allow_copy_paste       = false
 

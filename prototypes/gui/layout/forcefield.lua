@@ -10,7 +10,7 @@ local guiLayout = LSlib.gui.layout.create("center")
 
 -- gui base
 local guiConfigFrame = LSlib.gui.layout.addFrame(guiLayout, "root", guiNames.configFrame, "vertical", {
-  style = "frame_with_even_small_even_paddings",
+  style = "inside_shallow_frame_with_padding",
 })
 local guiConfigFrameHeaderFlow = LSlib.gui.layout.addFlow(guiLayout, guiConfigFrame, guiNames.configFrame.."-header-flow", "horizontal", {
   style = "LSlib_default_header",

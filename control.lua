@@ -62,7 +62,8 @@ local onEntityCreated = function(event)
 end
 script.on_event({defines.events.on_built_entity      ,
                  defines.events.on_robot_built_entity,
-                 defines.events.script_raised_built  }, onEntityCreated)
+                 defines.events.script_raised_built  ,
+                 defines.events.script_raised_revive }, onEntityCreated)
 
 script.on_event(defines.events.on_entity_cloned, function(event)
   if event.destination.name == settings.emitterName then

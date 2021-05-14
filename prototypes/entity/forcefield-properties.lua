@@ -18,18 +18,18 @@ fieldProperties.respawn_cost = function(color)
   return {"",
     LSlib.utils.units.getLocalisedUnit(costPerWall, {"si-unit-symbol-joule"}),
     " + ",
-    LSlib.utils.units.getLocalisedUnit(energyPerTick/healthPerTick, {"", {"si-unit-symbol-joule"}, "/", {"forcefield-parameter-unit.health"}}),
+    LSlib.utils.units.getLocalisedUnit(energyPerTick/healthPerTick, {"", {"si-unit-symbol-joule"}, "/", {"forcefield-parameter-unit.health-points"}}),
   }
 end
 
 fieldProperties.repair_rate = function(color)
   local healthPerTick = settings[color]["properties"]["chargeRate"]
-  return {"", string.format("%.2f ", healthPerTick*60), {"forcefield-parameter-unit.health"}, {"per-second-suffix"}}
+  return {"", string.format("%.2f ", healthPerTick*60), {"forcefield-parameter-unit.health-points"}, {"per-second-suffix"}}
 end
 
 fieldProperties.repair_cost = function(color)
   local energyPerHealth = settings[color]["properties"]["energyPerHealthLost"]
-  return LSlib.utils.units.getLocalisedUnit(energyPerHealth, {"", {"si-unit-symbol-joule"}, "/", {"forcefield-parameter-unit.health"}})
+  return LSlib.utils.units.getLocalisedUnit(energyPerHealth, {"", {"si-unit-symbol-joule"}, "/", {"forcefield-parameter-unit.health-points"}})
 end
 
 fieldProperties.max_health = function(color)

@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.7
+Date: 28. 11. 2020
+  Features:
+    - Updated to 1.1.1
+---------------------------------------------------------------------------------------------------
+Version: 2.3.6
+Date: 18. 8. 2020
+  Features:
+    - Updated to 1.0
+  Bugfixes:
+    - Fixed missing localisation due to changes in LSlib
+    - Fixed multiple crashes related to other mods placing entity controller
+---------------------------------------------------------------------------------------------------
 Version: 2.3.5
 Date: 26. 6. 2020
   Bugfixes:

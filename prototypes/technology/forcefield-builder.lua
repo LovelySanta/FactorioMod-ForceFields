@@ -8,14 +8,14 @@ function forcefieldWallTech(color)
   forcefieldWallItem(color)
   forcefieldWallRecipe(color)
 
-  local forcefieldWallTech = util.table.deepcopy(data.raw["technology"]["stone-walls"])
+  local forcefieldWallTech = util.table.deepcopy(data.raw["technology"]["stone-wall"])
   local settings = require("prototypes/settings")[color]
 
   forcefieldWallTech.name             = string.format(settings.name, "wall", color)
 
   forcefieldWallTech.icon             = nil
   forcefieldWallTech.icon_size        = nil
-  forcefieldWallTech.icons            = LSlib.technology.getIcons("stone-walls", nil, nil, settings.colorTint)
+  forcefieldWallTech.icons            = LSlib.technology.getIcons("stone-wall", nil, nil, settings.colorTint)
 
   forcefieldWallTech.prerequisites    = util.table.deepcopy(settings["wallTechnology"]["additionalPrerequisites"])
   forcefieldWallTech.effects          = util.table.deepcopy(settings["wallTechnology"]["additionalEffects"])
@@ -37,14 +37,14 @@ function forcefieldGateTech(color)
   forcefieldGateItem(color)
   forcefieldGateRecipe(color)
 
-  local forcefieldGateTech = util.table.deepcopy(data.raw["technology"]["gates"])
+  local forcefieldGateTech = util.table.deepcopy(data.raw["technology"]["gate"])
   local settings = require("prototypes/settings")[color]
 
   forcefieldGateTech.name             = string.format(settings.name, "gate", color)
 
   forcefieldGateTech.icon             = nil
   forcefieldGateTech.icon_size        = nil
-  forcefieldGateTech.icons            = LSlib.technology.getIcons("gates", nil, nil, settings.colorTint)
+  forcefieldGateTech.icons            = LSlib.technology.getIcons("gate", nil, nil, settings.colorTint)
 
   forcefieldGateTech.prerequisites    = util.table.deepcopy(settings["gateTechnology"]["additionalPrerequisites"])
   table.insert(forcefieldGateTech.prerequisites, string.format(settings.name, "wall", color))
