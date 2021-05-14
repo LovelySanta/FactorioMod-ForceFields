@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.8
+Date: 14. 05. 2021
+  Bugfixes:
+    - Actively remove next_upgrade to prevent errors
+    - Fixed copy pasting from a distance resulted in error message 'not operable'
+---------------------------------------------------------------------------------------------------
 Version: 2.3.7
 Date: 28. 11. 2020
   Features:
